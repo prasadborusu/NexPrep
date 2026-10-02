@@ -21,40 +21,9 @@ export const ATSAnalyzerPage: React.FC = () => {
   const { user } = useAuth();
 
   const [inputMode, setInputMode] = useState<'text' | 'file'>('text');
-  const [resumeText, setResumeText] = useState(`ALEX JOHNSON
-alex.johnson@example.com | +91 98765 43210 | Bengaluru, India | linkedin.com/in/alexjohnson | github.com/alexjohnson
-
-PROFESSIONAL SUMMARY
-Results-driven Full Stack Software Engineer with deep expertise in modern web architectures, algorithm design, and microservices. Experienced in engineering low-latency REST APIs, reactive state management, and high-performance relational databases.
-
-TECHNICAL SKILLS
-• Languages: Java, Python, TypeScript, JavaScript, SQL, C++
-• Frameworks: React, Node.js, Express, Spring Boot, TailwindCSS
-• Tools & Databases: PostgreSQL, Redis, Docker, Git, Linux, AWS
-
-WORK EXPERIENCE
-Software Development Engineering Intern - TechNovation Labs (May 2024 - July 2024)
-• Architected asynchronous messaging worker queue using Redis and Node.js, reducing background notification latency by 45%.
-• Implemented comprehensive unit and integration test coverage using Jest, increasing test coverage from 62% to 91%.
-• Collaborated in two-week agile sprint cycles to deploy containerized microservices to cloud staging.
-
-TECHNICAL PROJECTS
-NexPrep Collaborative Career Preparation Platform | React, TypeScript, Node.js, PostgreSQL
-• Engineered full-stack career preparation portal featuring real-time code compilation across 4 languages via sandboxed API.
-• Implemented deterministic keyword-matching ATS analyzer evaluating candidate resumes against live job descriptions.
-
-EDUCATION
-National Institute of Technology - B.Tech in Computer Science & Engineering (2022 - 2026) | CGPA: 8.75`);
-
-  const [jobDescription, setJobDescription] = useState(`We are seeking an Associate Software Engineer to build resilient distributed web systems.
-Responsibilities:
-- Build low-latency microservices with Node.js and Java.
-- Develop interactive, high performance UI components using React and TypeScript.
-- Optimize relational databases (PostgreSQL) and implement in-memory caching using Redis.
-- Collaborate with cloud deployment pipelines using Docker, Kubernetes, and AWS.
-- Strong knowledge of Data Structures, Algorithms, and Object-Oriented Design (OOP).`);
-
-  const [targetRole, setTargetRole] = useState('Full Stack Engineer');
+  const [resumeText, setResumeText] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+  const [targetRole, setTargetRole] = useState(user?.target_role || 'Full Stack Engineer');
   const [file, setFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<ATSAnalysisResult | null>(null);
@@ -62,6 +31,19 @@ Responsibilities:
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (inputMode === 'text' && !resumeText.trim()) {
+      setError('Please paste your resume text to begin analysis.');
+      return;
+    }
+    if (inputMode === 'file' && !file) {
+      setError('Please upload a resume file (PDF or TXT) to begin analysis.');
+      return;
+    }
+    if (!jobDescription.trim()) {
+      setError('Please provide the target job description to match against.');
+      return;
+    }
+
     setIsAnalyzing(true);
     setError(null);
     try {
@@ -70,7 +52,7 @@ Responsibilities:
         formData.append('resume_file', file);
         formData.append('job_description', jobDescription);
         formData.append('target_role', targetRole);
-        formData.append('student_id', user?.id || 'demo-student-id');
+        formData.append('student_id', user?.id || '');
         const res = await api.ats.analyze(formData);
         setAnalysis(res);
       } else {
@@ -78,7 +60,7 @@ Responsibilities:
           resume_text: resumeText,
           job_description: jobDescription,
           target_role: targetRole,
-          student_id: user?.id || 'demo-student-id'
+          student_id: user?.id || ''
         });
         setAnalysis(res);
       }

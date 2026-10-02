@@ -66,23 +66,25 @@ export const PlacementDrivesPage: React.FC = () => {
         </div>
 
         <span className="px-3 py-1 rounded-xl bg-purple-50 text-purple-700 text-xs font-semibold border border-purple-200">
-          Your Profile CGPA: {user?.cgpa || 8.75}
+          Your Profile CGPA: {user?.cgpa !== undefined && user?.cgpa !== null ? user.cgpa : 'Not set'}
         </span>
       </div>
 
       {isLoading ? (
         <div className="text-center py-12 text-xs text-slate-400">Loading placement drives...</div>
       ) : drives.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center border border-purple-100 shadow-soft">
+        <div className="bg-white rounded-2xl p-12 text-center border border-purple-100 shadow-soft space-y-2">
           <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-2" />
           <p className="text-sm font-bold text-slate-700">No active placement drives currently open.</p>
+          <p className="text-xs text-slate-500">Corporate recruitment opportunities scheduled by your training & placement office will appear here.</p>
         </div>
       ) : (
         <div className="space-y-6">
           {drives.map((drive) => {
             const applied = isApplied(drive.id);
-            const userCgpa = user?.cgpa || 8.75;
-            const isEligible = userCgpa >= drive.eligibility.min_cgpa;
+            const userCgpa = user?.cgpa ?? 0;
+            const hasCgpa = user?.cgpa !== undefined && user?.cgpa !== null;
+            const isEligible = hasCgpa ? userCgpa >= drive.eligibility.min_cgpa : true;
 
             return (
               <div
@@ -104,9 +106,10 @@ export const PlacementDrivesPage: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <h3 className="text-lg font-bold text-slate-900">{drive.company_name}</h3>
                         <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          !hasCgpa ? 'bg-amber-100 text-amber-800' :
                           isEligible ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                         }`}>
-                          {isEligible ? 'Eligible' : 'CGPA Below Requirement'}
+                          {!hasCgpa ? 'CGPA Not Set' : isEligible ? 'Eligible' : 'CGPA Below Requirement'}
                         </span>
                       </div>
                       <p className="text-sm font-semibold text-purple-700">{drive.role_title}</p>

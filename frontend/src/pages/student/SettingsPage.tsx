@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Settings, Shield, Bell, Moon, Database } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
-  const { user, role, switchRole } = useAuth();
+  const { user, role } = useAuth();
 
   return (
     <div className="p-6 sm:p-8 max-w-4xl mx-auto space-y-6">
@@ -13,36 +13,21 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Role Persona Switcher */}
+        {/* Account Identity & RBAC Context */}
         <div className="bg-white rounded-2xl p-6 border border-purple-100/80 shadow-soft space-y-4">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-purple-700" />
-            <h3 className="text-sm font-bold text-slate-900">Active Persona & RBAC Context</h3>
+            <h3 className="text-sm font-bold text-slate-900">Account Identity & Access Context</h3>
           </div>
-          <p className="text-xs text-slate-600">
-            Current active role: <strong className="text-purple-700 uppercase">{role}</strong>. For hackathon evaluation and demonstration, you can toggle your access level immediately:
-          </p>
-          <div className="flex gap-3">
-            <button
-              onClick={() => switchRole('student')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
-                role === 'student'
-                  ? 'bg-purple-700 text-white border-purple-700 shadow-sm'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              Student Persona
-            </button>
-            <button
-              onClick={() => switchRole('admin')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
-                role === 'admin'
-                  ? 'bg-purple-700 text-white border-purple-700 shadow-sm'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              Administrator / TPO Persona
-            </button>
+          <div className="grid sm:grid-cols-2 gap-4 text-xs">
+            <div className="p-3 rounded-xl bg-purple-50/50 border border-purple-100">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Access Role</span>
+              <span className="text-sm font-bold text-purple-900 uppercase">{role}</span>
+            </div>
+            <div className="p-3 rounded-xl bg-purple-50/50 border border-purple-100">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Account Email</span>
+              <span className="text-sm font-bold text-slate-800">{user?.email || 'Authenticated User'}</span>
+            </div>
           </div>
         </div>
 

@@ -49,6 +49,16 @@ export const AdminStudentsPage: React.FC = () => {
 
       {isLoading ? (
         <div className="text-center py-12 text-xs text-slate-400">Loading student directory...</div>
+      ) : filtered.length === 0 ? (
+        <div className="bg-white rounded-2xl p-12 text-center border border-purple-100 shadow-soft space-y-2">
+          <Users className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+          <p className="text-sm font-bold text-slate-700">No candidates found in roster.</p>
+          <p className="text-xs text-slate-500">
+            {students.length === 0
+              ? 'No candidates have registered yet. Once students create accounts and take exams, their live telemetry will populate here.'
+              : 'No candidates matched your search criteria.'}
+          </p>
+        </div>
       ) : (
         <div className="bg-white rounded-2xl border border-purple-100 shadow-soft overflow-hidden">
           <div className="overflow-x-auto">
@@ -73,12 +83,16 @@ export const AdminStudentsPage: React.FC = () => {
                         <span className="block text-[11px] font-normal text-slate-400">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-purple-700">{s.target_role || 'General SDE'}</td>
+                    <td className="py-3.5 px-4 font-semibold text-purple-700">{s.target_role || 'Not specified'}</td>
                     <td className="py-3.5 px-4">
-                      {s.college || 'Engineering Institute'}
-                      <span className="block text-[10px] text-slate-400">{s.branch} ({s.graduation_year})</span>
+                      {s.college || 'Not specified'}
+                      {s.branch && (
+                        <span className="block text-[10px] text-slate-400">{s.branch} {s.graduation_year ? `(${s.graduation_year})` : ''}</span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">{s.cgpa || 8.5}</td>
+                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                      {s.cgpa !== undefined && s.cgpa !== null ? s.cgpa : '—'}
+                    </td>
                     <td className="py-3.5 px-4 font-semibold">{s.assessments_taken || 0}</td>
                     <td className="py-3.5 px-4 font-semibold text-emerald-600">{s.code_problems_solved || 0}</td>
                     <td className="py-3.5 px-4 font-semibold text-purple-700">{s.drives_applied || 0}</td>

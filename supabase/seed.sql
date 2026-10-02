@@ -63,28 +63,3 @@ VALUES
   ]'::jsonb
 );
 
--- Sample Placement Drives
-INSERT INTO public.placement_drives (company_name, role_title, location, ctc_range, eligibility, job_description, rounds, deadline, apply_url)
-VALUES
-(
-  'Atlassian',
-  'Associate Software Engineer',
-  'Bengaluru, India (Hybrid)',
-  '26 - 32 LPA',
-  '{"min_cgpa": 7.5, "allowed_branches": ["CSE", "IT", "ECE"], "allowed_batches": [2025, 2026], "backlogs_allowed": false}'::jsonb,
-  'Work with global teams on Jira, Confluence and developer productivity tooling. Focus on high scalability, distributed systems, and clean code.',
-  ARRAY['Online Assessment', 'Technical Round 1 (DSA)', 'Technical Round 2 (System & OOP)', 'Values & HR'],
-  NOW() + INTERVAL '14 days',
-  'https://www.atlassian.com/company/careers'
-),
-(
-  'Razorpay',
-  'Software Development Engineer 1',
-  'Bengaluru, India',
-  '18 - 24 LPA',
-  '{"min_cgpa": 7.0, "allowed_branches": ["All Engineering Branches"], "allowed_batches": [2025, 2026], "backlogs_allowed": false}'::jsonb,
-  'Build the financial infrastructure that powers modern internet businesses in India. High performance APIs, microservices, and reliable payment gateways.',
-  ARRAY['Coding Screening', 'DSA & Problem Solving', 'Machine Coding & Architecture', 'Cultural Fit'],
-  NOW() + INTERVAL '21 days',
-  'https://razorpay.com/jobs/'
-);

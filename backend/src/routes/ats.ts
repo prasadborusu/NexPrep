@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import pdfParse from 'pdf-parse';
 import { analyzeResumeATS } from '../services/ats';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
@@ -13,7 +13,7 @@ router.post('/analyze', upload.single('resume_file'), async (req: Request, res: 
     let resumeText = (req.body.resume_text || '').trim();
     const jobDescription = (req.body.job_description || '').trim();
     const targetRole = req.body.target_role || 'Software Engineer';
-    const studentId = req.body.student_id || 'demo-student-id';
+    const studentId = req.body.student_id || 'unassigned';
 
     // If PDF uploaded, extract text
     if (req.file) {
@@ -39,6 +39,7 @@ router.post('/analyze', upload.single('resume_file'), async (req: Request, res: 
 
     // Store in memory
     memoryStore.ats_analyses.unshift(analysis);
+    persistStore();
 
     return res.json(analysis);
   } catch (err: any) {

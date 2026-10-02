@@ -201,6 +201,7 @@ export interface ResumeData {
     issue_date: string;
     url?: string;
   }>;
+  created_at?: string;
   updated_at: string;
 }
 

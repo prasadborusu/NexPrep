@@ -9,7 +9,6 @@ interface AuthContextType {
   login: (email: string) => Promise<UserProfile>;
   register: (data: Partial<UserProfile>) => Promise<UserProfile>;
   logout: () => void;
-  switchRole: (role: UserRole) => void;
   updateProfile: (data: Partial<UserProfile>) => Promise<UserProfile>;
 }
 
@@ -65,29 +64,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('nexprep_user');
   };
 
-  const switchRole = (newRole: UserRole) => {
-    if (user) {
-      const updated = {
-        ...user,
-        role: newRole,
-        full_name: newRole === 'admin' ? 'Administrator' : 'Student Candidate',
-        email: newRole === 'admin' ? 'admin@nexprep.io' : 'student@nexprep.io'
-      };
-      setUser(updated);
-    } else {
-      setUser({
-        id: newRole === 'admin' ? 'demo-admin-id' : 'demo-student-id',
-        email: newRole === 'admin' ? 'admin@nexprep.io' : 'student@nexprep.io',
-        full_name: newRole === 'admin' ? 'Administrator' : 'Student Candidate',
-        role: newRole,
-        skills: ['Software Engineering', 'Evaluation'],
-        target_role: newRole === 'admin' ? 'Placement Director' : 'Software Engineer',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      });
-    }
-  };
-
   const updateProfile = async (data: Partial<UserProfile>) => {
     if (!user) throw new Error('No user logged in');
     setIsLoading(true);
@@ -109,7 +85,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         logout,
-        switchRole,
         updateProfile
       }}
     >

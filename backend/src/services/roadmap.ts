@@ -11,8 +11,8 @@ export function generatePersonalizedRoadmap(
       theme: 'Core Language Fundamentals & Memory Model',
       focus: 'Syntax, Type Systems, Pointers/References & Runtime Semantics',
       items: [
-        { id: 'w1-1', title: 'Language Basics & Data Types', description: 'Review primitive vs reference types, immutability, and scopes.', category: 'core', completed: true },
-        { id: 'w1-2', title: 'Memory Management & Garbage Collection', description: 'Understand heap vs stack, lifecycle of objects, and memory leaks.', category: 'core', completed: true },
+        { id: 'w1-1', title: 'Language Basics & Data Types', description: 'Review primitive vs reference types, immutability, and scopes.', category: 'core', completed: false },
+        { id: 'w1-2', title: 'Memory Management & Garbage Collection', description: 'Understand heap vs stack, lifecycle of objects, and memory leaks.', category: 'core', completed: false },
         { id: 'w1-3', title: 'Practice 5 Warmup Algorithmic Problems', description: 'Solve string manipulation and two-pointer problems on NexPrep.', category: 'practice', completed: false }
       ]
     },

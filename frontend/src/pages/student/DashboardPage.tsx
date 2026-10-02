@@ -43,8 +43,9 @@ export const DashboardPage: React.FC = () => {
     const loadDashboardData = async () => {
       setIsLoading(true);
       try {
-        const [assList, codeSubs, rm, plList, sg] = await Promise.all([
+        const [assList, userSubs, codeSubs, rm, plList, sg] = await Promise.all([
           api.assessments.list().catch(() => []),
+          api.assessments.getStudentSubmissions(user.id).catch(() => []),
           api.coding.getSubmissions(user.id).catch(() => []),
           api.roadmap.get(user.id).catch(() => null),
           api.placements.list().catch(() => []),
@@ -52,6 +53,7 @@ export const DashboardPage: React.FC = () => {
         ]);
 
         setAssessments(assList);
+        setSubmissions(userSubs);
         setCodeSubmissions(codeSubs);
         setRoadmap(rm);
         setDrives(plList);
@@ -67,7 +69,12 @@ export const DashboardPage: React.FC = () => {
   }, [user]);
 
   const solvedProblemsCount = codeSubmissions.filter(s => s.status === 'Accepted').length;
-  const readiness = skillGap?.readiness_percentage || 65;
+  const completedAssessments = submissions.filter(s => s.status === 'evaluated' || s.status === 'submitted');
+  const readiness = skillGap?.readiness_percentage !== undefined
+    ? skillGap.readiness_percentage
+    : (completedAssessments.length > 0
+        ? Math.round(completedAssessments.reduce((acc, curr) => acc + (curr.percentage || 0), 0) / completedAssessments.length)
+        : 0);
 
   return (
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-8">
@@ -82,7 +89,7 @@ export const DashboardPage: React.FC = () => {
               Target Career: {user?.target_role || 'Full Stack Engineer'}
             </span>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-              Welcome back, {user?.full_name || 'Alex'}!
+              Welcome back, {user?.full_name || 'Candidate'}!
             </h1>
             <p className="text-sm text-purple-100 font-normal leading-relaxed">
               Your preparation pipeline is active. Track your assessments, coding milestones, and verified placement applications.
@@ -114,7 +121,9 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-purple-200">Readiness Score</p>
-              <p className="text-sm font-bold text-white">Competitive Track</p>
+              <p className="text-sm font-bold text-white">
+                {readiness > 0 ? (readiness >= 75 ? 'Placement Ready' : 'In Progress') : 'Pending Evaluation'}
+              </p>
               <Link to="/student/skills" className="text-[11px] text-pink-300 hover:text-white flex items-center gap-1 mt-0.5">
                 View skill gaps <ChevronRight className="w-3 h-3" />
               </Link>
@@ -291,7 +300,7 @@ export const DashboardPage: React.FC = () => {
               </Link>
             </div>
 
-            {roadmap?.weeks ? (
+            {roadmap?.weeks && roadmap.weeks.length > 0 ? (
               <div className="space-y-3">
                 {roadmap.weeks.slice(0, 3).map((w) => (
                   <div key={w.week_number} className="p-3 rounded-xl bg-[#FBFAFF] border border-slate-100 space-y-1.5">
@@ -307,7 +316,16 @@ export const DashboardPage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-400">No active roadmap. Generate one tailored to your profile.</p>
+              <div className="text-center py-6 text-slate-400 space-y-3">
+                <p className="text-xs">No active roadmap generated yet.</p>
+                <button
+                  onClick={() => navigate('/student/roadmap')}
+                  className="px-3.5 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all inline-flex items-center gap-1.5 shadow-sm"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-pink-300" />
+                  Generate Roadmap
+                </button>
+              </div>
             )}
           </div>
 

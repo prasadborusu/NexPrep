@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { generateInterviewFeedback } from '../services/ai';
 import { InterviewSession, InterviewQuestion } from '../types';
 
@@ -65,7 +65,11 @@ const QUESTION_BANK: Record<string, InterviewQuestion[]> = {
 
 // Start a new mock interview session
 router.post('/start', (req: Request, res: Response) => {
-  const { student_id = 'demo-student-id', target_role = 'Full Stack Engineer', domain = 'Core Software Engineering' } = req.body;
+  const { student_id, target_role = 'Software Engineer', domain = 'Core Software Engineering' } = req.body;
+
+  if (!student_id) {
+    return res.status(400).json({ error: 'student_id is required' });
+  }
 
   const sessionQuestions: InterviewQuestion[] = [
     ...QUESTION_BANK.technical.slice(0, 2),
@@ -85,6 +89,7 @@ router.post('/start', (req: Request, res: Response) => {
   };
 
   memoryStore.interview_sessions.unshift(session);
+  persistStore();
   return res.status(201).json(session);
 });
 

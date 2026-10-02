@@ -18,12 +18,7 @@ export const AdminBulkEmailPage: React.FC = () => {
   const [templates, setTemplates] = useState<Record<string, { subject: string; body: string }>>({});
   const [selectedTemplateKey, setSelectedTemplateKey] = useState('drive_announcement');
   const [csvFile, setCsvFile] = useState<File | null>(null);
-  const [parsedRecipients, setParsedRecipients] = useState<any[]>([
-    { email: 'alex.johnson@nit.edu', name: 'Alex Johnson' },
-    { email: 'priya.sharma@nit.edu', name: 'Priya Sharma' },
-    { email: 'rohit.verma@nit.edu', name: 'Rohit Verma' },
-    { email: 'sneha.patel@nit.edu', name: 'Sneha Patel' }
-  ]);
+  const [parsedRecipients, setParsedRecipients] = useState<any[]>([]);
 
   const [previewSubject, setPreviewSubject] = useState('');
   const [previewBody, setPreviewBody] = useState('');
@@ -37,12 +32,16 @@ export const AdminBulkEmailPage: React.FC = () => {
 
   const fetchTemplatesAndLogs = async () => {
     try {
-      const [tpls, logList] = await Promise.all([
+      const [tpls, logList, studentList] = await Promise.all([
         api.bulkEmail.getTemplates(),
-        api.bulkEmail.getLogs()
+        api.bulkEmail.getLogs(),
+        api.admin.getStudents().catch(() => [])
       ]);
       setTemplates(tpls);
       setLogs(logList);
+      if (studentList && studentList.length > 0) {
+        setParsedRecipients(studentList.map((s: any) => ({ email: s.email, name: s.full_name })));
+      }
       updatePreview('drive_announcement', tpls);
     } catch (err) {
       console.error(err);
@@ -54,12 +53,12 @@ export const AdminBulkEmailPage: React.FC = () => {
       const res = await api.bulkEmail.preview({
         template_key: templateKey,
         variables: {
-          name: parsedRecipients[0]?.name || 'Alex Johnson',
-          company: 'Atlassian',
+          name: parsedRecipients[0]?.name || 'Candidate Name',
+          company: 'Enterprise Partner',
           role: 'Associate Software Engineer',
           cgpa: '7.5',
-          deadline: 'Oct 15, 2026',
-          assessment_title: 'Full Stack Screening'
+          deadline: 'In 14 days',
+          assessment_title: 'Institutional Screening Assessment'
         }
       });
       setPreviewSubject(res.subject);
@@ -195,12 +194,18 @@ export const AdminBulkEmailPage: React.FC = () => {
             <div className="pt-2">
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Recipient Roster Preview</span>
               <div className="max-h-36 overflow-y-auto space-y-1 rounded-xl border border-slate-100 p-2 bg-[#FBFAFF] text-xs">
-                {parsedRecipients.map((r, i) => (
-                  <div key={i} className="flex justify-between text-slate-600 py-0.5 px-1">
-                    <span className="font-semibold text-slate-800">{r.name}</span>
-                    <span className="text-slate-400 font-mono text-[11px]">{r.email}</span>
-                  </div>
-                ))}
+                {parsedRecipients.length === 0 ? (
+                  <p className="text-center py-4 text-slate-400 text-[11px]">
+                    No candidates loaded. Upload a CSV roster or register students.
+                  </p>
+                ) : (
+                  parsedRecipients.map((r, i) => (
+                    <div key={i} className="flex justify-between text-slate-600 py-0.5 px-1">
+                      <span className="font-semibold text-slate-800">{r.name}</span>
+                      <span className="text-slate-400 font-mono text-[11px]">{r.email}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

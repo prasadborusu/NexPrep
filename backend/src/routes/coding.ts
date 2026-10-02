@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { runCodeWithPiston, testCodeAgainstCases } from '../services/compiler';
 import { CodeSubmission } from '../types';
 
@@ -64,7 +64,7 @@ router.post('/submit', async (req: Request, res: Response) => {
 
   const submission: CodeSubmission = {
     id: `csub-${Date.now()}`,
-    student_id: student_id || 'demo-student-id',
+    student_id: student_id || 'unassigned',
     problem_id: problem.id,
     language,
     code,
@@ -82,6 +82,8 @@ router.post('/submit', async (req: Request, res: Response) => {
   const allForProb = memoryStore.code_submissions.filter(s => s.problem_id === problem.id);
   const acceptedForProb = allForProb.filter(s => s.status === 'Accepted').length;
   problem.acceptance_rate = Math.round((acceptedForProb / allForProb.length) * 100);
+
+  persistStore();
 
   return res.json({
     submission,

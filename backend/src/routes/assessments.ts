@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { testCodeAgainstCases } from '../services/compiler';
 import { Assessment, AssessmentSubmission } from '../types';
 
@@ -105,9 +105,9 @@ router.post('/:id/submit', async (req: Request, res: Response) => {
   const submission: AssessmentSubmission = {
     id: `sub-${Date.now()}`,
     assessment_id: assessment.id,
-    student_id: student_id || 'demo-student-id',
-    student_name: student?.full_name || 'Alex Johnson',
-    student_email: student?.email || 'student@nexprep.io',
+    student_id: student_id || (student ? student.id : 'unassigned'),
+    student_name: student?.full_name || 'Candidate',
+    student_email: student?.email || '',
     assessment_title: assessment.title,
     status: is_final_submit ? 'evaluated' : 'in_progress',
     score: totalScore,
@@ -129,6 +129,8 @@ router.post('/:id/submit', async (req: Request, res: Response) => {
   } else {
     memoryStore.assessment_submissions.push(submission);
   }
+
+  persistStore();
 
   return res.json({
     message: is_final_submit ? 'Assessment submitted successfully' : 'Autosaved progress',
@@ -154,6 +156,12 @@ router.get('/:id/result/:studentId', (req: Request, res: Response) => {
   });
 });
 
+// Get all submissions for a student
+router.get('/submissions/student/:studentId', (req: Request, res: Response) => {
+  const list = memoryStore.assessment_submissions.filter(s => s.student_id === req.params.studentId);
+  return res.json(list);
+});
+
 // Admin: Create assessment
 router.post('/', (req: Request, res: Response) => {
   const { title, description, type, duration_minutes, total_marks, pass_percentage, scheduled_at } = req.body;
@@ -177,6 +185,7 @@ router.post('/', (req: Request, res: Response) => {
   };
 
   memoryStore.assessments.unshift(newAssessment);
+  persistStore();
   return res.status(201).json(newAssessment);
 });
 
@@ -207,6 +216,7 @@ router.post('/:id/questions', (req: Request, res: Response) => {
   };
 
   memoryStore.questions.push(newQuestion);
+  persistStore();
   return res.status(201).json(newQuestion);
 });
 

@@ -20,16 +20,16 @@ export const ProfilePage: React.FC = () => {
 
   const [fullName, setFullName] = useState(user?.full_name || '');
   const [college, setCollege] = useState(user?.college || '');
-  const [degree, setDegree] = useState(user?.degree || 'B.Tech');
-  const [branch, setBranch] = useState(user?.branch || 'Computer Science & Engineering');
-  const [gradYear, setGradYear] = useState(user?.graduation_year?.toString() || '2026');
-  const [cgpa, setCgpa] = useState(user?.cgpa?.toString() || '8.75');
-  const [phone, setPhone] = useState(user?.phone || '+91 98765 43210');
+  const [degree, setDegree] = useState(user?.degree || '');
+  const [branch, setBranch] = useState(user?.branch || '');
+  const [gradYear, setGradYear] = useState(user?.graduation_year?.toString() || '');
+  const [cgpa, setCgpa] = useState(user?.cgpa !== undefined && user?.cgpa !== null ? user.cgpa.toString() : '');
+  const [phone, setPhone] = useState(user?.phone || '');
   const [targetRole, setTargetRole] = useState(user?.target_role || 'Full Stack Engineer');
-  const [githubUrl, setGithubUrl] = useState(user?.github_url || 'https://github.com');
-  const [linkedinUrl, setLinkedinUrl] = useState(user?.linkedin_url || 'https://linkedin.com');
+  const [githubUrl, setGithubUrl] = useState(user?.github_url || '');
+  const [linkedinUrl, setLinkedinUrl] = useState(user?.linkedin_url || '');
   const [bio, setBio] = useState(user?.bio || '');
-  const [skills, setSkills] = useState<string[]>(user?.skills || ['Java', 'Python', 'React', 'Data Structures']);
+  const [skills, setSkills] = useState<string[]>(user?.skills || []);
   const [newSkill, setNewSkill] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,8 +55,8 @@ export const ProfilePage: React.FC = () => {
         college,
         degree,
         branch,
-        graduation_year: parseInt(gradYear, 10) || 2026,
-        cgpa: parseFloat(cgpa) || 8.5,
+        graduation_year: gradYear ? parseInt(gradYear, 10) : undefined,
+        cgpa: cgpa ? parseFloat(cgpa) : undefined,
         phone,
         target_role: targetRole,
         github_url: githubUrl,

@@ -71,6 +71,8 @@ export const api = {
       }),
     getResult: (id: string, studentId: string) =>
       fetchJson<{ submission: AssessmentSubmission; questions: Question[] }>(`/assessments/${id}/result/${studentId}`),
+    getStudentSubmissions: (studentId: string) =>
+      fetchJson<AssessmentSubmission[]>(`/assessments/submissions/student/${studentId}`),
     create: (data: Partial<Assessment>) => fetchJson<Assessment>('/assessments', {
       method: 'POST',
       body: JSON.stringify(data)

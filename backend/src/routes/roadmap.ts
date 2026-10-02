@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { generatePersonalizedRoadmap } from '../services/roadmap';
 
 const router = Router();
@@ -22,6 +22,7 @@ router.post('/:studentId/generate', (req: Request, res: Response) => {
   const { targetRole } = req.body;
   const studentId = String(req.params.studentId);
   const roadmap = generatePersonalizedRoadmap(studentId, targetRole);
+  persistStore();
   return res.json(roadmap);
 });
 
@@ -55,6 +56,7 @@ router.patch('/:studentId/item/:itemId', (req: Request, res: Response) => {
 
   roadmap.progress_percentage = Math.round((completedItems / Math.max(1, totalItems)) * 100);
   roadmap.updated_at = new Date().toISOString();
+  persistStore();
 
   return res.json(roadmap);
 });

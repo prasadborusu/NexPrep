@@ -8,10 +8,10 @@ export const AdminPlacementsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [roleTitle, setRoleTitle] = useState('');
-  const [ctcRange, setCtcRange] = useState('15 - 22 LPA');
-  const [location, setLocation] = useState('Bengaluru / Remote');
+  const [ctcRange, setCtcRange] = useState('');
+  const [location, setLocation] = useState('');
   const [minCgpa, setMinCgpa] = useState('7.0');
-  const [applyUrl, setApplyUrl] = useState('https://careers.google.com');
+  const [applyUrl, setApplyUrl] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -36,21 +36,25 @@ export const AdminPlacementsPage: React.FC = () => {
       const created = await api.placements.create({
         company_name: companyName,
         role_title: roleTitle,
-        ctc_range: ctcRange,
-        location,
+        ctc_range: ctcRange || 'Competitive',
+        location: location || 'Hybrid',
         eligibility: {
           min_cgpa: parseFloat(minCgpa) || 7.0,
           allowed_branches: ['CSE', 'IT', 'ECE'],
           allowed_batches: [2025, 2026],
           backlogs_allowed: false
         },
-        job_description: jobDescription || `${roleTitle} drive at ${companyName}.`,
+        job_description: jobDescription || `${roleTitle} recruitment drive at ${companyName}.`,
         apply_url: applyUrl
       });
       setDrives([created, ...drives]);
       setShowModal(false);
       setCompanyName('');
       setRoleTitle('');
+      setCtcRange('');
+      setLocation('');
+      setApplyUrl('');
+      setJobDescription('');
     } catch (err: any) {
       alert(err.message || 'Creation failed');
     } finally {
@@ -75,38 +79,48 @@ export const AdminPlacementsPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {drives.map((d) => (
-          <div key={d.id} className="bg-white rounded-2xl p-6 border border-purple-100 shadow-soft space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">{d.company_name}</h3>
-                <p className="text-xs font-semibold text-purple-700">{d.role_title}</p>
+      {drives.length === 0 ? (
+        <div className="bg-white rounded-2xl p-12 text-center border border-purple-100 shadow-soft space-y-2">
+          <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+          <p className="text-sm font-bold text-slate-700">No placement drives posted yet.</p>
+          <p className="text-xs text-slate-500">
+            Click "Post New Drive" to configure corporate recruitment drives and eligibility criteria.
+          </p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-6">
+          {drives.map((d) => (
+            <div key={d.id} className="bg-white rounded-2xl p-6 border border-purple-100 shadow-soft space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">{d.company_name}</h3>
+                  <p className="text-xs font-semibold text-purple-700">{d.role_title}</p>
+                </div>
+                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  Active
+                </span>
               </div>
-              <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                Active
-              </span>
-            </div>
 
-            <p className="text-xs text-slate-500 line-clamp-2">{d.job_description}</p>
+              <p className="text-xs text-slate-500 line-clamp-2">{d.job_description}</p>
 
-            <div className="grid grid-cols-3 gap-2 text-center text-xs pt-1">
-              <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
-                <span className="text-[10px] text-slate-400 block">Package</span>
-                <span className="font-bold text-slate-800">{d.ctc_range}</span>
-              </div>
-              <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
-                <span className="text-[10px] text-slate-400 block">Min CGPA</span>
-                <span className="font-bold text-slate-800">{d.eligibility?.min_cgpa || 7.0}</span>
-              </div>
-              <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
-                <span className="text-[10px] text-slate-400 block">Location</span>
-                <span className="font-bold text-slate-800 truncate">{d.location}</span>
+              <div className="grid grid-cols-3 gap-2 text-center text-xs pt-1">
+                <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
+                  <span className="text-[10px] text-slate-400 block">Package</span>
+                  <span className="font-bold text-slate-800">{d.ctc_range || 'Competitive'}</span>
+                </div>
+                <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
+                  <span className="text-[10px] text-slate-400 block">Min CGPA</span>
+                  <span className="font-bold text-slate-800">{d.eligibility?.min_cgpa || 7.0}</span>
+                </div>
+                <div className="p-2 rounded-xl bg-[#FBFAFF] border border-slate-100">
+                  <span className="text-[10px] text-slate-400 block">Location</span>
+                  <span className="font-bold text-slate-800 truncate">{d.location}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">

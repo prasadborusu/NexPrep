@@ -131,11 +131,11 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
       visual: (
         <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-[11px] text-slate-600 space-y-2">
           <div className="text-center pb-1 border-b border-slate-200">
-            <p className="font-bold text-slate-800 text-xs">ALEX JOHNSON</p>
-            <p className="text-[10px] text-slate-500">alex.johnson@example.com • Bengaluru, India</p>
+            <p className="font-bold text-slate-800 text-xs">CANDIDATE NAME</p>
+            <p className="text-[10px] text-slate-500">candidate@university.edu • Campus Placement Candidate</p>
           </div>
           <p className="font-semibold text-purple-700 uppercase tracking-wider text-[10px]">Technical Projects</p>
-          <p className="text-slate-700 font-medium">NexPrep Career Preparation Platform</p>
+          <p className="text-slate-700 font-medium">Full Stack Cloud Application</p>
           <p className="text-[10px] text-slate-500 leading-relaxed">• Architected asynchronous queue with Node.js & Redis, cutting latency by 45%.</p>
         </div>
       )
@@ -180,16 +180,16 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
       icon: Building2,
       badge: 'Verified Opportunities',
       heading: 'Direct Eligibility Filtering & Applications',
-      description: 'Browse top tier campus placement drives (Atlassian, Razorpay, etc.), check CGPA eligibility, and track status.',
+      description: 'Browse verified corporate placement drives, check eligibility thresholds, and submit direct applications.',
       visual: (
         <div className="bg-white rounded-xl p-3.5 border border-purple-100 shadow-soft flex items-center justify-between text-xs">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center">
-              A
+              C
             </div>
             <div>
-              <p className="font-bold text-slate-800">Atlassian</p>
-              <p className="text-[11px] text-slate-500">26 - 32 LPA • Bengaluru</p>
+              <p className="font-bold text-slate-800">Enterprise Partner Drive</p>
+              <p className="text-[11px] text-slate-500">Associate Software Engineer</p>
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-[11px] font-semibold">

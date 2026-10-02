@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { UserProfile } from '../types';
 
 const router = Router();
@@ -8,34 +8,17 @@ const router = Router();
 router.post('/login', (req: Request, res: Response) => {
   const { email } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' });
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'Valid email address is required' });
   }
 
-  // Look for existing user or create a session
-  let user: UserProfile | undefined = memoryStore.profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+  const normalized = email.trim().toLowerCase();
+  const user = memoryStore.profiles.find(p => p.email.toLowerCase() === normalized);
 
   if (!user) {
-    // If logging in with admin credentials or role specified
-    const isAdmin = email.toLowerCase().includes('admin');
-    user = {
-      id: `user-${Date.now()}`,
-      email: email.toLowerCase(),
-      full_name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-      role: isAdmin ? 'admin' : 'student',
-      college: 'NexPrep Engineering Academy',
-      degree: 'B.Tech',
-      branch: 'Computer Science',
-      graduation_year: 2026,
-      cgpa: 8.5,
-      phone: '+91 98765 43210',
-      skills: ['Java', 'Python', 'React', 'Data Structures'],
-      target_role: 'Full Stack Engineer',
-      bio: 'Ready to learn and excel in campus placements.',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-    memoryStore.profiles.push(user);
+    return res.status(401).json({
+      error: 'No account registered with this email. Please create your account first.'
+    });
   }
 
   return res.json({
@@ -46,36 +29,38 @@ router.post('/login', (req: Request, res: Response) => {
 
 // Register
 router.post('/register', (req: Request, res: Response) => {
-  const { email, full_name, role = 'student', target_role = 'Full Stack Engineer' } = req.body;
+  const { email, full_name, role = 'student', target_role = 'Software Engineer' } = req.body;
 
   if (!email || !full_name) {
     return res.status(400).json({ error: 'Email and Full Name are required' });
   }
 
-  const existing = memoryStore.profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+  const normalized = email.trim().toLowerCase();
+  const existing = memoryStore.profiles.find(p => p.email.toLowerCase() === normalized);
   if (existing) {
-    return res.status(409).json({ error: 'User with this email already exists' });
+    return res.status(409).json({ error: 'An account with this email address already exists. Please sign in.' });
   }
 
   const newUser: UserProfile = {
-    id: `user-${Date.now()}`,
-    email: email.toLowerCase(),
-    full_name,
+    id: `user-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    email: normalized,
+    full_name: full_name.trim(),
     role: role === 'admin' ? 'admin' : 'student',
-    college: req.body.college || 'Engineering Institute',
-    degree: req.body.degree || 'B.Tech',
-    branch: req.body.branch || 'Computer Science',
-    graduation_year: req.body.graduation_year || 2026,
-    cgpa: req.body.cgpa || 8.0,
-    phone: req.body.phone || '',
-    skills: req.body.skills || ['Python', 'Problem Solving'],
-    target_role,
-    bio: req.body.bio || 'Aspiring software developer preparing for top tech opportunities.',
+    college: req.body.college ? req.body.college.trim() : '',
+    degree: req.body.degree ? req.body.degree.trim() : 'B.Tech',
+    branch: req.body.branch ? req.body.branch.trim() : 'Computer Science',
+    graduation_year: req.body.graduation_year ? parseInt(req.body.graduation_year, 10) : new Date().getFullYear(),
+    cgpa: req.body.cgpa ? parseFloat(req.body.cgpa) : undefined,
+    phone: req.body.phone ? req.body.phone.trim() : '',
+    skills: Array.isArray(req.body.skills) ? req.body.skills : [],
+    target_role: target_role.trim(),
+    bio: req.body.bio ? req.body.bio.trim() : '',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
 
   memoryStore.profiles.push(newUser);
+  persistStore();
 
   return res.status(201).json({
     token: `token-${newUser.id}`,
@@ -85,7 +70,10 @@ router.post('/register', (req: Request, res: Response) => {
 
 // Get Profile
 router.get('/profile/:id', (req: Request, res: Response) => {
-  const user = memoryStore.profiles.find(p => p.id === req.params.id) || memoryStore.profiles[0];
+  const user = memoryStore.profiles.find(p => p.id === req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Profile not found' });
+  }
   return res.json(user);
 });
 
@@ -101,6 +89,8 @@ router.put('/profile/:id', (req: Request, res: Response) => {
     ...req.body,
     updated_at: new Date().toISOString()
   };
+
+  persistStore();
 
   return res.json(memoryStore.profiles[idx]);
 });

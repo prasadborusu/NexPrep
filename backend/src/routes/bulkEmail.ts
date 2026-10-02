@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
-import { memoryStore } from '../services/db';
+import { memoryStore, persistStore } from '../services/db';
 import { BulkEmailLog } from '../types';
 
 const router = Router();
@@ -77,7 +77,7 @@ router.post('/preview', (req: Request, res: Response) => {
   let renderedSubject = template.subject;
   let renderedBody = template.body;
 
-  const vars = { name: 'Alex Johnson', company: 'Atlassian', role: 'Software Engineer', cgpa: '7.5', deadline: 'Oct 15, 2026', assessment_title: 'Full Stack Screening', ...variables };
+  const vars = { name: 'Candidate Name', company: 'Company', role: 'Software Engineer', cgpa: '7.5', deadline: 'Upcoming Date', assessment_title: 'Assessment', ...variables };
 
   Object.entries(vars).forEach(([k, v]) => {
     const reg = new RegExp(`{{${k}}}`, 'g');
@@ -93,7 +93,7 @@ router.post('/preview', (req: Request, res: Response) => {
 
 // Send Bulk Email (processes list, records delivery metrics, logs)
 router.post('/send', (req: Request, res: Response) => {
-  const { admin_id = 'demo-admin-id', template_name, subject, recipients } = req.body;
+  const { admin_id = 'institutional-admin', template_name, subject, recipients } = req.body;
 
   if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
     return res.status(400).json({ error: 'No recipients provided' });
@@ -122,6 +122,7 @@ router.post('/send', (req: Request, res: Response) => {
   };
 
   memoryStore.bulk_email_logs.unshift(log);
+  persistStore();
 
   return res.status(201).json({
     message: `Dispatched ${successCount} emails successfully`,
