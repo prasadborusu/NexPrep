@@ -26,6 +26,87 @@ if (isSmtpConfigured) {
   console.log('⚠️ SMTP not configured in backend/.env');
 }
 
+export async function sendOtpEmail(to: string, fullName: string, otp: string) {
+  if (!transporter || !isSmtpConfigured) {
+    console.warn('⚠️ Cannot send OTP email: SMTP not configured');
+    return false;
+  }
+
+  const digits = otp.split('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin:0;padding:0;background:#FBFAFF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+      <div style="max-width:540px;margin:36px auto;background:#ffffff;border:1px solid #EAE6F5;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(109,40,217,0.07);">
+        
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%);padding:32px 28px;text-align:center;color:white;">
+          <h1 style="margin:0;font-size:26px;font-weight:900;letter-spacing:-0.5px;">NexPrep</h1>
+          <p style="margin:6px 0 0;font-size:13px;color:#E9D5FF;font-weight:500;">Placement & Career Intelligence Platform</p>
+        </div>
+
+        <!-- Body Content -->
+        <div style="padding:36px 32px;color:#181525;line-height:1.6;text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:#F3E8FF;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;">
+            <span style="font-size:28px;">🔐</span>
+          </div>
+
+          <h2 style="margin:0 0 8px;font-size:22px;color:#181525;font-weight:800;">Verify Your Email Address</h2>
+          <p style="margin:0 0 24px;font-size:14px;color:#6B7280;line-height:1.5;">
+            Hi <strong>${fullName}</strong>, use the 4-digit verification code below to complete your NexPrep registration:
+          </p>
+
+          <!-- 4-Digit OTP Box -->
+          <div style="margin:28px 0;text-align:center;">
+            <div style="display:inline-flex;gap:12px;align-items:center;justify-content:center;">
+              ${digits.map(d => `
+                <div style="display:inline-block;width:56px;height:64px;line-height:64px;font-size:32px;font-weight:900;color:#6D28D9;background:#F5F3FF;border:2px solid #C4B5FD;border-radius:14px;text-align:center;font-family:monospace;box-shadow:0 2px 8px rgba(109,40,217,0.1);">
+                  ${d}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <p style="margin:24px 0 0;font-size:13px;color:#6B7280;">
+            ⏱️ This code is valid for <strong>10 minutes</strong>.<br>
+            Never share this code with anyone.
+          </p>
+
+          <div style="margin-top:28px;padding-top:20px;border-top:1px solid #F3F4F6;font-size:12px;color:#9CA3AF;">
+            If you didn't request this code, you can safely ignore this email.
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background:#F9FAFB;padding:16px 28px;font-size:11px;color:#9CA3AF;text-align:center;border-top:1px solid #EAE6F5;">
+          © ${new Date().getFullYear()} NexPrep · Career & Campus Placement Platform
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    const info = await transporter.sendMail({
+      from: `"${config.smtpFromName || 'NexPrep Placement Cell'}" <${config.smtpUser}>`,
+      to,
+      subject: `🔐 ${otp} is your NexPrep verification code`,
+      text: `Your NexPrep 4-digit verification code is: ${otp}\n\nValid for 10 minutes.\n\nNexPrep Placement Cell`,
+      html
+    });
+    console.log(`✅ 4-Digit OTP (${otp}) sent to ${to} (MessageId: ${info.messageId})`);
+    return true;
+  } catch (err: any) {
+    console.error(`❌ Failed to send OTP email to ${to}:`, err.message);
+    return false;
+  }
+}
+
 export async function sendWelcomeEmail(to: string, fullName: string, role: string) {
   if (!transporter || !isSmtpConfigured) {
     console.warn('⚠️ Cannot send email: SMTP not configured');
@@ -90,3 +171,4 @@ export async function sendWelcomeEmail(to: string, fullName: string, role: strin
     return false;
   }
 }
+

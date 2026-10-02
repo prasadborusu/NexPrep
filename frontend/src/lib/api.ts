@@ -55,9 +55,17 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ email, password })
     }),
-    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ token: string; user: UserProfile; email_verification_required?: boolean; message?: string }>('/auth/register', {
+    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ otp_required: boolean; email: string; message: string }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(data)
+    }),
+    verifyOtp: (data: { email: string; otp: string }) => fetchJson<{ success: boolean; token: string; user: UserProfile; message: string }>('/auth/verify-otp', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+    resendOtp: (email: string) => fetchJson<{ success: boolean; message: string }>('/auth/resend-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email })
     }),
     getProfile: (id: string) => fetchJson<UserProfile>(`/auth/profile/${id}`),
     updateProfile: (id: string, data: Partial<UserProfile>) => fetchJson<UserProfile>(`/auth/profile/${id}`, {

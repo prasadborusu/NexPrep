@@ -7,7 +7,8 @@ interface AuthContextType {
   role: UserRole;
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<UserProfile>;
-  register: (data: Partial<UserProfile> & { password?: string }) => Promise<UserProfile>;
+  register: (data: Partial<UserProfile> & { password?: string }) => Promise<any>;
+  loginWithUser: (user: UserProfile) => void;
   logout: () => void;
   updateProfile: (data: Partial<UserProfile>) => Promise<UserProfile>;
 }
@@ -69,11 +70,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       const res = await api.auth.register(data);
-      setUser(res.user);
-      return res.user;
+      return res;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const loginWithUser = (userProfile: UserProfile) => {
+    setUser(userProfile);
   };
 
   const logout = () => {
@@ -101,6 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         register,
+        loginWithUser,
         logout,
         updateProfile
       }}

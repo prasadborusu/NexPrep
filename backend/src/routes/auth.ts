@@ -1,9 +1,31 @@
 import { Router, Request, Response } from 'express';
 import { memoryStore, persistStore, supabase } from '../services/db';
 import { UserProfile } from '../types';
-import { sendWelcomeEmail, isSmtpConfigured } from '../services/email';
+import { sendWelcomeEmail, sendOtpEmail, isSmtpConfigured } from '../services/email';
 
 const router = Router();
+
+interface PendingRegistration {
+  otp: string;
+  expiresAt: number;
+  userData: {
+    email: string;
+    password: string;
+    full_name: string;
+    role: 'student' | 'admin';
+    target_role?: string;
+    college?: string;
+    degree?: string;
+    branch?: string;
+    graduation_year?: number;
+    cgpa?: number;
+    phone?: string;
+    skills?: string[];
+    bio?: string;
+  };
+}
+
+const pendingRegistrations = new Map<string, PendingRegistration>();
 
 // Login
 router.post('/login', async (req: Request, res: Response) => {
@@ -146,7 +168,7 @@ router.post('/login', async (req: Request, res: Response) => {
   });
 });
 
-// Register
+// 1. Register & Send 4-Digit OTP
 router.post('/register', async (req: Request, res: Response) => {
   const { email, password, full_name, role = 'student', target_role = 'Software Engineer' } = req.body;
 
@@ -154,76 +176,133 @@ router.post('/register', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Email and Full Name are required' });
   }
 
+  if (!password || password.trim().length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+  }
+
   const normalized = email.trim().toLowerCase();
+
+  // Check if already registered in local memory or Supabase
   const existingLocal = memoryStore.profiles.find(p => p.email.toLowerCase() === normalized);
+  if (existingLocal) {
+    return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
+  }
 
-  let userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-  let emailVerificationRequired = false;
-
-  // Create or register user in Supabase Auth
   if (supabase) {
     try {
-      // First try admin.createUser so the user is confirmed and ready
+      const { data: profile } = await supabase.from('profiles').select('id').eq('email', normalized).maybeSingle();
+      if (profile) {
+        return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
+      }
+    } catch (e) {
+      console.warn('Supabase check profile:', e);
+    }
+  }
+
+  // Generate 4-digit OTP code
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+  pendingRegistrations.set(normalized, {
+    otp,
+    expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
+    userData: {
+      email: normalized,
+      password: password.trim(),
+      full_name: full_name.trim(),
+      role: role === 'admin' ? 'admin' : 'student',
+      target_role: target_role?.trim() || 'Software Engineer',
+      college: req.body.college?.trim() || '',
+      degree: req.body.degree?.trim() || '',
+      branch: req.body.branch?.trim() || '',
+      graduation_year: req.body.graduation_year ? parseInt(req.body.graduation_year, 10) : undefined,
+      cgpa: req.body.cgpa ? parseFloat(req.body.cgpa) : undefined,
+      phone: req.body.phone?.trim() || '',
+      skills: Array.isArray(req.body.skills) ? req.body.skills : [],
+      bio: req.body.bio?.trim() || ''
+    }
+  });
+
+  // Send real 4-Digit OTP email
+  if (isSmtpConfigured) {
+    sendOtpEmail(normalized, full_name.trim(), otp).catch(err => {
+      console.error('Error sending OTP email:', err);
+    });
+  }
+
+  return res.json({
+    otp_required: true,
+    email: normalized,
+    message: `A 4-digit verification code has been sent to ${normalized}.`
+  });
+});
+
+// 2. Verify 4-Digit OTP & Finalize Account Creation
+router.post('/verify-otp', async (req: Request, res: Response) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: 'Email and 4-digit OTP are required.' });
+  }
+
+  const normalized = email.trim().toLowerCase();
+  const pending = pendingRegistrations.get(normalized);
+
+  if (!pending) {
+    return res.status(400).json({
+      error: 'No pending registration found for this email, or it has already been verified. Please sign in or register again.'
+    });
+  }
+
+  if (Date.now() > pending.expiresAt) {
+    return res.status(400).json({
+      error: 'The 4-digit verification code has expired. Please click "Resend Code" to get a new one.'
+    });
+  }
+
+  if (pending.otp !== String(otp).trim()) {
+    return res.status(400).json({
+      error: 'Incorrect 4-digit code. Please check your email and enter the latest code.'
+    });
+  }
+
+  const { userData } = pending;
+  let userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+
+  // Create confirmed user in Supabase Auth
+  if (supabase) {
+    try {
       const { data: adminData, error: adminError } = await supabase.auth.admin.createUser({
         email: normalized,
-        password: password.trim(),
+        password: userData.password,
         email_confirm: true,
         user_metadata: {
-          full_name: full_name.trim(),
-          role: role === 'admin' ? 'admin' : 'student'
+          full_name: userData.full_name,
+          role: userData.role
         }
       });
 
       if (!adminError && adminData?.user) {
         userId = adminData.user.id;
-        emailVerificationRequired = true;
-      } else {
-        // Fallback to standard signUp if admin fails
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email: normalized,
-          password: password.trim(),
-          options: {
-            data: {
-              full_name: full_name.trim(),
-              role: role === 'admin' ? 'admin' : 'student'
-            }
-          }
-        });
-
-        if (authError) {
-          if (authError.message.toLowerCase().includes('already registered') ||
-              authError.message.toLowerCase().includes('already exists')) {
-            return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
-          }
-          console.warn('Supabase auth fallback error:', authError.message);
-        }
-
-        if (authData?.user) {
-          userId = authData.user.id;
-          emailVerificationRequired = true;
-        }
       }
     } catch (e: any) {
-      console.warn('Supabase auth exception:', e?.message || e);
+      console.warn('Supabase create user error:', e?.message || e);
     }
-  } else if (existingLocal) {
-    return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
   }
 
   const newUser: UserProfile = {
     id: userId,
     email: normalized,
-    full_name: full_name.trim(),
-    role: role === 'admin' ? 'admin' : 'student',
-    college: req.body.college?.trim() || '',
-    degree: req.body.degree?.trim() || '',
-    branch: req.body.branch?.trim() || '',
-    graduation_year: req.body.graduation_year ? parseInt(req.body.graduation_year, 10) : undefined,
-    cgpa: req.body.cgpa ? parseFloat(req.body.cgpa) : undefined,
-    phone: req.body.phone?.trim() || '',
-    skills: Array.isArray(req.body.skills) ? req.body.skills : [],
-    target_role: target_role.trim(),
-    bio: req.body.bio?.trim() || '',
+    full_name: userData.full_name,
+    role: userData.role,
+    college: userData.college || '',
+    degree: userData.degree || '',
+    branch: userData.branch || '',
+    graduation_year: userData.graduation_year,
+    cgpa: userData.cgpa,
+    phone: userData.phone || '',
+    skills: userData.skills || [],
+    target_role: userData.target_role || 'Software Engineer',
+    bio: userData.bio || '',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
@@ -246,18 +325,55 @@ router.post('/register', async (req: Request, res: Response) => {
   }
   persistStore();
 
-  // 🚀 Send real Welcome & Verification Email directly via Gmail SMTP
+  // Clear pending registration
+  pendingRegistrations.delete(normalized);
+
+  // Send Welcome Email
   if (isSmtpConfigured) {
-    sendWelcomeEmail(normalized, full_name.trim(), role).catch(err => {
-      console.error('Error sending registration email:', err);
+    sendWelcomeEmail(normalized, userData.full_name, userData.role).catch(err => {
+      console.error('Error sending welcome email:', err);
     });
   }
 
-  return res.status(201).json({
+  return res.json({
+    success: true,
     token: `token-${newUser.id}`,
     user: newUser,
-    email_verification_required: true,
-    message: `Account created successfully! Verification & welcome email sent to ${normalized}.`
+    message: 'Account verified and created successfully!'
+  });
+});
+
+// 3. Resend 4-Digit OTP
+router.post('/resend-otp', async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email address is required.' });
+  }
+
+  const normalized = email.trim().toLowerCase();
+  const pending = pendingRegistrations.get(normalized);
+
+  if (!pending) {
+    return res.status(400).json({
+      error: 'No pending registration found for this email. Please fill out the registration form again.'
+    });
+  }
+
+  const newOtp = Math.floor(1000 + Math.random() * 9000).toString();
+  pending.otp = newOtp;
+  pending.expiresAt = Date.now() + 10 * 60 * 1000;
+  pendingRegistrations.set(normalized, pending);
+
+  if (isSmtpConfigured) {
+    sendOtpEmail(normalized, pending.userData.full_name, newOtp).catch(err => {
+      console.error('Error resending OTP email:', err);
+    });
+  }
+
+  return res.json({
+    success: true,
+    message: `A fresh 4-digit code has been sent to ${normalized}.`
   });
 });
 
