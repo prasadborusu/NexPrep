@@ -79,6 +79,14 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data)
     }),
+    verifyPasskey: (id: string, passkey: string) => fetchJson<{ success: boolean; message: string }>(`/assessments/${id}/verify-passkey`, {
+      method: 'POST',
+      body: JSON.stringify({ passkey })
+    }),
+    updatePasskey: (id: string, passkey?: string) => fetchJson<{ success: boolean; passkey: string }>(`/assessments/${id}/passkey`, {
+      method: 'POST',
+      body: JSON.stringify({ passkey })
+    }),
     addQuestion: (assessmentId: string, question: Partial<Question>) =>
       fetchJson<Question>(`/assessments/${assessmentId}/questions`, {
         method: 'POST',

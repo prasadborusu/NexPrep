@@ -9,13 +9,23 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  KeyRound,
+  ShieldAlert,
+  Lock,
+  X
 } from 'lucide-react';
 
 export const AssessmentsPage: React.FC = () => {
   const navigate = useNavigate();
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Passkey Modal State
+  const [selectedExam, setSelectedExam] = useState<Assessment | null>(null);
+  const [passkeyInput, setPasskeyInput] = useState('');
+  const [passkeyError, setPasskeyError] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
     const fetchAssessments = async () => {
@@ -31,12 +41,52 @@ export const AssessmentsPage: React.FC = () => {
     fetchAssessments();
   }, []);
 
+  const handleOpenPasskeyModal = (exam: Assessment) => {
+    setSelectedExam(exam);
+    setPasskeyInput('');
+    setPasskeyError(null);
+  };
+
+  const handleClosePasskeyModal = () => {
+    setSelectedExam(null);
+    setPasskeyInput('');
+    setPasskeyError(null);
+  };
+
+  const handleVerifyPasskey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedExam) return;
+
+    if (!passkeyInput.trim()) {
+      setPasskeyError('Please enter the assessment passkey provided by your administrator.');
+      return;
+    }
+
+    setIsVerifying(true);
+    setPasskeyError(null);
+
+    try {
+      const res = await api.assessments.verifyPasskey(selectedExam.id, passkeyInput.trim());
+      if (res.success) {
+        // Store unlock state in session
+        sessionStorage.setItem(`passkey_unlocked_${selectedExam.id}`, 'true');
+        navigate(`/student/assessments/${selectedExam.id}`);
+      } else {
+        setPasskeyError('Invalid assessment passkey. Please check with your administrator.');
+      }
+    } catch (err: any) {
+      setPasskeyError(err.message || 'Invalid assessment passkey. Please check with your administrator.');
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
   return (
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-purple-100">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">Proctored Assessments</h1>
-          <p className="text-xs text-slate-500">Official technical screening evaluations with automated scoring</p>
+          <p className="text-xs text-slate-500">Official technical screening evaluations with automated scoring & passkey verification</p>
         </div>
       </div>
 
@@ -96,15 +146,112 @@ export const AssessmentsPage: React.FC = () => {
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-xs text-slate-400">Questions: {ass.questions_count || 4} Items</span>
                 <button
-                  onClick={() => navigate(`/student/assessments/${ass.id}`)}
+                  onClick={() => handleOpenPasskeyModal(ass)}
                   className="px-5 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all shadow-sm flex items-center gap-1.5"
                 >
+                  <Lock className="w-3.5 h-3.5" />
                   Take Assessment
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Admin Passkey Verification Modal */}
+      {selectedExam && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl p-6 sm:p-7 max-w-md w-full space-y-5 border border-purple-100 shadow-soft-lg animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700">
+                  <KeyRound className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Enter Assessment Passkey</h3>
+                  <p className="text-xs text-slate-500">Official Exam Proctoring Gate</p>
+                </div>
+              </div>
+              <button
+                onClick={handleClosePasskeyModal}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1">
+              <div className="font-semibold text-slate-800">{selectedExam.title}</div>
+              <div className="text-slate-500 flex items-center gap-4 text-[11px]">
+                <span>⏱ Duration: {selectedExam.duration_minutes} Mins</span>
+                <span>🎯 Passing: {selectedExam.pass_percentage}%</span>
+              </div>
+            </div>
+
+            {passkeyError && (
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{passkeyError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleVerifyPasskey} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  Assessment Passkey / Access Code
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    autoFocus
+                    value={passkeyInput}
+                    onChange={(e) => setPasskeyInput(e.target.value.toUpperCase())}
+                    placeholder="e.g. NEX-CS-8492"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono tracking-wider uppercase focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  This passkey was generated by your test administrator or university coordinator.
+                </p>
+              </div>
+
+              {/* Developer / Demo Quick-fill Hint */}
+              {selectedExam.passkey && (
+                <div className="p-2.5 rounded-lg bg-purple-50/70 border border-purple-100 flex items-center justify-between text-[11px]">
+                  <span className="text-slate-600 font-medium">Admin Generated Key:</span>
+                  <button
+                    type="button"
+                    onClick={() => setPasskeyInput(selectedExam.passkey!)}
+                    className="font-mono font-bold text-purple-700 hover:text-purple-900 bg-white px-2 py-0.5 rounded border border-purple-200 transition-colors"
+                    title="Click to fill passkey"
+                  >
+                    {selectedExam.passkey}
+                  </button>
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={handleClosePasskeyModal}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isVerifying}
+                  className="flex-1 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  {isVerifying ? 'Verifying...' : 'Verify & Start Exam'}
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

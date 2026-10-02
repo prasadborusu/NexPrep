@@ -37,6 +37,7 @@ export interface Assessment {
   created_by?: string;
   created_at: string;
   questions_count?: number;
+  passkey?: string;
 }
 
 export type QuestionType = 'mcq' | 'coding';

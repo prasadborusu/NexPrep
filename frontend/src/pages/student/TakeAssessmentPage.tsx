@@ -15,7 +15,10 @@ import {
   HelpCircle,
   Play,
   RotateCcw,
-  AlertTriangle
+  AlertTriangle,
+  KeyRound,
+  Lock,
+  ArrowRight
 } from 'lucide-react';
 
 export const TakeAssessmentPage: React.FC = () => {
@@ -34,6 +37,14 @@ export const TakeAssessmentPage: React.FC = () => {
   const [codeOutput, setCodeOutput] = useState<string | null>(null);
   const [isRunningCode, setIsRunningCode] = useState(false);
 
+  // Passkey gate state
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
+    return Boolean(id && sessionStorage.getItem(`passkey_unlocked_${id}`) === 'true');
+  });
+  const [gatePasskey, setGatePasskey] = useState('');
+  const [gateError, setGateError] = useState<string | null>(null);
+  const [isVerifyingGate, setIsVerifyingGate] = useState(false);
+
   const timerRef = useRef<any>(null);
 
   useEffect(() => {
@@ -44,6 +55,11 @@ export const TakeAssessmentPage: React.FC = () => {
         setAssessment(data.assessment);
         setQuestions(data.questions);
         setTimeLeft(data.assessment.duration_minutes * 60);
+
+        // Auto-unlock if no passkey is configured on the assessment
+        if (!data.assessment.passkey) {
+          setIsUnlocked(true);
+        }
 
         // Prepopulate starter answers
         const initialAnswers: Record<string, StudentAssessmentAnswer> = {};
@@ -64,8 +80,9 @@ export const TakeAssessmentPage: React.FC = () => {
     fetchExam();
   }, [id]);
 
-  // Countdown Timer
+  // Countdown Timer - only ticks once unlocked
   useEffect(() => {
+    if (!isUnlocked) return;
     if (timeLeft <= 0) {
       handleFinalSubmit();
       return;
@@ -76,7 +93,7 @@ export const TakeAssessmentPage: React.FC = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [timeLeft]);
+  }, [timeLeft, isUnlocked]);
 
   const formatTime = (secs: number) => {
     const mins = Math.floor(secs / 60);
@@ -190,8 +207,119 @@ export const TakeAssessmentPage: React.FC = () => {
     }
   };
 
+  const handleVerifyGatePasskey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id) return;
+    if (!gatePasskey.trim()) {
+      setGateError('Please enter the assessment passkey provided by your administrator.');
+      return;
+    }
+    setIsVerifyingGate(true);
+    setGateError(null);
+    try {
+      const res = await api.assessments.verifyPasskey(id, gatePasskey.trim());
+      if (res.success) {
+        sessionStorage.setItem(`passkey_unlocked_${id}`, 'true');
+        setIsUnlocked(true);
+      } else {
+        setGateError('Invalid assessment passkey. Please check with your administrator.');
+      }
+    } catch (err: any) {
+      setGateError(err.message || 'Invalid assessment passkey. Please check with your administrator.');
+    } finally {
+      setIsVerifyingGate(false);
+    }
+  };
+
   if (!assessment || questions.length === 0) {
     return <div className="p-12 text-center text-xs text-slate-500">Preparing assessment workstation...</div>;
+  }
+
+  // Proctored Passkey Gate (locks timer & questions until verified)
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-[#FBFAFF] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl p-7 border border-purple-100 shadow-soft-lg space-y-6">
+          <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center mx-auto shadow-xs">
+            <Lock className="w-6 h-6" />
+          </div>
+
+          <div className="text-center space-y-1.5">
+            <h2 className="text-xl font-black text-slate-900 tracking-tight">Proctored Verification Gate</h2>
+            <p className="text-xs text-slate-500">Official technical screening passkey required to start</p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1.5 text-xs">
+            <div className="font-bold text-slate-800">{assessment.title}</div>
+            <div className="text-slate-500 flex items-center gap-4 text-[11px]">
+              <span>⏱ {assessment.duration_minutes} Mins</span>
+              <span>🎯 Pass: {assessment.pass_percentage}%</span>
+              <span>📝 {questions.length} Questions</span>
+            </div>
+          </div>
+
+          {gateError && (
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{gateError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleVerifyGatePasskey} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Assessment Passkey</label>
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  value={gatePasskey}
+                  onChange={(e) => setGatePasskey(e.target.value.toUpperCase())}
+                  placeholder="e.g. NEX-CS-8492"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono tracking-wider uppercase focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
+                />
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                Enter the passkey generated by your test administrator to start the timer and begin your assessment.
+              </p>
+            </div>
+
+            {assessment.passkey && (
+              <div className="p-2.5 rounded-lg bg-purple-50/70 border border-purple-100 flex items-center justify-between text-[11px]">
+                <span className="text-slate-600 font-medium">Admin Generated Key:</span>
+                <button
+                  type="button"
+                  onClick={() => setGatePasskey(assessment.passkey!)}
+                  className="font-mono font-bold text-purple-700 hover:text-purple-900 bg-white px-2 py-0.5 rounded border border-purple-200 transition-colors"
+                  title="Click to fill passkey"
+                >
+                  {assessment.passkey}
+                </button>
+              </div>
+            )}
+
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => navigate('/student/assessments')}
+                className="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+              >
+                Back to Tests
+              </button>
+              <button
+                type="submit"
+                disabled={isVerifyingGate}
+                className="flex-1 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5"
+              >
+                {isVerifyingGate ? 'Verifying...' : 'Unlock & Start'}
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
   }
 
   return (

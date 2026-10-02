@@ -54,6 +54,7 @@ const INITIAL_ASSESSMENTS: Assessment[] = [
     is_active: true,
     scheduled_at: new Date().toISOString(),
     expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60).toISOString(),
+    passkey: 'NEX-CS-8492',
     created_by: 'system',
     created_at: new Date().toISOString()
   },
@@ -67,6 +68,7 @@ const INITIAL_ASSESSMENTS: Assessment[] = [
     pass_percentage: 70.0,
     is_active: true,
     scheduled_at: new Date().toISOString(),
+    passkey: 'NEX-JAVA-5130',
     created_by: 'system',
     created_at: new Date().toISOString()
   }

@@ -162,13 +162,57 @@ router.get('/submissions/student/:studentId', (req: Request, res: Response) => {
   return res.json(list);
 });
 
+// Verify Assessment Passkey (Called when student attempts to start)
+router.post('/:id/verify-passkey', (req: Request, res: Response) => {
+  const { passkey } = req.body;
+  const assessment = memoryStore.assessments.find(a => a.id === req.params.id);
+  if (!assessment) {
+    return res.status(404).json({ error: 'Assessment not found' });
+  }
+
+  // If assessment has no passkey configured, auto-authorize
+  if (!assessment.passkey) {
+    return res.json({ success: true, message: 'Assessment unlocked' });
+  }
+
+  const expectedKey = assessment.passkey.trim().toUpperCase();
+  const inputKey = String(passkey || '').trim().toUpperCase();
+
+  if (expectedKey === inputKey) {
+    return res.json({ success: true, message: 'Passkey verified successfully' });
+  }
+
+  return res.status(403).json({
+    success: false,
+    error: 'Invalid assessment passkey. Please check with your exam administrator or proctor.'
+  });
+});
+
+// Admin: Update or Regenerate Passkey for an assessment
+router.post('/:id/passkey', (req: Request, res: Response) => {
+  const assessment = memoryStore.assessments.find(a => a.id === req.params.id);
+  if (!assessment) {
+    return res.status(404).json({ error: 'Assessment not found' });
+  }
+
+  const customKey = req.body.passkey ? String(req.body.passkey).trim().toUpperCase() : null;
+  const newPasskey = customKey || `NEX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  assessment.passkey = newPasskey;
+  persistStore();
+
+  return res.json({ success: true, passkey: newPasskey });
+});
+
 // Admin: Create assessment
 router.post('/', (req: Request, res: Response) => {
-  const { title, description, type, duration_minutes, total_marks, pass_percentage, scheduled_at } = req.body;
+  const { title, description, type, duration_minutes, total_marks, pass_percentage, scheduled_at, passkey } = req.body;
 
   if (!title) {
     return res.status(400).json({ error: 'Title is required' });
   }
+
+  const generatedPasskey = passkey ? String(passkey).trim().toUpperCase() : `NEX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const newAssessment: Assessment = {
     id: `assessment-${Date.now()}`,
@@ -180,7 +224,8 @@ router.post('/', (req: Request, res: Response) => {
     pass_percentage: Number(pass_percentage) || 60,
     is_active: true,
     scheduled_at: scheduled_at || new Date().toISOString(),
-    created_by: 'demo-admin-id',
+    passkey: generatedPasskey,
+    created_by: 'admin',
     created_at: new Date().toISOString()
   };
 

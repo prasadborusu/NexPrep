@@ -51,8 +51,10 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
+// Start Server
 const server = app.listen(config.port, () => {
   console.log(`🚀 NexPrep Backend API running on http://localhost:${config.port}`);
 });
 
 export default app;
+
