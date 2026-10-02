@@ -1,35 +1,46 @@
 import nodemailer from 'nodemailer';
 import { config } from '../config';
 
-export const isSmtpConfigured = Boolean(
-  config.smtpUser &&
-  config.smtpPass &&
-  !config.smtpUser.includes('your-gmail') &&
-  !config.smtpPass.includes('your-16')
-);
+export function getTransporter() {
+  const user = process.env.SMTP_USER || config.smtpUser;
+  const pass = process.env.SMTP_PASS || config.smtpPass;
+  const host = process.env.SMTP_HOST || config.smtpHost || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || String(config.smtpPort) || '587', 10);
+  const secure = (process.env.SMTP_SECURE || String(config.smtpSecure)) === 'true';
 
-export const transporter = isSmtpConfigured
-  ? nodemailer.createTransport({
-      host: config.smtpHost,
-      port: config.smtpPort,
-      secure: config.smtpSecure,
-      auth: {
-        user: config.smtpUser,
-        pass: config.smtpPass
-      }
-    })
-  : null;
+  if (!user || !pass || user.includes('your-gmail') || pass.includes('your-16')) {
+    return null;
+  }
 
-if (isSmtpConfigured) {
-  console.log(`📧 Gmail SMTP configured & active: ${config.smtpUser}`);
-} else {
-  console.log('⚠️ SMTP not configured in backend/.env');
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: {
+      user: user.trim(),
+      pass: pass.trim().replace(/\s+/g, '')
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
 }
 
-export async function sendOtpEmail(to: string, fullName: string, otp: string) {
-  if (!transporter || !isSmtpConfigured) {
-    console.warn('⚠️ Cannot send OTP email: SMTP not configured');
-    return false;
+export const isSmtpConfigured = Boolean(
+  (process.env.SMTP_USER || config.smtpUser) &&
+  (process.env.SMTP_PASS || config.smtpPass) &&
+  !(process.env.SMTP_USER || config.smtpUser).includes('your-gmail')
+);
+
+export async function sendOtpEmail(to: string, fullName: string, otp: string): Promise<{ success: boolean; error?: string }> {
+  const transporter = getTransporter();
+  const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
+  const fromName = process.env.SMTP_FROM_NAME || config.smtpFromName || 'NexPrep Placement Cell';
+
+  if (!transporter || !user) {
+    const msg = 'SMTP is not configured on the server. Please add SMTP_USER and SMTP_PASS to Render Environment Variables.';
+    console.warn(`⚠️ Cannot send OTP email to ${to}: ${msg}`);
+    return { success: false, error: msg };
   }
 
   const digits = otp.split('');
@@ -93,23 +104,27 @@ export async function sendOtpEmail(to: string, fullName: string, otp: string) {
 
   try {
     const info = await transporter.sendMail({
-      from: `"${config.smtpFromName || 'NexPrep Placement Cell'}" <${config.smtpUser}>`,
+      from: `"${fromName}" <${user}>`,
       to,
       subject: `🔐 ${otp} is your NexPrep verification code`,
       text: `Your NexPrep 4-digit verification code is: ${otp}\n\nValid for 10 minutes.\n\nNexPrep Placement Cell`,
       html
     });
     console.log(`✅ 4-Digit OTP (${otp}) sent to ${to} (MessageId: ${info.messageId})`);
-    return true;
+    return { success: true };
   } catch (err: any) {
     console.error(`❌ Failed to send OTP email to ${to}:`, err.message);
-    return false;
+    return { success: false, error: err.message };
   }
 }
 
 export async function sendWelcomeEmail(to: string, fullName: string, role: string) {
-  if (!transporter || !isSmtpConfigured) {
-    console.warn('⚠️ Cannot send email: SMTP not configured');
+  const transporter = getTransporter();
+  const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
+  const fromName = process.env.SMTP_FROM_NAME || config.smtpFromName || 'NexPrep Placement Cell';
+
+  if (!transporter || !user) {
+    console.warn('⚠️ Cannot send welcome email: SMTP not configured');
     return false;
   }
 
@@ -140,7 +155,7 @@ export async function sendWelcomeEmail(to: string, fullName: string, role: strin
             You can now access your personalized dashboard, practice AI-powered mock interviews, take skill assessments, and apply for campus drives.
           </p>
           <div style="text-align:center;margin:32px 0;">
-            <a href="http://localhost:5173/login" style="background:#6D28D9;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;display:inline-block;box-shadow:0 4px 12px rgba(109,40,217,0.25);">
+            <a href="https://nex-prep1.netlify.app/login" style="background:#6D28D9;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;display:inline-block;box-shadow:0 4px 12px rgba(109,40,217,0.25);">
               Sign In to Your Dashboard →
             </a>
           </div>
@@ -158,10 +173,10 @@ export async function sendWelcomeEmail(to: string, fullName: string, role: strin
 
   try {
     const info = await transporter.sendMail({
-      from: `"${config.smtpFromName || 'NexPrep Placement Cell'}" <${config.smtpUser}>`,
+      from: `"${fromName}" <${user}>`,
       to,
       subject: '🎉 Welcome to NexPrep — Your Account is Ready!',
-      text: `Welcome to NexPrep, ${fullName}!\n\nYour account has been registered and verified.\n\nSign in to your dashboard: http://localhost:5173/login\n\nNexPrep Placement Cell`,
+      text: `Welcome to NexPrep, ${fullName}!\n\nYour account has been registered and verified.\n\nSign in to your dashboard: https://nex-prep1.netlify.app/login\n\nNexPrep Placement Cell`,
       html
     });
     console.log(`✅ Welcome email sent to ${to} (MessageId: ${info.messageId})`);
@@ -171,4 +186,3 @@ export async function sendWelcomeEmail(to: string, fullName: string, role: strin
     return false;
   }
 }
-

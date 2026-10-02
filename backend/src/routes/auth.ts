@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { memoryStore, persistStore, supabase } from '../services/db';
 import { UserProfile } from '../types';
 import { sendWelcomeEmail, sendOtpEmail, isSmtpConfigured } from '../services/email';
+import { config } from '../config';
 
 const router = Router();
 
@@ -219,16 +220,18 @@ router.post('/register', async (req: Request, res: Response) => {
   });
 
   // Send real 4-Digit OTP email
-  if (isSmtpConfigured) {
-    sendOtpEmail(normalized, full_name.trim(), otp).catch(err => {
-      console.error('Error sending OTP email:', err);
-    });
+  const emailResult = await sendOtpEmail(normalized, full_name.trim(), otp);
+  if (!emailResult.success) {
+    console.warn(`[OTP Dispatch Warning]: ${emailResult.error}`);
   }
 
   return res.json({
     otp_required: true,
     email: normalized,
-    message: `A 4-digit verification code has been sent to ${normalized}.`
+    message: emailResult.success
+      ? `A 4-digit verification code has been sent to ${normalized}.`
+      : `Verification code generated. ${emailResult.error || ''}`,
+    error_warning: !emailResult.success ? emailResult.error : undefined
   });
 });
 
@@ -376,15 +379,30 @@ router.post('/resend-otp', async (req: Request, res: Response) => {
   pending.expiresAt = Date.now() + 10 * 60 * 1000;
   pendingRegistrations.set(normalized, pending);
 
-  if (isSmtpConfigured) {
-    sendOtpEmail(normalized, pending.userData.full_name, newOtp).catch(err => {
-      console.error('Error resending OTP email:', err);
-    });
-  }
+  const emailResult = await sendOtpEmail(normalized, pending.userData.full_name, newOtp);
 
   return res.json({
     success: true,
-    message: `A fresh 4-digit code has been sent to ${normalized}.`
+    message: emailResult.success
+      ? `A fresh 4-digit code has been sent to ${normalized}.`
+      : `New code generated. ${emailResult.error || ''}`,
+    error_warning: !emailResult.success ? emailResult.error : undefined
+  });
+});
+
+// 4. Check SMTP Status on Render
+router.get('/smtp-check', (req: Request, res: Response) => {
+  const hasUser = Boolean(process.env.SMTP_USER || config.smtpUser);
+  const hasPass = Boolean(process.env.SMTP_PASS || config.smtpPass);
+  const user = process.env.SMTP_USER || config.smtpUser;
+  return res.json({
+    smtp_configured: Boolean(hasUser && hasPass && !user?.includes('your-gmail')),
+    smtp_user: user ? `${user.substring(0, 4)}***@gmail.com` : 'NOT_SET',
+    smtp_host: process.env.SMTP_HOST || config.smtpHost,
+    smtp_port: process.env.SMTP_PORT || config.smtpPort,
+    message: (hasUser && hasPass)
+      ? '✅ Gmail SMTP is configured in server environment variables.'
+      : '⚠️ SMTP_USER and SMTP_PASS are missing in server environment variables.'
   });
 });
 
