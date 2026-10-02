@@ -246,7 +246,33 @@
       "created_at": "2026-10-02T10:03:53.018Z"
     }
   ],
-  "assessment_submissions": [],
+  "assessment_submissions": [
+    {
+      "id": "sub-1790939717369",
+      "assessment_id": "assessment-1790939717352",
+      "student_id": "test-student-id",
+      "student_name": "Candidate",
+      "student_email": "",
+      "assessment_title": "Cloud & DevOps Screening",
+      "status": "evaluated",
+      "score": 0,
+      "total_marks": 5,
+      "percentage": 0,
+      "passed": false,
+      "answers": {},
+      "question_results": {
+        "q-1790939717360": {
+          "correct": false,
+          "marks_obtained": 0,
+          "correct_option_id": "opt1",
+          "explanation": "A pod is the smallest execution unit in Kubernetes."
+        }
+      },
+      "started_at": "2026-10-02T11:15:17.369Z",
+      "submitted_at": "2026-10-02T11:15:17.369Z",
+      "proctor_violations": 2
+    }
+  ],
   "coding_problems": [
     {
       "id": "prob-two-sum",

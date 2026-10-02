@@ -44,6 +44,20 @@ router.get('/:id', (req: Request, res: Response) => {
   });
 });
 
+// Admin: Get assessment details with full questions, solutions, and test cases
+router.get('/:id/admin', (req: Request, res: Response) => {
+  const assessment = memoryStore.assessments.find(a => a.id === req.params.id);
+  if (!assessment) {
+    return res.status(404).json({ error: 'Assessment not found' });
+  }
+
+  const questions = memoryStore.questions.filter(q => q.assessment_id === assessment.id);
+  return res.json({
+    assessment,
+    questions
+  });
+});
+
 // Submit / Autosave assessment answers
 router.post('/:id/submit', async (req: Request, res: Response) => {
   const { student_id, answers, is_final_submit = true } = req.body;
@@ -117,7 +131,8 @@ router.post('/:id/submit', async (req: Request, res: Response) => {
     answers: answers || {},
     question_results: questionResults,
     started_at: req.body.started_at || new Date().toISOString(),
-    submitted_at: new Date().toISOString()
+    submitted_at: new Date().toISOString(),
+    proctor_violations: Number(req.body.proctor_violations) || 0
   };
 
   // Upsert submission
@@ -263,6 +278,52 @@ router.post('/:id/questions', (req: Request, res: Response) => {
   memoryStore.questions.push(newQuestion);
   persistStore();
   return res.status(201).json(newQuestion);
+});
+
+// Admin: Update assessment
+router.put('/:id', (req: Request, res: Response) => {
+  const assessmentIdx = memoryStore.assessments.findIndex(a => a.id === req.params.id);
+  if (assessmentIdx === -1) {
+    return res.status(404).json({ error: 'Assessment not found' });
+  }
+
+  memoryStore.assessments[assessmentIdx] = {
+    ...memoryStore.assessments[assessmentIdx],
+    ...req.body,
+    duration_minutes: req.body.duration_minutes !== undefined ? Number(req.body.duration_minutes) : memoryStore.assessments[assessmentIdx].duration_minutes,
+    total_marks: req.body.total_marks !== undefined ? Number(req.body.total_marks) : memoryStore.assessments[assessmentIdx].total_marks,
+    pass_percentage: req.body.pass_percentage !== undefined ? Number(req.body.pass_percentage) : memoryStore.assessments[assessmentIdx].pass_percentage
+  };
+  persistStore();
+
+  return res.json(memoryStore.assessments[assessmentIdx]);
+});
+
+// Admin: Delete assessment and its questions
+router.delete('/:id', (req: Request, res: Response) => {
+  const assessmentIdx = memoryStore.assessments.findIndex(a => a.id === req.params.id);
+  if (assessmentIdx === -1) {
+    return res.status(404).json({ error: 'Assessment not found' });
+  }
+
+  memoryStore.assessments.splice(assessmentIdx, 1);
+  memoryStore.questions = memoryStore.questions.filter(q => q.assessment_id !== req.params.id);
+  persistStore();
+
+  return res.json({ message: 'Assessment and questions deleted successfully' });
+});
+
+// Admin: Delete question from assessment
+router.delete('/:id/questions/:questionId', (req: Request, res: Response) => {
+  const qIdx = memoryStore.questions.findIndex(q => q.id === req.params.questionId && q.assessment_id === req.params.id);
+  if (qIdx === -1) {
+    return res.status(404).json({ error: 'Question not found' });
+  }
+
+  memoryStore.questions.splice(qIdx, 1);
+  persistStore();
+
+  return res.json({ message: 'Question deleted successfully' });
 });
 
 export default router;

@@ -108,6 +108,7 @@ export interface AssessmentSubmission {
   }>;
   started_at: string;
   submitted_at?: string;
+  proctor_violations?: number;
 }
 
 export interface CodingProblem {

@@ -87,10 +87,22 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ passkey })
     }),
+    getAdmin: (id: string) => fetchJson<{ assessment: Assessment; questions: Question[] }>(`/assessments/${id}/admin`),
+    update: (id: string, data: Partial<Assessment>) => fetchJson<Assessment>(`/assessments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+    delete: (id: string) => fetchJson<{ message: string }>(`/assessments/${id}`, {
+      method: 'DELETE'
+    }),
     addQuestion: (assessmentId: string, question: Partial<Question>) =>
       fetchJson<Question>(`/assessments/${assessmentId}/questions`, {
         method: 'POST',
         body: JSON.stringify(question)
+      }),
+    deleteQuestion: (assessmentId: string, questionId: string) =>
+      fetchJson<{ message: string }>(`/assessments/${assessmentId}/questions/${questionId}`, {
+        method: 'DELETE'
       })
   },
 
