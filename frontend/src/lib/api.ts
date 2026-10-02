@@ -21,7 +21,7 @@ import {
   CourseEnrollment
 } from '../types';
 
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers || {});
@@ -29,23 +29,30 @@ async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> 
     headers.set('Content-Type', 'application/json');
   }
 
-  const res = await fetch(`${BASE_URL}${url}`, {
+  // If BASE_URL already ends with /api and url starts with /api, remove duplicate /api
+  const cleanBase = BASE_URL.replace(/\/+$/, '');
+  const cleanPath = url.startsWith('/') ? url : `/${url}`;
+  const fullUrl = `${cleanBase}${cleanPath}`;
+
+  const res = await fetch(fullUrl, {
     ...options,
     headers
   });
 
+  const rawText = await res.text();
+  let data: any = null;
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    // raw response is HTML or plaintext
+  }
+
   if (!res.ok) {
-    let errMessage = 'Request failed';
-    try {
-      const err = await res.json();
-      errMessage = err.error || err.message || errMessage;
-    } catch {
-      errMessage = await res.text();
-    }
+    const errMessage = data?.error || data?.message || (rawText.length < 200 ? rawText : `Request failed with status ${res.status}`);
     throw new Error(errMessage);
   }
 
-  return res.json();
+  return data as T;
 }
 
 export const api = {
