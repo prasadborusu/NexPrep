@@ -107,14 +107,22 @@ export const RegisterPage: React.FC = () => {
       setOtpDigits(['', '', '', '']);
       setOtpError(null);
       setResendCountdown(30);
+
+      // Deliver via EmailJS HTTPS API directly from browser
       if (res.otp_fallback) {
-        setOtpFallback(res.otp_fallback);
         if (isEmailJSConfigured) {
-          sendOtpViaEmailJS({
+          const emailJsRes = await sendOtpViaEmailJS({
             to_name: fullName.trim(),
             to_email: email.trim(),
             otp_code: res.otp_fallback
           });
+          if (emailJsRes.success) {
+            setOtpFallback(null);
+          } else {
+            setOtpFallback(res.otp_fallback);
+          }
+        } else {
+          setOtpFallback(res.otp_fallback);
         }
       } else {
         setOtpFallback(null);
@@ -218,16 +226,26 @@ export const RegisterPage: React.FC = () => {
     try {
       const res = await api.auth.resendOtp(registeredEmail);
       if (res.otp_fallback) {
-        setOtpFallback(res.otp_fallback);
         if (isEmailJSConfigured) {
-          sendOtpViaEmailJS({
+          const emailJsRes = await sendOtpViaEmailJS({
             to_name: fullName.trim() || 'Candidate',
             to_email: registeredEmail,
             otp_code: res.otp_fallback
           });
+          if (emailJsRes.success) {
+            setOtpFallback(null);
+            setResendSuccess(`Fresh 4-digit code sent to ${registeredEmail}!`);
+          } else {
+            setOtpFallback(res.otp_fallback);
+            setResendSuccess('New verification code generated below.');
+          }
+        } else {
+          setOtpFallback(res.otp_fallback);
+          setResendSuccess('New verification code generated below.');
         }
+      } else {
+        setResendSuccess(res.message || 'New 4-digit code sent!');
       }
-      setResendSuccess(res.message || 'New 4-digit code sent!');
       setResendCountdown(30);
       setOtpDigits(['', '', '', '']);
       digitRefs[0].current?.focus();
