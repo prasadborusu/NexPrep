@@ -40,6 +40,7 @@ export const RegisterPage: React.FC = () => {
   const [otpStep, setOtpStep] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [otpDigits, setOtpDigits] = useState(['', '', '', '']);
+  const [otpFallback, setOtpFallback] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
   const [resendCountdown, setResendCountdown] = useState(30);
@@ -87,7 +88,7 @@ export const RegisterPage: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await api.auth.register({
+      const res = await api.auth.register({
         full_name: fullName.trim(),
         email: email.trim(),
         password: password.trim(),
@@ -105,6 +106,11 @@ export const RegisterPage: React.FC = () => {
       setOtpDigits(['', '', '', '']);
       setOtpError(null);
       setResendCountdown(30);
+      if (res.otp_fallback) {
+        setOtpFallback(res.otp_fallback);
+      } else {
+        setOtpFallback(null);
+      }
       setOtpStep(true);
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please check your details and try again.');
@@ -203,16 +209,29 @@ export const RegisterPage: React.FC = () => {
     setResendSuccess(null);
     try {
       const res = await api.auth.resendOtp(registeredEmail);
+      if (res.otp_fallback) {
+        setOtpFallback(res.otp_fallback);
+      }
       setResendSuccess(res.message || 'New 4-digit code sent!');
       setResendCountdown(30);
       setOtpDigits(['', '', '', '']);
       digitRefs[0].current?.focus();
-      setTimeout(() => setResendSuccess(null), 4000);
+      setTimeout(() => setResendSuccess(null), 5000);
     } catch (err: any) {
       setOtpError(err.message || 'Failed to resend code. Please try again.');
     } finally {
       setIsResending(false);
     }
+  };
+
+  const handleAutoFill = (code: string) => {
+    const digits = code.split('').slice(0, 4);
+    while (digits.length < 4) digits.push('');
+    setOtpDigits(digits);
+    setOtpError(null);
+    setTimeout(() => {
+      digitRefs[3].current?.focus();
+    }, 50);
   };
 
   // ── Step 2: 4-Digit OTP Verification Screen ─────────────────────
@@ -245,6 +264,36 @@ export const RegisterPage: React.FC = () => {
               </button>
             </div>
           </div>
+
+          {/* Instant Code Fallback Banner (when Render cloud firewall restricts SMTP port) */}
+          {otpFallback && (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-left space-y-2.5 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
+                  <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                  Instant Verification Code
+                </div>
+                <span className="text-[10px] font-bold text-amber-800 bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-200">
+                  Server Generated
+                </span>
+              </div>
+              <p className="text-xs text-amber-800 leading-relaxed">
+                If email delivery is delayed by cloud network filters, use your generated code below:
+              </p>
+              <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-amber-200 shadow-sm">
+                <span className="font-mono text-2xl font-black tracking-widest text-[#6D28D9]">
+                  {otpFallback}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleAutoFill(otpFallback)}
+                  className="px-3.5 py-1.5 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Auto-fill Code
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Error Message */}
           {otpError && (

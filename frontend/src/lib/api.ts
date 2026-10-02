@@ -62,7 +62,7 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ email, password })
     }),
-    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ otp_required: boolean; email: string; message: string }>('/auth/register', {
+    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ otp_required: boolean; email: string; message: string; otp_fallback?: string; email_sent?: boolean }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(data)
     }),
@@ -70,7 +70,7 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data)
     }),
-    resendOtp: (email: string) => fetchJson<{ success: boolean; message: string }>('/auth/resend-otp', {
+    resendOtp: (email: string) => fetchJson<{ success: boolean; message: string; otp_fallback?: string; email_sent?: boolean }>('/auth/resend-otp', {
       method: 'POST',
       body: JSON.stringify({ email })
     }),

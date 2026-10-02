@@ -228,9 +228,11 @@ router.post('/register', async (req: Request, res: Response) => {
   return res.json({
     otp_required: true,
     email: normalized,
+    email_sent: emailResult.success,
     message: emailResult.success
       ? `A 4-digit verification code has been sent to ${normalized}.`
-      : `Verification code generated. ${emailResult.error || ''}`,
+      : `Verification code generated. If email delivery is delayed by cloud port restrictions, your code is: ${otp}`,
+    otp_fallback: !emailResult.success ? otp : undefined,
     error_warning: !emailResult.success ? emailResult.error : undefined
   });
 });
@@ -383,9 +385,11 @@ router.post('/resend-otp', async (req: Request, res: Response) => {
 
   return res.json({
     success: true,
+    email_sent: emailResult.success,
     message: emailResult.success
       ? `A fresh 4-digit code has been sent to ${normalized}.`
-      : `New code generated. ${emailResult.error || ''}`,
+      : `New code generated. If email delivery is delayed by cloud port restrictions, your code is: ${newOtp}`,
+    otp_fallback: !emailResult.success ? newOtp : undefined,
     error_warning: !emailResult.success ? emailResult.error : undefined
   });
 });
