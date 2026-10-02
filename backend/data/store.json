@@ -1,77 +1,5 @@
 {
-  "profiles": [
-    {
-      "id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
-      "email": "prasadborusu0@gmail.com",
-      "full_name": "prasad",
-      "role": "student",
-      "college": "RCEE",
-      "degree": "B.Tech",
-      "branch": "CSE",
-      "graduation_year": 2026,
-      "cgpa": 9,
-      "phone": "",
-      "skills": [
-        "java"
-      ],
-      "target_role": "Full Stack Engineer",
-      "bio": "",
-      "created_at": "2026-10-02T15:18:48.984+00:00",
-      "updated_at": "2026-10-02T15:28:53.174Z",
-      "github_url": "",
-      "linkedin_url": ""
-    },
-    {
-      "id": "48bbf5e6-afb3-43b1-a1ed-626cb495c790",
-      "email": "prasadborusu336@gmail.com",
-      "full_name": "Kumar",
-      "role": "admin",
-      "college": "",
-      "degree": "B.Tech",
-      "branch": "Computer Science",
-      "graduation_year": 2026,
-      "phone": "",
-      "skills": [],
-      "target_role": "Full Stack Developer",
-      "bio": "",
-      "created_at": "2026-10-02T15:20:54.37738+00:00",
-      "updated_at": "2026-10-02T15:20:54.37738+00:00"
-    },
-    {
-      "id": "180355ec-3c3c-4476-9143-0e559ddb74ec",
-      "email": "prasadbou0@gmail.com",
-      "full_name": "Prasad",
-      "role": "student",
-      "college": "Mohan Babu University",
-      "degree": "B.Tech",
-      "branch": "Computer Science & Engineering",
-      "graduation_year": 2026,
-      "cgpa": 7.9,
-      "phone": "",
-      "skills": [],
-      "target_role": "Full Stack Engineer",
-      "bio": "",
-      "created_at": "2026-10-02T12:32:59.243+00:00",
-      "updated_at": "2026-10-02T12:32:59.243+00:00"
-    },
-    {
-      "id": "9455bf6f-4761-41b1-bc03-92c07410087a",
-      "email": "prasadborusu8@gmail.com",
-      "full_name": "Venkata Durga Prasad",
-      "role": "student",
-      "college": "mohan Babu University",
-      "degree": "B.Tech",
-      "branch": "AIML",
-      "graduation_year": 2026,
-      "cgpa": 9,
-      "phone": "",
-      "skills": [],
-      "target_role": "Full Stack Engineer",
-      "bio": "",
-      "created_at": "2026-10-02T15:07:16.213Z",
-      "updated_at": "2026-10-02T15:07:16.213Z"
-    }
-  ],
+  "profiles": [],
   "assessments": [
     {
       "id": "assessment-core-cs",
@@ -421,7 +349,7 @@
       ],
       "acceptance_rate": 67,
       "total_submissions": 123,
-      "created_at": "2026-10-02T15:58:29.304Z"
+      "created_at": "2026-10-02T16:16:25.947Z"
     },
     {
       "id": "prob-contains-duplicate",
@@ -489,7 +417,7 @@
       ],
       "acceptance_rate": 94,
       "total_submissions": 84,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-best-time-to-buy-and-sell-stock",
@@ -554,7 +482,7 @@
       ],
       "acceptance_rate": 92,
       "total_submissions": 95,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-product-of-array-except-self",
@@ -618,7 +546,7 @@
       ],
       "acceptance_rate": 88,
       "total_submissions": 60,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-maximum-subarray",
@@ -687,7 +615,7 @@
       ],
       "acceptance_rate": 89,
       "total_submissions": 75,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-valid-anagram",
@@ -751,7 +679,7 @@
       ],
       "acceptance_rate": 96,
       "total_submissions": 110,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-valid-palindrome",
@@ -821,7 +749,7 @@
       ],
       "acceptance_rate": 93,
       "total_submissions": 88,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-valid-parentheses",
@@ -888,7 +816,7 @@
       ],
       "acceptance_rate": 97,
       "total_submissions": 130,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-binary-search",
@@ -954,7 +882,7 @@
       ],
       "acceptance_rate": 95,
       "total_submissions": 92,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-longest-substring-without-repeating-characters",
@@ -1025,7 +953,7 @@
       ],
       "acceptance_rate": 85,
       "total_submissions": 78,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     },
     {
       "id": "prob-climbing-stairs",
@@ -1090,7 +1018,7 @@
       ],
       "acceptance_rate": 96,
       "total_submissions": 90,
-      "created_at": "2026-10-02T15:58:29.305Z"
+      "created_at": "2026-10-02T16:16:25.948Z"
     }
   ],
   "code_submissions": [

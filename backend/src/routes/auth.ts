@@ -182,20 +182,16 @@ router.post('/register', async (req: Request, res: Response) => {
 
   const normalized = email.trim().toLowerCase();
 
-  // Check if already registered in local memory or Supabase
-  const existingLocal = memoryStore.profiles.find(p => p.email.toLowerCase() === normalized);
-  if (existingLocal) {
-    return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
-  }
-
+  // Check if live Supabase Auth already has this user
   if (supabase) {
     try {
-      const { data: profile } = await supabase.from('profiles').select('id').eq('email', normalized).maybeSingle();
-      if (profile) {
+      const { data: userList } = await supabase.auth.admin.listUsers();
+      const existingAuth = userList?.users?.find(u => u.email?.toLowerCase() === normalized);
+      if (existingAuth) {
         return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
       }
     } catch (e) {
-      console.warn('Supabase check profile:', e);
+      console.warn('Supabase check auth users error:', e);
     }
   }
 
@@ -268,7 +264,7 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
   const { userData } = pending;
   let userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 
-  // Create confirmed user in Supabase Auth
+  // Create or sync confirmed user in Supabase Auth
   if (supabase) {
     try {
       const { data: adminData, error: adminError } = await supabase.auth.admin.createUser({
@@ -283,9 +279,24 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
 
       if (!adminError && adminData?.user) {
         userId = adminData.user.id;
+      } else {
+        // If user already existed in auth, update their password and confirm them
+        const { data: userList } = await supabase.auth.admin.listUsers();
+        const existing = userList?.users?.find(u => u.email?.toLowerCase() === normalized);
+        if (existing) {
+          userId = existing.id;
+          await supabase.auth.admin.updateUserById(existing.id, {
+            password: userData.password,
+            email_confirm: true,
+            user_metadata: {
+              full_name: userData.full_name,
+              role: userData.role
+            }
+          });
+        }
       }
     } catch (e: any) {
-      console.warn('Supabase create user error:', e?.message || e);
+      console.warn('Supabase create/sync user error:', e?.message || e);
     }
   }
 
