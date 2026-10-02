@@ -20,6 +20,23 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Root Welcome Route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    message: '🚀 NexPrep Backend API is live and running!',
+    docs: {
+      health: '/api/health',
+      auth: '/api/auth',
+      courses: '/api/courses',
+      coding: '/api/coding',
+      assessments: '/api/assessments'
+    },
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({
