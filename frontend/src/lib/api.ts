@@ -47,11 +47,11 @@ async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> 
 export const api = {
   // Auth
   auth: {
-    login: (email: string) => fetchJson<{ token: string; user: UserProfile }>('/auth/login', {
+    login: (email: string, password?: string) => fetchJson<{ token: string; user: UserProfile }>('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email, password })
     }),
-    register: (data: Partial<UserProfile>) => fetchJson<{ token: string; user: UserProfile }>('/auth/register', {
+    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ token: string; user: UserProfile }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(data)
     }),

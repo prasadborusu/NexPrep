@@ -18,7 +18,7 @@
       "updated_at": "2026-10-02T10:10:23.216Z"
     },
     {
-      "id": "user-1790937177748-sytkp",
+      "id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
       "email": "prasadborusu0@gmail.com",
       "full_name": "Prasad",
       "role": "student",
@@ -31,8 +31,57 @@
       "skills": [],
       "target_role": "Full Stack Engineer",
       "bio": "",
-      "created_at": "2026-10-02T10:32:57.748Z",
-      "updated_at": "2026-10-02T10:32:57.748Z"
+      "created_at": "2026-10-02T10:55:27.001342+00:00",
+      "updated_at": "2026-10-02T10:55:27.001342+00:00"
+    },
+    {
+      "id": "3c2845a8-4b35-4d4f-8e60-4f8bf1dff325",
+      "email": "admin@nexprep.io",
+      "full_name": "NexPrep Administrator",
+      "role": "admin",
+      "college": "",
+      "degree": "B.Tech",
+      "branch": "Computer Science",
+      "graduation_year": 2026,
+      "phone": "",
+      "skills": [],
+      "target_role": "Platform Lead",
+      "bio": "",
+      "created_at": "2026-10-02T10:55:19.326904+00:00",
+      "updated_at": "2026-10-02T10:55:19.326904+00:00"
+    },
+    {
+      "id": "7ab0fb43-8995-415d-95ab-2cf7866bcec8",
+      "email": "student@nexprep.io",
+      "full_name": "NexPrep Candidate",
+      "role": "student",
+      "college": "Mohan Babu University",
+      "degree": "B.Tech",
+      "branch": "Computer Science & Engineering",
+      "graduation_year": 2026,
+      "cgpa": 7.9,
+      "phone": "",
+      "skills": [],
+      "target_role": "Full Stack Engineer",
+      "bio": "",
+      "created_at": "2026-10-02T10:55:27.420961+00:00",
+      "updated_at": "2026-10-02T10:55:27.420961+00:00"
+    },
+    {
+      "id": "ea4318ad-2557-4b1b-beca-c6809624c8c2",
+      "email": "candidate.1790938697268@example.com",
+      "full_name": "Test Candidate",
+      "role": "student",
+      "college": "",
+      "degree": "B.Tech",
+      "branch": "Computer Science",
+      "graduation_year": 2026,
+      "phone": "",
+      "skills": [],
+      "target_role": "Full Stack Developer",
+      "bio": "",
+      "created_at": "2026-10-02T10:58:17.733759+00:00",
+      "updated_at": "2026-10-02T10:58:17.733759+00:00"
     }
   ],
   "assessments": [

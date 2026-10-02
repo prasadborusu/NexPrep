@@ -22,14 +22,14 @@ export const LoginPage: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const user = await login(email.trim());
+      const user = await login(email.trim(), password);
       if (redirectUrl) {
         navigate(redirectUrl);
       } else {
         navigate(user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
       }
     } catch (err: any) {
-      setError(err.message || 'No account found with this email. Please check your credentials or register.');
+      setError(err.message || 'Unable to sign in. Please verify your email and password, or create an account.');
     } finally {
       setIsLoading(false);
     }
@@ -110,6 +110,35 @@ export const LoginPage: React.FC = () => {
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
+
+        {/* Quick Credentials for Evaluation / Testing */}
+        <div className="p-3 bg-[#F8F6FD] rounded-xl border border-[#EAE6F5] space-y-2">
+          <p className="text-[11px] font-bold text-[#4B3B70] uppercase tracking-wider">Quick Sign In Options</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('student@nexprep.io');
+                setPassword('StudentPassword123!');
+              }}
+              className="px-2.5 py-1.5 text-left text-xs bg-white rounded-lg border border-[#EAE6F5] hover:border-[#8B5CF6] transition-colors"
+            >
+              <span className="font-semibold block text-[#181525]">Candidate / Student</span>
+              <span className="text-[10px] text-[#77718A]">student@nexprep.io</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('admin@nexprep.io');
+                setPassword('AdminPassword123!');
+              }}
+              className="px-2.5 py-1.5 text-left text-xs bg-white rounded-lg border border-[#EAE6F5] hover:border-[#8B5CF6] transition-colors"
+            >
+              <span className="font-semibold block text-[#181525]">Administrator</span>
+              <span className="text-[10px] text-[#77718A]">admin@nexprep.io</span>
+            </button>
+          </div>
+        </div>
 
         {/* Footer */}
         <div className="text-center text-xs text-[#77718A] pt-2 border-t border-[#EAE6F5]">

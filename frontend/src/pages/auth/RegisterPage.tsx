@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { ArrowRight, User, Mail, GraduationCap, Award, BookOpen, AlertCircle } from 'lucide-react';
+import { ArrowRight, User, Mail, GraduationCap, Award, BookOpen, AlertCircle, Lock } from 'lucide-react';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [targetRole, setTargetRole] = useState('Full Stack Engineer');
   const [college, setCollege] = useState('');
   const [degree, setDegree] = useState('B.Tech');
@@ -24,12 +25,17 @@ export const RegisterPage: React.FC = () => {
       setError('Please provide your name and email address.');
       return;
     }
+    if (!password.trim() || password.trim().length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
       const user = await register({
         full_name: fullName.trim(),
         email: email.trim(),
+        password: password.trim(),
         target_role: targetRole,
         college: college.trim(),
         degree,
@@ -97,6 +103,22 @@ export const RegisterPage: React.FC = () => {
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE6F5] text-sm focus:outline-none focus:border-[#6D28D9] focus:ring-2 focus:ring-purple-100 bg-[#FBFAFF]"
                 />
               </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[#181525] mb-1.5">Create Password</label>
+            <div className="relative">
+              <Lock className="w-4 h-4 text-[#77718A] absolute left-3.5 top-3 pointer-events-none" />
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE6F5] text-sm focus:outline-none focus:border-[#6D28D9] focus:ring-2 focus:ring-purple-100 bg-[#FBFAFF]"
+              />
             </div>
           </div>
 
