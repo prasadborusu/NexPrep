@@ -146,10 +146,101 @@ export interface CodeSubmission {
   created_at: string;
 }
 
+export interface EducationItem {
+  id: string;
+  institution: string;
+  degree: string;
+  field: string;
+  start_year?: string;
+  end_year?: string;
+  score?: string;
+  location?: string;
+}
+
+export interface CategorizedSkills {
+  languages: string[];
+  frameworks: string[];
+  libraries: string[];
+  databases: string[];
+  tools: string[];
+  cloud: string[];
+  other: string[];
+}
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  github_url?: string;
+  demo_url?: string;
+  duration?: string;
+  contributions?: string[];
+  bullets?: string[];
+}
+
+export interface ExperienceItem {
+  id: string;
+  company: string;
+  role: string;
+  employment_type?: string;
+  location?: string;
+  start_date?: string;
+  end_date?: string;
+  is_current?: boolean;
+  description?: string;
+  responsibilities?: string[];
+  achievements?: string[];
+  bullets?: string[];
+}
+
+export interface CertificationItem {
+  id: string;
+  name: string;
+  issuer: string;
+  issue_date?: string;
+  credential_url?: string;
+}
+
+export interface AchievementItem {
+  id: string;
+  title: string;
+  description: string;
+  date?: string;
+  organization?: string;
+}
+
+export interface ResumeLinkItem {
+  id: string;
+  platform: string;
+  url: string;
+}
+
+export interface ResumeVersion {
+  id: string;
+  name: string;
+  created_at: string;
+  target_role: string;
+  template: string;
+  data: ResumeData;
+}
+
+export interface JobMatchAnalysis {
+  required_skills: { skill: string; matched: boolean }[];
+  preferred_skills: { skill: string; matched: boolean }[];
+  keywords: { keyword: string; matched: boolean }[];
+  missing_skills: string[];
+  relevant_projects: string[];
+  relevant_experience: string[];
+  matched_count: number;
+  total_count: number;
+}
+
 export interface ResumeData {
   id?: string;
   student_id: string;
-  title: string;
+  title?: string;
+  template?: 'classic' | 'modern' | 'minimal' | 'technical';
   personal_info: {
     full_name: string;
     email: string;
@@ -160,47 +251,17 @@ export interface ResumeData {
     portfolio_url?: string;
   };
   target_role: string;
+  target_industry?: string;
+  job_description?: string;
   summary: string;
-  education: Array<{
-    id: string;
-    institution: string;
-    degree: string;
-    field: string;
-    start_date: string;
-    end_date: string;
-    score: string;
-    highlights?: string[];
-  }>;
-  experience: Array<{
-    id: string;
-    company: string;
-    role: string;
-    location: string;
-    start_date: string;
-    end_date: string;
-    is_current: boolean;
-    bullets: string[];
-  }>;
-  projects: Array<{
-    id: string;
-    title: string;
-    technologies: string[];
-    link?: string;
-    bullets: string[];
-  }>;
-  skills: {
-    languages: string[];
-    frameworks: string[];
-    tools_databases: string[];
-    core_concepts: string[];
-  };
-  certifications: Array<{
-    id: string;
-    name: string;
-    issuer: string;
-    issue_date: string;
-    url?: string;
-  }>;
+  education: EducationItem[];
+  skills: CategorizedSkills;
+  projects: ProjectItem[];
+  experience: ExperienceItem[];
+  certifications: CertificationItem[];
+  achievements: AchievementItem[];
+  links: ResumeLinkItem[];
+  versions?: ResumeVersion[];
   created_at?: string;
   updated_at: string;
 }

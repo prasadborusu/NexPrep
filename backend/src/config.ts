@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
-
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+const envPath = path.resolve(__dirname, '../.env');
+dotenv.config({ path: envPath, override: true });
 
 export const config = {
   port: parseInt(process.env.PORT || '5000', 10),
@@ -13,3 +13,4 @@ export const config = {
   pistonApiUrl: process.env.PISTON_API_URL || 'https://emkc.org/api/v2/piston',
   nodeEnv: process.env.NODE_ENV || 'development'
 };
+

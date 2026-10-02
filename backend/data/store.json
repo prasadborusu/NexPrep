@@ -16,6 +16,23 @@
       "bio": "",
       "created_at": "2026-10-02T10:10:23.216Z",
       "updated_at": "2026-10-02T10:10:23.216Z"
+    },
+    {
+      "id": "user-1790937177748-sytkp",
+      "email": "prasadborusu0@gmail.com",
+      "full_name": "Prasad",
+      "role": "student",
+      "college": "Mohan Babu University",
+      "degree": "B.Tech",
+      "branch": "Computer Science & Engineering",
+      "graduation_year": 2026,
+      "cgpa": 7.9,
+      "phone": "",
+      "skills": [],
+      "target_role": "Full Stack Engineer",
+      "bio": "",
+      "created_at": "2026-10-02T10:32:57.748Z",
+      "updated_at": "2026-10-02T10:32:57.748Z"
     }
   ],
   "assessments": [
@@ -293,9 +310,424 @@
     }
   ],
   "code_submissions": [],
-  "resumes": [],
+  "resumes": [
+    {
+      "id": "resume-user-1790937177748-sytkp",
+      "student_id": "user-1790937177748-sytkp",
+      "title": "Full Stack Engineer Resume",
+      "personal_info": {
+        "full_name": "Prasad",
+        "email": "prasadborusu0@gmail.com",
+        "phone": "",
+        "location": "",
+        "linkedin_url": "",
+        "github_url": ""
+      },
+      "target_role": "Full Stack Engineer",
+      "summary": "",
+      "education": [
+        {
+          "id": "edu-1",
+          "institution": "Mohan Babu University",
+          "degree": "B.Tech",
+          "field": "Computer Science & Engineering",
+          "start_date": "",
+          "end_date": "2026",
+          "score": "7.9 CGPA",
+          "highlights": []
+        }
+      ],
+      "experience": [],
+      "projects": [],
+      "skills": {
+        "languages": [],
+        "frameworks": [],
+        "tools_databases": [],
+        "core_concepts": []
+      },
+      "certifications": [],
+      "created_at": "2026-10-02T10:33:18.613Z",
+      "updated_at": "2026-10-02T10:33:18.613Z"
+    },
+    {
+      "id": "resume-default-student",
+      "student_id": "default-student",
+      "title": "Software Engineering Resume",
+      "template": "minimal",
+      "personal_info": {
+        "full_name": "",
+        "email": "",
+        "phone": "",
+        "location": "",
+        "linkedin_url": "",
+        "github_url": "",
+        "portfolio_url": ""
+      },
+      "target_role": "Software Engineer",
+      "target_industry": "Technology",
+      "job_description": "",
+      "summary": "",
+      "education": [],
+      "experience": [],
+      "projects": [],
+      "skills": {
+        "languages": [],
+        "frameworks": [],
+        "libraries": [],
+        "databases": [],
+        "tools": [],
+        "cloud": [],
+        "other": []
+      },
+      "certifications": [],
+      "achievements": [],
+      "links": [],
+      "versions": [],
+      "created_at": "2026-10-02T10:43:56.648Z",
+      "updated_at": "2026-10-02T10:43:56.648Z"
+    },
+    {
+      "id": "resume-stu-1",
+      "student_id": "stu-1",
+      "title": "Full Stack Resume",
+      "template": "minimal",
+      "personal_info": {
+        "full_name": "Devon Vance",
+        "email": "devon@example.com",
+        "phone": "+91 9876543210",
+        "location": "Bengaluru, India",
+        "linkedin_url": "https://linkedin.com/in/devon",
+        "github_url": "https://github.com/devon",
+        "portfolio_url": "https://devon.dev"
+      },
+      "target_role": "Full Stack Engineer",
+      "target_industry": "FinTech",
+      "job_description": "Looking for a full stack engineer proficient in React and Node.js with strong database skills.",
+      "summary": "Proactive full-stack engineer with hands-on project experience in web architectures.",
+      "education": [
+        {
+          "id": "edu-1",
+          "institution": "National Institute of Technology",
+          "degree": "B.Tech",
+          "field": "Computer Science",
+          "start_year": "2021",
+          "end_year": "2025",
+          "score": "8.5 CGPA",
+          "location": "Bengaluru"
+        }
+      ],
+      "skills": {
+        "languages": [
+          "TypeScript",
+          "Python"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js"
+        ],
+        "libraries": [],
+        "databases": [
+          "PostgreSQL"
+        ],
+        "tools": [
+          "Git"
+        ],
+        "cloud": [
+          "Docker"
+        ],
+        "other": []
+      },
+      "projects": [
+        {
+          "id": "proj-1",
+          "name": "Placement Portal",
+          "description": "Built an automated placement dashboard with student profiles.",
+          "technologies": [
+            "React",
+            "Node.js"
+          ],
+          "github_url": "",
+          "live_url": "",
+          "duration": "3 months",
+          "key_contributions": [
+            "Designed REST endpoints."
+          ]
+        }
+      ],
+      "experience": [],
+      "certifications": [],
+      "achievements": [],
+      "links": [],
+      "versions": [
+        {
+          "id": "ver-1790937860289-rd0l",
+          "name": "v1.0-Release",
+          "created_at": "2026-10-02T10:44:20.289Z",
+          "target_role": "Full Stack Engineer",
+          "template": "minimal",
+          "data": {
+            "id": "resume-stu-1",
+            "student_id": "stu-1",
+            "title": "Full Stack Resume",
+            "template": "minimal",
+            "personal_info": {
+              "full_name": "Devon Vance",
+              "email": "devon@example.com",
+              "phone": "+91 9876543210",
+              "location": "Bengaluru, India",
+              "linkedin_url": "https://linkedin.com/in/devon",
+              "github_url": "https://github.com/devon",
+              "portfolio_url": "https://devon.dev"
+            },
+            "target_role": "Full Stack Engineer",
+            "target_industry": "FinTech",
+            "job_description": "Looking for a full stack engineer proficient in React and Node.js with strong database skills.",
+            "summary": "Proactive full-stack engineer with hands-on project experience in web architectures.",
+            "education": [
+              {
+                "id": "edu-1",
+                "institution": "National Institute of Technology",
+                "degree": "B.Tech",
+                "field": "Computer Science",
+                "start_year": "2021",
+                "end_year": "2025",
+                "score": "8.5 CGPA",
+                "location": "Bengaluru"
+              }
+            ],
+            "skills": {
+              "languages": [
+                "TypeScript",
+                "Python"
+              ],
+              "frameworks": [
+                "React",
+                "Node.js"
+              ],
+              "libraries": [],
+              "databases": [
+                "PostgreSQL"
+              ],
+              "tools": [
+                "Git"
+              ],
+              "cloud": [
+                "Docker"
+              ],
+              "other": []
+            },
+            "projects": [
+              {
+                "id": "proj-1",
+                "name": "Placement Portal",
+                "description": "Built an automated placement dashboard with student profiles.",
+                "technologies": [
+                  "React",
+                  "Node.js"
+                ],
+                "github_url": "",
+                "live_url": "",
+                "duration": "3 months",
+                "key_contributions": [
+                  "Designed REST endpoints."
+                ]
+              }
+            ],
+            "experience": [],
+            "certifications": [],
+            "achievements": [],
+            "links": [],
+            "versions": [],
+            "created_at": "2026-10-02T10:44:20.275Z",
+            "updated_at": "2026-10-02T10:44:20.276Z"
+          }
+        }
+      ],
+      "created_at": "2026-10-02T10:44:20.275Z",
+      "updated_at": "2026-10-02T10:44:20.278Z"
+    }
+  ],
   "ats_analyses": [],
-  "roadmaps": [],
+  "roadmaps": [
+    {
+      "id": "rm-user-1790937177748-sytkp",
+      "student_id": "user-1790937177748-sytkp",
+      "target_role": "Full Stack Engineer",
+      "duration_weeks": 6,
+      "weeks": [
+        {
+          "week_number": 1,
+          "theme": "Core Language Fundamentals & Memory Model",
+          "focus": "Syntax, Type Systems, Pointers/References & Runtime Semantics",
+          "items": [
+            {
+              "id": "w1-1",
+              "title": "Language Basics & Data Types",
+              "description": "Review primitive vs reference types, immutability, and scopes.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w1-2",
+              "title": "Memory Management & Garbage Collection",
+              "description": "Understand heap vs stack, lifecycle of objects, and memory leaks.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w1-3",
+              "title": "Practice 5 Warmup Algorithmic Problems",
+              "description": "Solve string manipulation and two-pointer problems on NexPrep.",
+              "category": "practice",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "week_number": 2,
+          "theme": "Object-Oriented Programming & Clean Architecture",
+          "focus": "Inheritance, Polymorphism, Encapsulation, Abstraction & SOLID",
+          "items": [
+            {
+              "id": "w2-1",
+              "title": "SOLID Design Principles",
+              "description": "Study Single Responsibility, Open/Closed, and Dependency Inversion patterns.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w2-2",
+              "title": "Design Patterns Deep-Dive",
+              "description": "Implement Singleton, Factory, and Observer patterns in idiomatic code.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w2-3",
+              "title": "Refactor Monolithic Module",
+              "description": "Separate data access, service layer, and controller logic.",
+              "category": "project",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "week_number": 3,
+          "theme": "Collections Framework & Standard Libraries",
+          "focus": "Lists, Sets, Maps, Queues, Iterators & Complexity Analysis",
+          "items": [
+            {
+              "id": "w3-1",
+              "title": "Internal Working of HashMaps",
+              "description": "Hash functions, bucket arrays, collision resolution and load factor.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w3-2",
+              "title": "PriorityQueue & Tree Structures",
+              "description": "Understand binary heaps and red-black tree ordering invariants.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w3-3",
+              "title": "Solve 6 Hashing & Heap Problems",
+              "description": "Focus on Top-K elements, frequency sorting, and sliding window maximum.",
+              "category": "practice",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "week_number": 4,
+          "theme": "Data Structures & Algorithms Mastery",
+          "focus": "Trees, Graphs, Dynamic Programming & Backtracking",
+          "items": [
+            {
+              "id": "w4-1",
+              "title": "Binary Search Tree & Graph Traversals",
+              "description": "Master BFS, DFS, Dijkstra, and cycle detection in directed graphs.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w4-2",
+              "title": "Dynamic Programming Patterns",
+              "description": "0/1 Knapsack, Longest Common Subsequence, and state memoization.",
+              "category": "practice",
+              "completed": false
+            },
+            {
+              "id": "w4-3",
+              "title": "Timed Mock Assessment",
+              "description": "Complete a 60-minute mixed coding test on NexPrep with hidden test suites.",
+              "category": "practice",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "week_number": 5,
+          "theme": "Production Projects & System Integration",
+          "focus": "REST APIs, Databases, Caching, Authentication & Deployment",
+          "items": [
+            {
+              "id": "w5-1",
+              "title": "Database Optimization & Indexing",
+              "description": "Write optimized SQL queries, composite indexes, and prevent N+1 queries.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w5-2",
+              "title": "Build Full Stack Capstone Project",
+              "description": "Integrate real authentication, state management, and cloud deployment.",
+              "category": "project",
+              "completed": false
+            },
+            {
+              "id": "w5-3",
+              "title": "Update ATS-Friendly Resume",
+              "description": "Use NexPrep AI Resume Builder to generate quantifiable bullet points.",
+              "category": "project",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "week_number": 6,
+          "theme": "Placement Drives & Mock Technical Interviews",
+          "focus": "System Design, Behavioral STAR Method & High-Stakes Drills",
+          "items": [
+            {
+              "id": "w6-1",
+              "title": "System Design Fundamentals",
+              "description": "Horizontal scaling, load balancers, CDN, caching and CAP theorem.",
+              "category": "core",
+              "completed": false
+            },
+            {
+              "id": "w6-2",
+              "title": "AI Mock Interview Simulator",
+              "description": "Complete 3 technical and HR interview sessions on NexPrep with feedback.",
+              "category": "interview",
+              "completed": false
+            },
+            {
+              "id": "w6-3",
+              "title": "Apply to Active Placement Drives",
+              "description": "Review eligibility criteria and submit verified applications.",
+              "category": "interview",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "progress_percentage": 0,
+      "updated_at": "2026-10-02T10:32:57.830Z"
+    }
+  ],
   "interview_sessions": [],
   "placement_drives": [],
   "placement_applications": [],

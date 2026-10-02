@@ -6,6 +6,8 @@ import {
   CodingProblem,
   CodeSubmission,
   ResumeData,
+  ResumeVersion,
+  JobMatchAnalysis,
   ATSAnalysisResult,
   SkillGapData,
   StudentRoadmap,
@@ -112,8 +114,66 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(resume)
     }),
-    generateSummary: (data: { fullName: string; targetRole: string; skills: string[]; education?: string }) =>
+    saveVersion: (data: { student_id: string; version_name?: string; resume_data: ResumeData }) =>
+      fetchJson<{ message: string; version: ResumeVersion }>('/resume/version', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    getVersions: (studentId: string) => fetchJson<ResumeVersion[]>(`/resume/versions/${studentId}`),
+    restoreVersion: (student_id: string, version_id: string) =>
+      fetchJson<{ message: string; resume: ResumeData }>('/resume/version/restore', {
+        method: 'POST',
+        body: JSON.stringify({ student_id, version_id })
+      }),
+    deleteVersion: (student_id: string, version_id: string) =>
+      fetchJson<{ message: string; remaining_versions: ResumeVersion[] }>(`/resume/version/${student_id}/${version_id}`, {
+        method: 'DELETE'
+      }),
+    generateSummary: (data: {
+      fullName: string;
+      targetRole: string;
+      skills: string[];
+      education?: string;
+      projects?: string[];
+      experience?: string[];
+    }) =>
       fetchJson<{ summary: string }>('/resume/ai/summary', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    improveProject: (data: {
+      title: string;
+      currentDescription: string;
+      technologies: string[];
+      contributions?: string[];
+    }) =>
+      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string }>('/resume/ai/improve-project', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    improveExperience: (data: {
+      company: string;
+      role: string;
+      currentDescription: string;
+      responsibilities?: string[];
+      achievements?: string[];
+    }) =>
+      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string }>('/resume/ai/improve-experience', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    analyzeJobMatch: (data: { job_description: string; resume_data: ResumeData }) =>
+      fetchJson<JobMatchAnalysis>('/resume/ai/analyze-job', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    checkStructure: (data: { resume_data: ResumeData }) =>
+      fetchJson<{ audit: Array<{ section: string; status: 'good' | 'warning' | 'tip'; message: string }> }>('/resume/ai/check-structure', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    suggestKeywords: (data: { target_role: string; job_description?: string; current_skills?: string[] }) =>
+      fetchJson<{ suggestions: Array<{ keyword: string; category: string; reason: string }> }>('/resume/ai/suggest-keywords', {
         method: 'POST',
         body: JSON.stringify(data)
       }),

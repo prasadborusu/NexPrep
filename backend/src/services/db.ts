@@ -21,13 +21,21 @@ import {
 const isLiveSupabase = Boolean(
   config.supabaseUrl &&
   !config.supabaseUrl.includes('mock-supabase') &&
+  !config.supabaseUrl.includes('your-project-id') &&
   config.supabaseAnonKey &&
-  config.supabaseAnonKey !== 'mock-anon-key'
+  config.supabaseAnonKey !== 'mock-anon-key' &&
+  config.supabaseAnonKey !== 'your-supabase-anon-key'
 );
 
 export const supabase = isLiveSupabase
   ? createClient(config.supabaseUrl, config.supabaseServiceKey || config.supabaseAnonKey)
   : null;
+
+if (isLiveSupabase) {
+  console.log(`⚡ Connected to Live Supabase: ${config.supabaseUrl}`);
+} else {
+  console.log('ℹ️ Running on local persistent file store (store.json). Set SUPABASE_URL & SUPABASE_ANON_KEY in backend/.env to switch to live Supabase.');
+}
 
 // Local JSON Storage Path for Production Persistence
 const DATA_DIR = path.resolve(__dirname, '../../data');
