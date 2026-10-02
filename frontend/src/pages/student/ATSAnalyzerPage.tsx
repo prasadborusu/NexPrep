@@ -98,6 +98,7 @@ export const ATSAnalyzerPage: React.FC = () => {
               onChange={(e) => setTargetRole(e.target.value)}
               className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:border-purple-600 focus:outline-none"
             >
+              <option value="Python Developer">Python Developer</option>
               <option value="Full Stack Engineer">Full Stack Engineer</option>
               <option value="Frontend Specialist">Frontend Specialist</option>
               <option value="Backend Engineer">Backend Engineer</option>
@@ -167,13 +168,41 @@ export const ATSAnalyzerPage: React.FC = () => {
 
           {/* Job Description Input Area */}
           <div className="bg-white rounded-2xl p-5 border border-purple-100/80 shadow-soft space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Target Job Description</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Target Job Description</span>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetRole('Python Developer');
+                    setJobDescription(
+                      'We are looking for a Python Developer proficient in Python 3, Django or FastAPI, PostgreSQL, and Git. Experience building RESTful APIs, writing unit tests, and working with Docker or containerized microservices is required. Knowledge of Redis caching and Data Structures is a plus.'
+                    );
+                  }}
+                  className="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
+                >
+                  + Python JD
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetRole('Full Stack Engineer');
+                    setJobDescription(
+                      'Seeking a Full Stack Engineer experienced with React, TypeScript, Node.js, and SQL/PostgreSQL. Must understand REST APIs, Git workflows, Docker containers, state management, and modern CI/CD pipelines.'
+                    );
+                  }}
+                  className="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                >
+                  + Full Stack JD
+                </button>
+              </div>
+            </div>
             <textarea
               rows={6}
               required
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              placeholder="Paste the requirements section of the job posting..."
+              placeholder="Paste the requirements section of the job posting or click a sample preset above..."
               className="w-full p-3 rounded-xl border border-slate-200 text-xs leading-relaxed focus:border-purple-600 focus:outline-none"
             />
           </div>

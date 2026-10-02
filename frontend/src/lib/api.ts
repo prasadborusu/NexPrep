@@ -4,8 +4,10 @@ import {
   Question,
   AssessmentSubmission,
   CodingProblem,
+  CodingTopic,
   CodeSubmission,
   ResumeData,
+  ResumeTemplateId,
   ResumeVersion,
   JobMatchAnalysis,
   ATSAnalysisResult,
@@ -14,7 +16,9 @@ import {
   InterviewSession,
   PlacementDrive,
   PlacementApplication,
-  BulkEmailLog
+  BulkEmailLog,
+  Course,
+  CourseEnrollment
 } from '../types';
 
 const BASE_URL = '/api';
@@ -51,7 +55,7 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ email, password })
     }),
-    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ token: string; user: UserProfile }>('/auth/register', {
+    register: (data: Partial<UserProfile> & { password?: string }) => fetchJson<{ token: string; user: UserProfile; email_verification_required?: boolean; message?: string }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(data)
     }),
@@ -59,12 +63,17 @@ export const api = {
     updateProfile: (id: string, data: Partial<UserProfile>) => fetchJson<UserProfile>(`/auth/profile/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data)
+    }),
+    sendMagicLink: (email: string, role: 'student' | 'admin' = 'student') => fetchJson<{ success: boolean; message: string }>('/auth/magic-link', {
+      method: 'POST',
+      body: JSON.stringify({ email, role })
     })
   },
 
   // Assessments
   assessments: {
     list: () => fetchJson<Assessment[]>('/assessments'),
+    listAdmin: () => fetchJson<Assessment[]>('/assessments/admin/all'),
     get: (id: string) => fetchJson<{ assessment: Assessment; questions: Question[] }>(`/assessments/${id}`),
     submit: (id: string, data: { student_id: string; answers: any; is_final_submit?: boolean }) =>
       fetchJson<{ message: string; submission: AssessmentSubmission }>(`/assessments/${id}/submit`, {
@@ -108,8 +117,14 @@ export const api = {
 
   // Coding Practice
   coding: {
-    listProblems: () => fetchJson<CodingProblem[]>('/coding/problems'),
-    getProblem: (idOrSlug: string) => fetchJson<CodingProblem>(`/coding/problems/${idOrSlug}`),
+    getTopics: (studentId?: string) =>
+      fetchJson<CodingTopic[]>('/coding/topics' + (studentId ? `?student_id=${studentId}` : '')),
+    getTopicDetail: (topicId: string, studentId?: string) =>
+      fetchJson<{ topic: CodingTopic; problems: CodingProblem[] }>(`/coding/topics/${topicId}` + (studentId ? `?student_id=${studentId}` : '')),
+    listProblems: (studentId?: string) =>
+      fetchJson<CodingProblem[]>('/coding/problems' + (studentId ? `?student_id=${studentId}` : '')),
+    getProblem: (idOrSlug: string, studentId?: string) =>
+      fetchJson<CodingProblem>(`/coding/problems/${idOrSlug}` + (studentId ? `?student_id=${studentId}` : '')),
     runCode: (language: string, code: string, stdin?: string) =>
       fetchJson<any>('/coding/run', {
         method: 'POST',
@@ -120,7 +135,14 @@ export const api = {
         method: 'POST',
         body: JSON.stringify(data)
       }),
-    getSubmissions: (studentId: string) => fetchJson<CodeSubmission[]>(`/coding/submissions/${studentId}`),
+    getSubmissions: (studentId: string, params?: { problem_id?: string; language?: string; status?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.problem_id) q.set('problem_id', params.problem_id);
+      if (params?.language) q.set('language', params.language);
+      if (params?.status) q.set('status', params.status);
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return fetchJson<CodeSubmission[]>(`/coding/submissions/${studentId}${queryStr}`);
+    },
     createProblem: (data: Partial<CodingProblem>) => fetchJson<CodingProblem>('/coding/problems', {
       method: 'POST',
       body: JSON.stringify(data)
@@ -129,6 +151,17 @@ export const api = {
 
   // Resume
   resume: {
+    getTemplates: () =>
+      fetchJson<Array<{ id: ResumeTemplateId; name: string; description: string; category: string; isPopular?: boolean }>>('/resume/templates'),
+    listForStudent: (studentId: string) =>
+      fetchJson<ResumeData[]>(`/resume/student/${studentId}/all`),
+    getById: (resumeId: string) =>
+      fetchJson<ResumeData>(`/resume/item/${resumeId}`),
+    create: (data: { student_id: string; template_id?: ResumeTemplateId; title?: string; target_role?: string }) =>
+      fetchJson<ResumeData>('/resume/create', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
     get: (studentId: string) => fetchJson<ResumeData>(`/resume/${studentId}`),
     save: (resume: ResumeData) => fetchJson<{ message: string; resume: ResumeData }>('/resume', {
       method: 'POST',
@@ -157,7 +190,7 @@ export const api = {
       projects?: string[];
       experience?: string[];
     }) =>
-      fetchJson<{ summary: string }>('/resume/ai/summary', {
+      fetchJson<{ original: string; suggested: string; explanation: string }>('/resume/ai/summary', {
         method: 'POST',
         body: JSON.stringify(data)
       }),
@@ -167,23 +200,34 @@ export const api = {
       technologies: string[];
       contributions?: string[];
     }) =>
-      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string }>('/resume/ai/improve-project', {
+      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string; original?: string; suggested?: string }>('/resume/ai/improve-project', {
         method: 'POST',
         body: JSON.stringify(data)
       }),
     improveExperience: (data: {
       company: string;
       role: string;
-      currentDescription: string;
+      currentDescription?: string;
+      currentBullets?: string[];
       responsibilities?: string[];
       achievements?: string[];
+      technologies?: string[];
     }) =>
-      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string }>('/resume/ai/improve-experience', {
+      fetchJson<{ improvedDescription: string; bullets: string[]; explanation: string; improvedBullets?: string[] }>('/resume/ai/improve-experience', {
         method: 'POST',
         body: JSON.stringify(data)
       }),
-    analyzeJobMatch: (data: { job_description: string; resume_data: ResumeData }) =>
+    analyzeJobMatch: (data: { job_description: string; resume_data?: ResumeData; resume?: ResumeData }) =>
       fetchJson<JobMatchAnalysis>('/resume/ai/analyze-job', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }),
+    getATSScore: (data: { resume: ResumeData; job_description?: string }) =>
+      fetchJson<{
+        overallScore: number;
+        checks: Array<{ category: string; max: number; score: number; feedback: string }>;
+        calculatedAt: string;
+      }>('/resume/ai/ats-score', {
         method: 'POST',
         body: JSON.stringify(data)
       }),
@@ -312,5 +356,92 @@ export const api = {
       recent_applications: PlacementApplication[];
     }>('/admin/analytics'),
     getStudents: () => fetchJson<any[]>('/admin/students')
+  },
+
+  // Company Interview Prep
+  companies: {
+    list: (params?: { category?: string; search?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.category) q.set('category', params.category);
+      if (params?.search) q.set('search', params.search);
+      const qs = q.toString() ? `?${q.toString()}` : '';
+      return fetchJson<any[]>(`/companies${qs}`);
+    },
+    getById: (companyId: string) => fetchJson<any>(`/companies/${companyId}`),
+    getTheory: (companyId: string, topic?: string) => {
+      const qs = topic ? `?topic=${encodeURIComponent(topic)}` : '';
+      return fetchJson<{ questions: any[]; available_topics: string[] }>(`/companies/${companyId}/theory${qs}`);
+    },
+    evaluateTheory: (companyId: string, questionId: string, userAnswer: string, studentId: string) =>
+      fetchJson<{ feedback: any; question_id: string; expected_concepts: string[] }>(
+        `/companies/${companyId}/theory/${questionId}/evaluate`,
+        { method: 'POST', body: JSON.stringify({ userAnswer, student_id: studentId }) }
+      ),
+    getAptitude: (companyId: string, category?: string) => {
+      const qs = category ? `?category=${encodeURIComponent(category)}` : '';
+      return fetchJson<{ questions: any[] }>(`/companies/${companyId}/aptitude${qs}`);
+    },
+    submitAptitude: (companyId: string, answers: Record<string, string>) =>
+      fetchJson<{ score: number; correct: number; total: number; results: any[] }>(
+        `/companies/${companyId}/aptitude/submit`,
+        { method: 'POST', body: JSON.stringify({ answers }) }
+      ),
+    getHR: (companyId: string) => fetchJson<{ questions: any[]; company: any }>(`/companies/${companyId}/hr`),
+    evaluateHR: (companyId: string, questionId: string, userAnswer: string) =>
+      fetchJson<{ feedback: any; tips: string[] }>(
+        `/companies/${companyId}/hr/${questionId}/evaluate`,
+        { method: 'POST', body: JSON.stringify({ userAnswer }) }
+      ),
+    getCoding: (companyId: string) => fetchJson<{ problems: any[]; company: any }>(`/companies/${companyId}/coding`),
+    getProgress: (companyId: string, studentId: string) =>
+      fetchJson<any>(`/companies/${companyId}/progress/${studentId}`)
+  },
+
+  // Courses & Learning System
+  courses: {
+    list: (params?: { category?: string; level?: string; search?: string; include_drafts?: boolean }) => {
+      const q = new URLSearchParams();
+      if (params?.category) q.set('category', params.category);
+      if (params?.level) q.set('level', params.level);
+      if (params?.search) q.set('search', params.search);
+      if (params?.include_drafts) q.set('include_drafts', 'true');
+      const qs = q.toString() ? `?${q.toString()}` : '';
+      return fetchJson<Course[]>(`/courses${qs}`);
+    },
+    getById: (courseId: string) => fetchJson<Course>(`/courses/${courseId}`),
+    enroll: (courseId: string, studentId: string) =>
+      fetchJson<{ message: string; enrollment: CourseEnrollment; course: Course }>(
+        `/courses/${courseId}/enroll`,
+        { method: 'POST', body: JSON.stringify({ student_id: studentId }) }
+      ),
+    getProgress: (courseId: string, studentId: string) =>
+      fetchJson<{ enrolled: boolean; completed_lessons: string[]; progress_percentage: number }>(
+        `/courses/${courseId}/progress/${studentId}`
+      ),
+    completeLesson: (courseId: string, lessonId: string, studentId: string) =>
+      fetchJson<{ message: string; enrollment: CourseEnrollment }>(
+        `/courses/${courseId}/lessons/${lessonId}/complete`,
+        { method: 'POST', body: JSON.stringify({ student_id: studentId }) }
+      ),
+    getEnrolled: (studentId: string) =>
+      fetchJson<Array<{ enrollment: CourseEnrollment; course: Course }>>(`/courses/student/${studentId}/enrolled`),
+    // Admin Course Management
+    create: (courseData: Partial<Course>) =>
+      fetchJson<Course>('/courses', { method: 'POST', body: JSON.stringify(courseData) }),
+    update: (courseId: string, courseData: Partial<Course>) =>
+      fetchJson<Course>(`/courses/${courseId}`, { method: 'PUT', body: JSON.stringify(courseData) }),
+    togglePublish: (courseId: string) =>
+      fetchJson<{ is_published: boolean; course: Course }>(`/courses/${courseId}/publish`, { method: 'PATCH' }),
+    delete: (courseId: string) =>
+      fetchJson<{ message: string }>(`/courses/${courseId}`, { method: 'DELETE' }),
+    getStats: () =>
+      fetchJson<{
+        total_courses: number;
+        published_courses: number;
+        draft_courses: number;
+        total_enrollments: number;
+        total_completed: number;
+        completion_rate: number;
+      }>('/courses/admin/stats')
   }
 };

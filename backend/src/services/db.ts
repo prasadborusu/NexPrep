@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import { config } from '../config';
+import { CODING_PROBLEMS } from './codingRepo';
 import {
   UserProfile,
   Assessment,
@@ -15,8 +16,11 @@ import {
   InterviewSession,
   PlacementDrive,
   PlacementApplication,
-  BulkEmailLog
+  BulkEmailLog,
+  Course,
+  CourseEnrollment
 } from '../types';
+import { INITIAL_COURSES } from '../data/coursesData';
 
 const isLiveSupabase = Boolean(
   config.supabaseUrl &&
@@ -54,7 +58,7 @@ const INITIAL_ASSESSMENTS: Assessment[] = [
     is_active: true,
     scheduled_at: new Date().toISOString(),
     expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60).toISOString(),
-    passkey: 'NEX-CS-8492',
+    passkey: '8492',
     created_by: 'system',
     created_at: new Date().toISOString()
   },
@@ -68,7 +72,7 @@ const INITIAL_ASSESSMENTS: Assessment[] = [
     pass_percentage: 70.0,
     is_active: true,
     scheduled_at: new Date().toISOString(),
-    passkey: 'NEX-JAVA-5130',
+    passkey: '5130',
     created_by: 'system',
     created_at: new Date().toISOString()
   }
@@ -150,62 +154,8 @@ const INITIAL_QUESTIONS: Question[] = [
   }
 ];
 
-const INITIAL_CODING_PROBLEMS: CodingProblem[] = [
-  {
-    id: 'prob-two-sum',
-    title: 'Two Sum',
-    slug: 'two-sum',
-    difficulty: 'easy',
-    category: 'Arrays & Hashing',
-    tags: ['Array', 'Hash Table'],
-    description: 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-    examples: [
-      { input: 'nums = [2, 7, 11, 15], target = 9', output: '[0, 1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
-      { input: 'nums = [3, 2, 4], target = 6', output: '[1, 2]' }
-    ],
-    constraints: ['2 <= nums.length <= 10^4', '-10^9 <= nums[i] <= 10^9', '-10^9 <= target <= 10^9', 'Only one valid answer exists.'],
-    starter_code: {
-      python: 'def twoSum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in seen:\n            return [seen[diff], i]\n        seen[num] = i\n    return []\n\nimport sys, json\ninput_data = sys.stdin.read().strip()\nif input_data:\n    d = json.loads(input_data)\n    print(json.dumps(twoSum(d["nums"], d["target"])))\n',
-      javascript: 'function twoSum(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp), i];\n        map.set(nums[i], i);\n    }\n    return [];\n}\n\nconst fs = require("fs");\nconst input = fs.readFileSync(0, "utf-8").trim();\nif (input) {\n    const d = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(d.nums, d.target)));\n}\n',
-      java: 'import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        System.out.println("[0, 1]");\n    }\n}\n',
-      cpp: '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "[0, 1]" << endl;\n    return 0;\n}\n'
-    },
-    test_cases: [
-      { id: 'tc1', input: '{"nums": [2, 7, 11, 15], "target": 9}', expected_output: '[0, 1]', is_hidden: false },
-      { id: 'tc2', input: '{"nums": [3, 2, 4], "target": 6}', expected_output: '[1, 2]', is_hidden: false },
-      { id: 'tc3', input: '{"nums": [3, 3], "target": 6}', expected_output: '[0, 1]', is_hidden: true }
-    ],
-    acceptance_rate: 0,
-    total_submissions: 0,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: 'prob-valid-parentheses',
-    title: 'Valid Parentheses',
-    slug: 'valid-parentheses',
-    difficulty: 'easy',
-    category: 'Stack',
-    tags: ['Stack', 'String'],
-    description: 'Given a string s containing just the characters "(", ")", "{", "}", "[" and "]", determine if the input string is valid.',
-    examples: [
-      { input: 's = "()[]{}"', output: 'true' },
-      { input: 's = "(]"', output: 'false' }
-    ],
-    constraints: ['1 <= s.length <= 10^4', 's consists of parentheses only "()[]{}"'],
-    starter_code: {
-      python: 'def isValid(s: str) -> bool:\n    stack = []\n    mapping = {")": "(", "}": "{", "]": "["}\n    for char in s:\n        if char in mapping:\n            top = stack.pop() if stack else "#"\n            if mapping[char] != top: return False\n        else:\n            stack.append(char)\n    return not stack\n\nimport sys\ns = sys.stdin.read().strip().replace(\'"\', "")\nprint("true" if isValid(s) else "false")\n',
-      javascript: 'function isValid(s) {\n    const stack = [];\n    const map = { ")": "(", "}": "{", "]": "[" };\n    for (let c of s) {\n        if (map[c]) {\n            if (stack.pop() !== map[c]) return false;\n        } else {\n            stack.push(c);\n        }\n    }\n    return stack.length === 0;\n}\nconst fs = require("fs");\nconst s = fs.readFileSync(0, "utf-8").trim().replace(/"/g, "");\nconsole.log(isValid(s) ? "true" : "false");\n'
-    },
-    test_cases: [
-      { id: 'tc1', input: '"()[]{}"', expected_output: 'true', is_hidden: false },
-      { id: 'tc2', input: '"(]"', expected_output: 'false', is_hidden: false },
-      { id: 'tc3', input: '"([{}])"', expected_output: 'true', is_hidden: true }
-    ],
-    acceptance_rate: 0,
-    total_submissions: 0,
-    created_at: new Date().toISOString()
-  }
-];
+const INITIAL_CODING_PROBLEMS: CodingProblem[] = CODING_PROBLEMS;
+
 
 export interface DataStore {
   profiles: UserProfile[];
@@ -221,6 +171,8 @@ export interface DataStore {
   placement_drives: PlacementDrive[];
   placement_applications: PlacementApplication[];
   bulk_email_logs: BulkEmailLog[];
+  courses: Course[];
+  course_enrollments: CourseEnrollment[];
 }
 
 function loadInitialStore(): DataStore {
@@ -231,12 +183,21 @@ function loadInitialStore(): DataStore {
     if (fs.existsSync(STORE_FILE)) {
       const content = fs.readFileSync(STORE_FILE, 'utf-8');
       const parsed = JSON.parse(content);
+      // Ensure all curated coding problems and verified LeetCode links are populated
+      const loadedProblems: CodingProblem[] = parsed.coding_problems || [];
+      const problemMap = new Map<string, CodingProblem>();
+      CODING_PROBLEMS.forEach(p => problemMap.set(p.id, p));
+      loadedProblems.forEach(p => {
+        const curated = problemMap.get(p.id);
+        problemMap.set(p.id, curated ? { ...curated, total_submissions: p.total_submissions, acceptance_rate: p.acceptance_rate } : p);
+      });
+
       return {
         profiles: parsed.profiles || [],
         assessments: parsed.assessments || INITIAL_ASSESSMENTS,
         questions: parsed.questions || INITIAL_QUESTIONS,
         assessment_submissions: parsed.assessment_submissions || [],
-        coding_problems: parsed.coding_problems || INITIAL_CODING_PROBLEMS,
+        coding_problems: Array.from(problemMap.values()),
         code_submissions: parsed.code_submissions || [],
         resumes: parsed.resumes || [],
         ats_analyses: parsed.ats_analyses || [],
@@ -244,7 +205,9 @@ function loadInitialStore(): DataStore {
         interview_sessions: parsed.interview_sessions || [],
         placement_drives: parsed.placement_drives || [],
         placement_applications: parsed.placement_applications || [],
-        bulk_email_logs: parsed.bulk_email_logs || []
+        bulk_email_logs: parsed.bulk_email_logs || [],
+        courses: parsed.courses || INITIAL_COURSES,
+        course_enrollments: parsed.course_enrollments || []
       };
     }
   } catch (err) {
@@ -265,7 +228,9 @@ function loadInitialStore(): DataStore {
     interview_sessions: [],
     placement_drives: [],
     placement_applications: [],
-    bulk_email_logs: []
+    bulk_email_logs: [],
+    courses: INITIAL_COURSES,
+    course_enrollments: []
   };
 }
 

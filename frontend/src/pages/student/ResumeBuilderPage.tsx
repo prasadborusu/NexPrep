@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef, useTransition } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { ResumePreviewRenderer } from '../../components/resume/templates';
 import {
   ResumeData,
+  ResumeTemplateId,
   ResumeVersion,
   EducationItem,
   ProjectItem,
@@ -62,11 +64,12 @@ const SKILL_CATEGORIES: Array<{ key: keyof CategorizedSkills; label: string; pla
 export const ResumeBuilderPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { resumeId } = useParams<{ resumeId?: string }>();
 
   // Active Resume State
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [activeSection, setActiveSection] = useState<number>(1);
-  const [selectedTemplate, setSelectedTemplate] = useState<'classic' | 'modern' | 'minimal' | 'technical'>('minimal');
+  const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplateId>('modern');
 
   // Autosave Status: 'saved' | 'saving' | 'unsaved'
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
@@ -120,10 +123,14 @@ export const ResumeBuilderPage: React.FC = () => {
     if (!user) return;
     const loadResume = async () => {
       try {
-        const data = await api.resume.get(user.id);
-        // Ensure defaults if any property is empty
-        if (!data.template) data.template = 'minimal';
-        setSelectedTemplate(data.template as any);
+        let data: ResumeData;
+        if (resumeId) {
+          data = await api.resume.getById(resumeId);
+        } else {
+          data = await api.resume.get(user.id);
+        }
+        const tmpl = (data.template_id || data.template || 'modern') as ResumeTemplateId;
+        setSelectedTemplate(tmpl);
         setResume(data);
         setVersions(data.versions || []);
       } catch (err) {
@@ -131,7 +138,7 @@ export const ResumeBuilderPage: React.FC = () => {
       }
     };
     loadResume();
-  }, [user]);
+  }, [user, resumeId]);
 
   // 2. Debounced Autosave (3 seconds after last change)
   const triggerAutoSave = (updated: ResumeData) => {
@@ -194,7 +201,7 @@ export const ResumeBuilderPage: React.FC = () => {
         experience: resume.experience.map(e => `${e.role} at ${e.company}`)
       });
 
-      setAiSummaryProposal(res.summary);
+      setAiSummaryProposal(res.suggested || (res as any).summary || '');
     } catch (err) {
       console.error('AI summary error:', err);
     } finally {
@@ -2045,20 +2052,20 @@ export const ResumeBuilderPage: React.FC = () => {
         {/* ======================================================== */}
         <div className={`lg:col-span-5 space-y-6 lg:sticky lg:top-6 ${mobileTab !== 'preview' ? 'hidden lg:block' : ''}`}>
           {/* Template Bar */}
-          <div className="bg-white rounded-2xl p-4 border border-purple-100 shadow-soft flex items-center justify-between">
+          <div className="bg-white rounded-2xl p-4 border border-purple-100 shadow-soft flex items-center justify-between flex-wrap gap-2">
             <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
               <Sliders className="w-4 h-4 text-purple-700" />
               Template Layout:
             </span>
 
-            <div className="flex gap-1.5">
-              {(['minimal', 'modern', 'classic', 'technical'] as const).map(tmpl => (
+            <div className="flex gap-1.5 flex-wrap">
+              {(['minimal', 'modern', 'classic', 'technical', 'executive'] as const).map(tmpl => (
                 <button
                   key={tmpl}
                   type="button"
                   onClick={() => {
                     setSelectedTemplate(tmpl);
-                    updateResume(prev => ({ ...prev, template: tmpl }));
+                    updateResume(prev => ({ ...prev, template: tmpl, template_id: tmpl }));
                   }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold capitalize transition-all ${
                     selectedTemplate === tmpl
@@ -2072,200 +2079,9 @@ export const ResumeBuilderPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Live Document Container (A4 Proportional Sheet) */}
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-300 shadow-soft-lg space-y-4 text-slate-800 text-[11px] leading-relaxed max-h-[85vh] overflow-y-auto">
-            {/* Template Header */}
-            <div className={`pb-3 border-b ${
-              selectedTemplate === 'classic' ? 'text-center border-slate-400' :
-              selectedTemplate === 'modern' ? 'border-purple-200' : 'border-slate-200'
-            }`}>
-              <h2 className={`font-black text-lg text-slate-900 tracking-tight ${
-                selectedTemplate === 'classic' ? 'font-serif text-xl' : ''
-              }`}>
-                {resume.personal_info.full_name || 'Your Full Name'}
-              </h2>
-              {resume.target_role && (
-                <p className={`font-semibold text-xs ${
-                  selectedTemplate === 'modern' ? 'text-purple-700' : 'text-slate-600'
-                }`}>
-                  {resume.target_role}
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-2 text-[10px] text-slate-500 pt-1.5 justify-center sm:justify-start">
-                {[
-                  resume.personal_info.email,
-                  resume.personal_info.phone,
-                  resume.personal_info.location,
-                  resume.personal_info.linkedin_url,
-                  resume.personal_info.github_url
-                ].filter(Boolean).map((coord, i) => (
-                  <span key={i} className="flex items-center gap-1">
-                    {i > 0 && <span>•</span>}
-                    <span>{coord}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Summary */}
-            {resume.summary && resume.summary.trim() && (
-              <div className="space-y-1">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Professional Summary
-                </h4>
-                <p className="text-slate-600 leading-normal">{resume.summary}</p>
-              </div>
-            )}
-
-            {/* Education */}
-            {resume.education && resume.education.length > 0 && (
-              <div className="space-y-2">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Education
-                </h4>
-                {resume.education.map(edu => (
-                  <div key={edu.id} className="space-y-0.5">
-                    <div className="flex justify-between font-bold text-slate-900 text-xs">
-                      <span>{edu.degree || 'Degree'} {edu.field ? `in ${edu.field}` : ''}</span>
-                      <span className="text-slate-500 text-[10px] font-normal">
-                        {[edu.start_year, edu.end_year].filter(Boolean).join(' - ')}
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-slate-500 flex justify-between">
-                      <span>{edu.institution} {edu.location ? `• ${edu.location}` : ''}</span>
-                      {edu.score && <span className="font-semibold text-purple-700">{edu.score}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Skills */}
-            {SKILL_CATEGORIES.some(cat => (resume.skills[cat.key] || []).length > 0) && (
-              <div className="space-y-1.5">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Technical Skills
-                </h4>
-                <div className="space-y-1 text-[10px]">
-                  {SKILL_CATEGORIES.map(cat => {
-                    const list = resume.skills[cat.key] || [];
-                    if (list.length === 0) return null;
-                    return (
-                      <div key={cat.key} className="flex gap-1.5">
-                        <span className="font-bold text-slate-700 shrink-0">{cat.label}:</span>
-                        <span className="text-slate-600">{list.join(', ')}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Projects */}
-            {resume.projects && resume.projects.length > 0 && (
-              <div className="space-y-2.5">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Technical Projects
-                </h4>
-                {resume.projects.map(proj => (
-                  <div key={proj.id} className="space-y-1">
-                    <div className="flex justify-between font-bold text-slate-900 text-xs">
-                      <span>{proj.title}</span>
-                      {proj.duration && <span className="text-slate-500 text-[10px] font-normal">{proj.duration}</span>}
-                    </div>
-                    {proj.technologies && proj.technologies.length > 0 && (
-                      <p className="text-[10px] text-purple-700 font-medium">
-                        {proj.technologies.join(', ')}
-                      </p>
-                    )}
-                    {proj.description && <p className="text-slate-600 text-[10px]">{proj.description}</p>}
-                    {proj.bullets && proj.bullets.length > 0 && (
-                      <ul className="list-disc list-inside text-slate-600 text-[10px] space-y-0.5">
-                        {proj.bullets.map((b, i) => (
-                          <li key={i}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Experience */}
-            {resume.experience && resume.experience.length > 0 && (
-              <div className="space-y-2.5">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Experience
-                </h4>
-                {resume.experience.map(exp => (
-                  <div key={exp.id} className="space-y-1">
-                    <div className="flex justify-between font-bold text-slate-900 text-xs">
-                      <span>{exp.role} — {exp.company}</span>
-                      <span className="text-slate-500 text-[10px] font-normal">
-                        {[exp.start_date, exp.is_current ? 'Present' : exp.end_date].filter(Boolean).join(' - ')}
-                      </span>
-                    </div>
-                    {exp.description && <p className="text-slate-600 text-[10px]">{exp.description}</p>}
-                    {exp.bullets && exp.bullets.length > 0 && (
-                      <ul className="list-disc list-inside text-slate-600 text-[10px] space-y-0.5">
-                        {exp.bullets.map((b, i) => (
-                          <li key={i}>{b}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Certifications */}
-            {resume.certifications && resume.certifications.length > 0 && (
-              <div className="space-y-1.5">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Certifications
-                </h4>
-                <div className="space-y-1 text-[10px]">
-                  {resume.certifications.map(c => (
-                    <div key={c.id} className="flex justify-between">
-                      <span className="font-semibold text-slate-800">• {c.name}</span>
-                      <span className="text-slate-500">{[c.issuer, c.issue_date].filter(Boolean).join(' | ')}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Achievements */}
-            {resume.achievements && resume.achievements.length > 0 && (
-              <div className="space-y-1.5">
-                <h4 className={`text-[11px] font-bold uppercase tracking-wider ${
-                  selectedTemplate === 'modern' ? 'text-purple-800' : 'text-slate-900'
-                }`}>
-                  Achievements
-                </h4>
-                <div className="space-y-1 text-[10px]">
-                  {resume.achievements.map(a => (
-                    <div key={a.id}>
-                      <span className="font-semibold text-slate-800">• {a.title}</span>
-                      {a.organization && <span className="text-slate-500"> — {a.organization}</span>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          {/* Live Document Container (Real Data Template Engine) */}
+          <div className="max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 sm:p-4 shadow-soft-lg">
+            <ResumePreviewRenderer data={resume} templateId={selectedTemplate} />
           </div>
 
           {/* Quick AI Assistant Trigger Card */}

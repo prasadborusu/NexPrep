@@ -111,11 +111,27 @@ export interface AssessmentSubmission {
   proctor_violations?: number;
 }
 
+export interface CodingTopic {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon?: string;
+  total_problems: number;
+  solved_problems: number;
+  easy_count: number;
+  medium_count: number;
+  hard_count: number;
+}
+
 export interface CodingProblem {
   id: string;
+  problem_number?: number;
   title: string;
   slug: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  topic_id: string;
+  topic?: string;
   category: string;
   tags: string[];
   description: string;
@@ -125,9 +141,12 @@ export interface CodingProblem {
     explanation?: string;
   }>;
   constraints: string[];
+  hints?: string[];
+  leetcode_url?: string;
   starter_code: Record<string, string>;
   solution_code?: Record<string, string>;
   test_cases: TestCase[];
+  solved?: boolean;
   acceptance_rate?: number;
   total_submissions?: number;
   created_at: string;
@@ -137,6 +156,7 @@ export interface CodeSubmission {
   id: string;
   student_id: string;
   problem_id: string;
+  problem_title?: string;
   language: string;
   code: string;
   status: 'Accepted' | 'Wrong Answer' | 'Time Limit Exceeded' | 'Compilation Error' | 'Runtime Error';
@@ -218,6 +238,36 @@ export interface ResumeLinkItem {
   url: string;
 }
 
+export interface ResponsibilityItem {
+  id: string;
+  title: string;
+  organization: string;
+  duration?: string;
+  description?: string;
+  bullets?: string[];
+}
+
+export interface LanguageItem {
+  id: string;
+  language: string;
+  proficiency: 'Native' | 'Fluent' | 'Professional' | 'Conversational' | 'Basic';
+}
+
+export type ResumeTemplateId = 'minimal' | 'modern' | 'classic' | 'technical' | 'executive';
+
+export type ResumeSectionKey =
+  | 'personal_info'
+  | 'summary'
+  | 'education'
+  | 'skills'
+  | 'projects'
+  | 'experience'
+  | 'certifications'
+  | 'achievements'
+  | 'responsibilities'
+  | 'links'
+  | 'languages';
+
 export interface ResumeVersion {
   id: string;
   name: string;
@@ -242,7 +292,9 @@ export interface ResumeData {
   id?: string;
   student_id: string;
   title?: string;
-  template?: 'classic' | 'modern' | 'minimal' | 'technical';
+  template?: ResumeTemplateId;
+  template_id?: ResumeTemplateId;
+  section_order?: ResumeSectionKey[];
   personal_info: {
     full_name: string;
     email: string;
@@ -253,6 +305,7 @@ export interface ResumeData {
     portfolio_url?: string;
   };
   target_role: string;
+  target_company?: string;
   target_industry?: string;
   job_description?: string;
   summary: string;
@@ -262,6 +315,8 @@ export interface ResumeData {
   experience: ExperienceItem[];
   certifications: CertificationItem[];
   achievements: AchievementItem[];
+  responsibilities?: ResponsibilityItem[];
+  languages?: LanguageItem[];
   links: ResumeLinkItem[];
   versions?: ResumeVersion[];
   created_at?: string;
@@ -399,6 +454,69 @@ export interface BulkEmailLog {
   recipients_count: number;
   success_count: number;
   failed_count: number;
-  recipients_preview: Array<{ email: string; name: string; status: 'sent' | 'failed' }>;
+  recipients_preview: Array<{ email: string; name: string; status: 'sent' | 'failed' | 'simulated' }>;
   sent_at: string;
+}
+
+// ═══════════════════════════════════════════════
+// COURSES & LEARNING SYSTEM
+// ═══════════════════════════════════════════════
+export interface Lesson {
+  id: string;
+  title: string;
+  slug: string;
+  type: 'video' | 'article' | 'quiz' | 'code';
+  duration_minutes: number;
+  content: string;
+  video_url?: string;
+  resources?: { title: string; url: string }[];
+  quiz?: {
+    question: string;
+    options: string[];
+    correct_option: number;
+    explanation: string;
+  };
+  order: number;
+}
+
+export interface CourseModule {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  lessons: Lesson[];
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  short_description?: string;
+  category: 'fullstack' | 'python' | 'dsa' | 'system_design' | 'devops' | 'core_cs';
+  level: 'beginner' | 'intermediate' | 'advanced';
+  duration_hours: number;
+  instructor_name: string;
+  instructor_title?: string;
+  instructor_avatar?: string;
+  thumbnail_url?: string;
+  tags: string[];
+  prerequisites: string[];
+  learning_outcomes: string[];
+  modules: CourseModule[];
+  is_published: boolean;
+  enrolled_count: number;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseEnrollment {
+  id: string;
+  course_id: string;
+  student_id: string;
+  enrolled_at: string;
+  completed_lessons: string[];
+  progress_percentage: number;
+  completed_at?: string;
 }

@@ -76,7 +76,7 @@ export const AdminAssessmentsPage: React.FC = () => {
   const fetchAssessments = async () => {
     setIsLoading(true);
     try {
-      const data = await api.assessments.list();
+      const data = await api.assessments.listAdmin();
       setAssessments(data);
     } catch (err) {
       console.error(err);
@@ -133,7 +133,7 @@ export const AdminAssessmentsPage: React.FC = () => {
   };
 
   const generateRandomKey = () => {
-    const code = `NEX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const code = String(Math.floor(1000 + Math.random() * 9000));
     setPasskey(code);
   };
 
@@ -530,7 +530,7 @@ export const AdminAssessmentsPage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold text-[#181525] flex items-center gap-1.5">
                     <KeyRound className="w-3.5 h-3.5 text-[#6D28D9]" />
-                    Exam Passkey
+                    4-Digit Exam Passkey PIN
                   </label>
                   <button
                     type="button"
@@ -543,10 +543,13 @@ export const AdminAssessmentsPage: React.FC = () => {
                 </div>
                 <input
                   type="text"
+                  maxLength={4}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={passkey}
-                  onChange={(e) => setPasskey(e.target.value.toUpperCase())}
-                  placeholder="e.g. NEX-CS-8492"
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#EAE6F5] text-xs font-mono tracking-wider uppercase focus:border-[#6D28D9] focus:outline-none bg-white"
+                  onChange={(e) => setPasskey(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="e.g. 8492"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#EAE6F5] text-sm font-mono tracking-widest text-center font-bold focus:border-[#6D28D9] focus:outline-none bg-white"
                 />
               </div>
 

@@ -572,3 +572,7 @@ export async function generateInterviewFeedback(data: {
     better_phrasing
   };
 }
+
+export { aiService } from './ai/AIService';
+export * from './ai';
+

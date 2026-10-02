@@ -1,41 +1,140 @@
 import { Router, Request, Response } from 'express';
 import { memoryStore, persistStore } from '../services/db';
 import { runCodeWithPiston, testCodeAgainstCases } from '../services/compiler';
-import { CodeSubmission } from '../types';
+import { CodeSubmission, CodingTopic, CodingProblem } from '../types';
+import { CODING_TOPICS } from '../services/codingRepo';
 
 const router = Router();
 
-// List all coding problems
+// 1. List all coding topics with problem counts & student progress
+router.get('/topics', (req: Request, res: Response) => {
+  const studentId = (req.query.student_id as string) || '';
+
+  // Calculate solved problem IDs for student
+  const solvedProblemIds = new Set<string>();
+  if (studentId) {
+    memoryStore.code_submissions
+      .filter(s => s.student_id === studentId && s.status === 'Accepted')
+      .forEach(s => solvedProblemIds.add(s.problem_id));
+  }
+
+  const topics: CodingTopic[] = CODING_TOPICS.map((topic) => {
+    const problems = memoryStore.coding_problems.filter(p => p.topic_id === topic.id);
+    const solvedCount = problems.filter(p => solvedProblemIds.has(p.id) || solvedProblemIds.has(p.slug)).length;
+    const easyCount = problems.filter(p => p.difficulty === 'easy').length;
+    const mediumCount = problems.filter(p => p.difficulty === 'medium').length;
+    const hardCount = problems.filter(p => p.difficulty === 'hard').length;
+
+    return {
+      ...topic,
+      total_problems: problems.length,
+      solved_problems: solvedCount,
+      easy_count: easyCount,
+      medium_count: mediumCount,
+      hard_count: hardCount
+    };
+  });
+
+  return res.json(topics);
+});
+
+// 2. Get single topic details and problem list
+router.get('/topics/:topicId', (req: Request, res: Response) => {
+  const { topicId } = req.params;
+  const studentId = (req.query.student_id as string) || '';
+
+  const topicMeta = CODING_TOPICS.find(t => t.id === topicId || t.slug === topicId);
+  if (!topicMeta) {
+    return res.status(404).json({ error: 'Topic not found' });
+  }
+
+  // Calculate solved problem IDs for student
+  const solvedProblemIds = new Set<string>();
+  if (studentId) {
+    memoryStore.code_submissions
+      .filter(s => s.student_id === studentId && s.status === 'Accepted')
+      .forEach(s => solvedProblemIds.add(s.problem_id));
+  }
+
+  const problemsInTopic = memoryStore.coding_problems
+    .filter(p => p.topic_id === topicMeta.id)
+    .map(p => {
+      const safeTestCases = (p.test_cases || []).filter(tc => !tc.is_hidden);
+      const isSolved = solvedProblemIds.has(p.id) || solvedProblemIds.has(p.slug);
+      return {
+        ...p,
+        test_cases: safeTestCases,
+        solved: isSolved
+      };
+    });
+
+  const easyCount = problemsInTopic.filter(p => p.difficulty === 'easy').length;
+  const mediumCount = problemsInTopic.filter(p => p.difficulty === 'medium').length;
+  const hardCount = problemsInTopic.filter(p => p.difficulty === 'hard').length;
+  const solvedCount = problemsInTopic.filter(p => p.solved).length;
+
+  const topic: CodingTopic = {
+    ...topicMeta,
+    total_problems: problemsInTopic.length,
+    solved_problems: solvedCount,
+    easy_count: easyCount,
+    medium_count: mediumCount,
+    hard_count: hardCount
+  };
+
+  return res.json({
+    topic,
+    problems: problemsInTopic
+  });
+});
+
+// 3. List all coding problems (global search/list)
 router.get('/problems', (req: Request, res: Response) => {
+  const studentId = (req.query.student_id as string) || '';
+  const solvedProblemIds = new Set<string>();
+  if (studentId) {
+    memoryStore.code_submissions
+      .filter(s => s.student_id === studentId && s.status === 'Accepted')
+      .forEach(s => solvedProblemIds.add(s.problem_id));
+  }
+
   const problems = memoryStore.coding_problems.map(p => {
-    // Strip hidden test cases from the public problem list
-    const safeTestCases = p.test_cases.filter(tc => !tc.is_hidden);
+    const safeTestCases = (p.test_cases || []).filter(tc => !tc.is_hidden);
     return {
       ...p,
-      test_cases: safeTestCases
+      test_cases: safeTestCases,
+      solved: solvedProblemIds.has(p.id) || solvedProblemIds.has(p.slug)
     };
   });
   return res.json(problems);
 });
 
-// Get single problem by ID or slug
+// 4. Get single problem by ID or slug (never sending hidden test cases)
 router.get('/problems/:idOrSlug', (req: Request, res: Response) => {
   const param = req.params.idOrSlug;
-  const problem = memoryStore.coding_problems.find(p => p.id === param || p.slug === param);
+  const studentId = (req.query.student_id as string) || '';
 
+  const problem = memoryStore.coding_problems.find(p => p.id === param || p.slug === param);
   if (!problem) {
     return res.status(404).json({ error: 'Problem not found' });
   }
 
-  // Return problem with only non-hidden test cases for the user editor view
-  const safeTestCases = problem.test_cases.filter(tc => !tc.is_hidden);
+  let isSolved = false;
+  if (studentId) {
+    isSolved = memoryStore.code_submissions.some(
+      s => s.student_id === studentId && (s.problem_id === problem.id || s.problem_id === problem.slug) && s.status === 'Accepted'
+    );
+  }
+
+  const safeTestCases = (problem.test_cases || []).filter(tc => !tc.is_hidden);
   return res.json({
     ...problem,
-    test_cases: safeTestCases
+    test_cases: safeTestCases,
+    solved: isSolved
   });
 });
 
-// Run Code (on custom input or test case)
+// 5. Run Code (sample tests / custom test case)
 router.post('/run', async (req: Request, res: Response) => {
   const { language, code, stdin = '' } = req.body;
 
@@ -47,7 +146,7 @@ router.post('/run', async (req: Request, res: Response) => {
   return res.json(result);
 });
 
-// Submit Code (evaluates against ALL test cases including hidden ones)
+// 6. Submit Code (evaluates against ALL test cases including hidden ones)
 router.post('/submit', async (req: Request, res: Response) => {
   const { student_id, problem_id, language, code } = req.body;
 
@@ -66,6 +165,7 @@ router.post('/submit', async (req: Request, res: Response) => {
     id: `csub-${Date.now()}`,
     student_id: student_id || 'unassigned',
     problem_id: problem.id,
+    problem_title: problem.title,
     language,
     code,
     status: evaluation.status as any,
@@ -96,51 +196,34 @@ router.post('/submit', async (req: Request, res: Response) => {
   });
 });
 
-// Get submissions for student
+// 7. Get submissions for student with filters
 router.get('/submissions/:studentId', (req: Request, res: Response) => {
-  const subs = memoryStore.code_submissions
-    .filter(s => s.student_id === req.params.studentId)
+  const { studentId } = req.params;
+  const { problem_id, language, status } = req.query;
+
+  let subs = memoryStore.code_submissions
+    .filter(s => s.student_id === studentId)
     .map(s => {
       const prob = memoryStore.coding_problems.find(p => p.id === s.problem_id);
       return {
         ...s,
-        problem_title: prob?.title || 'Unknown Problem',
-        difficulty: prob?.difficulty || 'easy'
+        problem_title: prob?.title || s.problem_title || 'Unknown Problem',
+        difficulty: prob?.difficulty || 'easy',
+        topic: prob?.topic || 'Algorithms'
       };
     });
 
-  return res.json(subs);
-});
-
-// Admin: Create new coding problem
-router.post('/problems', (req: Request, res: Response) => {
-  const { title, difficulty, category, tags, description, examples, constraints, starter_code, test_cases } = req.body;
-
-  if (!title || !description || !starter_code) {
-    return res.status(400).json({ error: 'Title, description, and starter_code are required' });
+  if (problem_id) {
+    subs = subs.filter(s => s.problem_id === problem_id);
+  }
+  if (language) {
+    subs = subs.filter(s => s.language.toLowerCase() === String(language).toLowerCase());
+  }
+  if (status) {
+    subs = subs.filter(s => s.status.toLowerCase() === String(status).toLowerCase());
   }
 
-  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-  const newProblem = {
-    id: `prob-${Date.now()}`,
-    title,
-    slug,
-    difficulty: difficulty || 'medium',
-    category: category || 'Algorithms',
-    tags: tags || ['Algorithms'],
-    description,
-    examples: examples || [],
-    constraints: constraints || [],
-    starter_code,
-    test_cases: test_cases || [],
-    acceptance_rate: 100,
-    total_submissions: 0,
-    created_at: new Date().toISOString()
-  };
-
-  memoryStore.coding_problems.push(newProblem);
-  return res.status(201).json(newProblem);
+  return res.json(subs);
 });
 
 export default router;

@@ -1,10 +1,14 @@
+-- ============================================================
 -- NEXPREP Production Supabase PostgreSQL Schema
--- Includes RLS (Row Level Security), triggers, and full indexing
+-- Safe to run multiple times (idempotent)
+-- Includes: RLS, triggers, full indexing
+-- ============================================================
 
--- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- ════════════════════════════════════════════════════════════
 -- 1. PROFILES TABLE
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL UNIQUE,
@@ -26,25 +30,20 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
--- RLS for Profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Public profiles are viewable by authenticated users" ON public.profiles;
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Public profiles are viewable by authenticated users"
-  ON public.profiles FOR SELECT
-  TO authenticated
-  USING (true);
-
+  ON public.profiles FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Users can insert their own profile"
-  ON public.profiles FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.uid() = id);
-
+  ON public.profiles FOR INSERT TO authenticated WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update their own profile"
-  ON public.profiles FOR UPDATE
-  TO authenticated
-  USING (auth.uid() = id);
+  ON public.profiles FOR UPDATE TO authenticated USING (auth.uid() = id);
 
+-- ════════════════════════════════════════════════════════════
 -- 2. ASSESSMENTS TABLE
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.assessments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
@@ -56,39 +55,31 @@ CREATE TABLE IF NOT EXISTS public.assessments (
   is_active BOOLEAN NOT NULL DEFAULT true,
   scheduled_at TIMESTAMPTZ,
   expires_at TIMESTAMPTZ,
+  passkey TEXT,
   created_by UUID REFERENCES public.profiles(id),
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
 ALTER TABLE public.assessments ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Assessments are viewable by authenticated users" ON public.assessments;
+DROP POLICY IF EXISTS "Admins can insert assessments" ON public.assessments;
+DROP POLICY IF EXISTS "Admins can update assessments" ON public.assessments;
+DROP POLICY IF EXISTS "Admins can delete assessments" ON public.assessments;
 CREATE POLICY "Assessments are viewable by authenticated users"
-  ON public.assessments FOR SELECT
-  TO authenticated
-  USING (true);
-
+  ON public.assessments FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Admins can insert assessments"
-  ON public.assessments FOR INSERT
-  TO authenticated
-  WITH CHECK (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
-
+  ON public.assessments FOR INSERT TO authenticated
+  WITH CHECK (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Admins can update assessments"
-  ON public.assessments FOR UPDATE
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
-
+  ON public.assessments FOR UPDATE TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Admins can delete assessments"
-  ON public.assessments FOR DELETE
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.assessments FOR DELETE TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ════════════════════════════════════════════════════════════
 -- 3. QUESTIONS TABLE
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.questions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assessment_id UUID REFERENCES public.assessments(id) ON DELETE CASCADE,
@@ -96,10 +87,10 @@ CREATE TABLE IF NOT EXISTS public.questions (
   description TEXT NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('mcq', 'coding')),
   marks INT NOT NULL DEFAULT 10,
-  options JSONB, -- [{ id: "1", text: "Option A" }, ...]
+  options JSONB,
   correct_option_id TEXT,
   explanation TEXT,
-  allowed_languages TEXT[] DEFAULT '{"java","python","cpp","javascript"}',
+  allowed_languages TEXT[] DEFAULT '{java,python,cpp,javascript}',
   starter_code JSONB DEFAULT '{}',
   test_cases JSONB DEFAULT '[]',
   constraints TEXT,
@@ -109,20 +100,17 @@ CREATE TABLE IF NOT EXISTS public.questions (
 );
 
 ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Questions are viewable by authenticated users" ON public.questions;
+DROP POLICY IF EXISTS "Admins manage questions" ON public.questions;
 CREATE POLICY "Questions are viewable by authenticated users"
-  ON public.questions FOR SELECT
-  TO authenticated
-  USING (true);
-
+  ON public.questions FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Admins manage questions"
-  ON public.questions FOR ALL
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.questions FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ════════════════════════════════════════════════════════════
 -- 4. ASSESSMENT SUBMISSIONS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.assessment_submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assessment_id UUID NOT NULL REFERENCES public.assessments(id) ON DELETE CASCADE,
@@ -139,26 +127,22 @@ CREATE TABLE IF NOT EXISTS public.assessment_submissions (
 );
 
 ALTER TABLE public.assessment_submissions ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students can view own submissions and Admins can view all" ON public.assessment_submissions;
+DROP POLICY IF EXISTS "Students can insert own submission" ON public.assessment_submissions;
+DROP POLICY IF EXISTS "Students can update own submission" ON public.assessment_submissions;
 CREATE POLICY "Students can view own submissions and Admins can view all"
-  ON public.assessment_submissions FOR SELECT
-  TO authenticated
-  USING (
-    student_id = auth.uid() OR
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
-
+  ON public.assessment_submissions FOR SELECT TO authenticated
+  USING (student_id = auth.uid() OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Students can insert own submission"
-  ON public.assessment_submissions FOR INSERT
-  TO authenticated
+  ON public.assessment_submissions FOR INSERT TO authenticated
   WITH CHECK (student_id = auth.uid());
-
 CREATE POLICY "Students can update own submission"
-  ON public.assessment_submissions FOR UPDATE
-  TO authenticated
+  ON public.assessment_submissions FOR UPDATE TO authenticated
   USING (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 5. CODING PROBLEMS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.coding_problems (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
@@ -178,20 +162,17 @@ CREATE TABLE IF NOT EXISTS public.coding_problems (
 );
 
 ALTER TABLE public.coding_problems ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Coding problems are viewable by all authenticated users" ON public.coding_problems;
+DROP POLICY IF EXISTS "Admins manage coding problems" ON public.coding_problems;
 CREATE POLICY "Coding problems are viewable by all authenticated users"
-  ON public.coding_problems FOR SELECT
-  TO authenticated
-  USING (true);
-
+  ON public.coding_problems FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Admins manage coding problems"
-  ON public.coding_problems FOR ALL
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.coding_problems FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ════════════════════════════════════════════════════════════
 -- 6. CODE SUBMISSIONS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.code_submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -208,21 +189,18 @@ CREATE TABLE IF NOT EXISTS public.code_submissions (
 );
 
 ALTER TABLE public.code_submissions ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Users can view own code submissions, admins view all" ON public.code_submissions;
+DROP POLICY IF EXISTS "Students can create code submissions" ON public.code_submissions;
 CREATE POLICY "Users can view own code submissions, admins view all"
-  ON public.code_submissions FOR SELECT
-  TO authenticated
-  USING (
-    student_id = auth.uid() OR
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
-
+  ON public.code_submissions FOR SELECT TO authenticated
+  USING (student_id = auth.uid() OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Students can create code submissions"
-  ON public.code_submissions FOR INSERT
-  TO authenticated
+  ON public.code_submissions FOR INSERT TO authenticated
   WITH CHECK (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 7. RESUMES
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.resumes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -239,14 +217,14 @@ CREATE TABLE IF NOT EXISTS public.resumes (
 );
 
 ALTER TABLE public.resumes ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students manage their own resumes" ON public.resumes;
 CREATE POLICY "Students manage their own resumes"
-  ON public.resumes FOR ALL
-  TO authenticated
-  USING (student_id = auth.uid())
-  WITH CHECK (student_id = auth.uid());
+  ON public.resumes FOR ALL TO authenticated
+  USING (student_id = auth.uid()) WITH CHECK (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 8. ATS ANALYSES
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.ats_analyses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -263,14 +241,14 @@ CREATE TABLE IF NOT EXISTS public.ats_analyses (
 );
 
 ALTER TABLE public.ats_analyses ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students manage their own ATS analyses" ON public.ats_analyses;
 CREATE POLICY "Students manage their own ATS analyses"
-  ON public.ats_analyses FOR ALL
-  TO authenticated
-  USING (student_id = auth.uid())
-  WITH CHECK (student_id = auth.uid());
+  ON public.ats_analyses FOR ALL TO authenticated
+  USING (student_id = auth.uid()) WITH CHECK (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 9. ROADMAPS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.roadmaps (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -282,14 +260,14 @@ CREATE TABLE IF NOT EXISTS public.roadmaps (
 );
 
 ALTER TABLE public.roadmaps ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students manage their own roadmap" ON public.roadmaps;
 CREATE POLICY "Students manage their own roadmap"
-  ON public.roadmaps FOR ALL
-  TO authenticated
-  USING (student_id = auth.uid())
-  WITH CHECK (student_id = auth.uid());
+  ON public.roadmaps FOR ALL TO authenticated
+  USING (student_id = auth.uid()) WITH CHECK (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 10. INTERVIEW SESSIONS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.interview_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -304,14 +282,14 @@ CREATE TABLE IF NOT EXISTS public.interview_sessions (
 );
 
 ALTER TABLE public.interview_sessions ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students manage their own interview sessions" ON public.interview_sessions;
 CREATE POLICY "Students manage their own interview sessions"
-  ON public.interview_sessions FOR ALL
-  TO authenticated
-  USING (student_id = auth.uid())
-  WITH CHECK (student_id = auth.uid());
+  ON public.interview_sessions FOR ALL TO authenticated
+  USING (student_id = auth.uid()) WITH CHECK (student_id = auth.uid());
 
+-- ════════════════════════════════════════════════════════════
 -- 11. PLACEMENT DRIVES
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.placement_drives (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   company_name TEXT NOT NULL,
@@ -329,20 +307,17 @@ CREATE TABLE IF NOT EXISTS public.placement_drives (
 );
 
 ALTER TABLE public.placement_drives ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Placement drives are viewable by all authenticated users" ON public.placement_drives;
+DROP POLICY IF EXISTS "Admins manage placement drives" ON public.placement_drives;
 CREATE POLICY "Placement drives are viewable by all authenticated users"
-  ON public.placement_drives FOR SELECT
-  TO authenticated
-  USING (true);
-
+  ON public.placement_drives FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Admins manage placement drives"
-  ON public.placement_drives FOR ALL
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.placement_drives FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ════════════════════════════════════════════════════════════
 -- 12. PLACEMENT APPLICATIONS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.placement_applications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   drive_id UUID NOT NULL REFERENCES public.placement_drives(id) ON DELETE CASCADE,
@@ -353,28 +328,22 @@ CREATE TABLE IF NOT EXISTS public.placement_applications (
 );
 
 ALTER TABLE public.placement_applications ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Students can view and manage their own applications, admins view all" ON public.placement_applications;
+DROP POLICY IF EXISTS "Students can apply" ON public.placement_applications;
+DROP POLICY IF EXISTS "Admins can update application status" ON public.placement_applications;
 CREATE POLICY "Students can view and manage their own applications, admins view all"
-  ON public.placement_applications FOR SELECT
-  TO authenticated
-  USING (
-    student_id = auth.uid() OR
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
-
+  ON public.placement_applications FOR SELECT TO authenticated
+  USING (student_id = auth.uid() OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Students can apply"
-  ON public.placement_applications FOR INSERT
-  TO authenticated
+  ON public.placement_applications FOR INSERT TO authenticated
   WITH CHECK (student_id = auth.uid());
-
 CREATE POLICY "Admins can update application status"
-  ON public.placement_applications FOR UPDATE
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.placement_applications FOR UPDATE TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
+-- ════════════════════════════════════════════════════════════
 -- 13. BULK EMAIL LOGS
+-- ════════════════════════════════════════════════════════════
 CREATE TABLE IF NOT EXISTS public.bulk_email_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   admin_id UUID REFERENCES public.profiles(id),
@@ -388,15 +357,71 @@ CREATE TABLE IF NOT EXISTS public.bulk_email_logs (
 );
 
 ALTER TABLE public.bulk_email_logs ENABLE ROW LEVEL SECURITY;
-
+DROP POLICY IF EXISTS "Admins view and insert bulk email logs" ON public.bulk_email_logs;
 CREATE POLICY "Admins view and insert bulk email logs"
-  ON public.bulk_email_logs FOR ALL
-  TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  ON public.bulk_email_logs FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
--- Trigger to automatically create profile on auth.users insert
+-- ════════════════════════════════════════════════════════════
+-- 14. COURSES TABLE
+-- ════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.courses (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  description TEXT NOT NULL,
+  short_description TEXT,
+  category TEXT NOT NULL CHECK (category IN ('fullstack', 'python', 'dsa', 'system_design', 'devops', 'core_cs')),
+  level TEXT NOT NULL CHECK (level IN ('beginner', 'intermediate', 'advanced')) DEFAULT 'beginner',
+  duration_hours INT NOT NULL DEFAULT 10,
+  instructor_name TEXT NOT NULL,
+  instructor_title TEXT,
+  instructor_avatar TEXT,
+  thumbnail_url TEXT,
+  tags TEXT[] DEFAULT '{}',
+  prerequisites TEXT[] DEFAULT '{}',
+  learning_outcomes TEXT[] DEFAULT '{}',
+  modules JSONB NOT NULL DEFAULT '[]',
+  is_published BOOLEAN NOT NULL DEFAULT true,
+  enrolled_count INT NOT NULL DEFAULT 0,
+  rating NUMERIC(3,2) NOT NULL DEFAULT 5.0,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Published courses are viewable by all authenticated users" ON public.courses;
+DROP POLICY IF EXISTS "Admins can insert and manage courses" ON public.courses;
+CREATE POLICY "Published courses are viewable by all authenticated users"
+  ON public.courses FOR SELECT TO authenticated
+  USING (is_published = true OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admins can insert and manage courses"
+  ON public.courses FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- ════════════════════════════════════════════════════════════
+-- 15. COURSE ENROLLMENTS TABLE
+-- ════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.course_enrollments (
+  id TEXT PRIMARY KEY,
+  course_id TEXT REFERENCES public.courses(id) ON DELETE CASCADE,
+  student_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  enrolled_at TIMESTAMPTZ DEFAULT now(),
+  completed_lessons TEXT[] DEFAULT '{}',
+  progress_percentage INT NOT NULL DEFAULT 0,
+  completed_at TIMESTAMPTZ,
+  UNIQUE(course_id, student_id)
+);
+
+ALTER TABLE public.course_enrollments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Students can view and manage their own enrollments, admins view all" ON public.course_enrollments;
+CREATE POLICY "Students can view and manage their own enrollments, admins view all"
+  ON public.course_enrollments FOR ALL TO authenticated
+  USING (student_id = auth.uid() OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- ════════════════════════════════════════════════════════════
+-- AUTO-CREATE PROFILE ON SIGNUP (TRIGGER)
+-- ════════════════════════════════════════════════════════════
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN

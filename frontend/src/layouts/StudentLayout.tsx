@@ -8,7 +8,7 @@ import {
   FileText,
   ScanSearch,
   Sparkles,
-  Milestone,
+
   MessagesSquare,
   Building2,
   Bell,
@@ -38,11 +38,12 @@ export const StudentLayout: React.FC = () => {
 
   const studentNavItems = [
     { label: 'Dashboard', to: '/student/dashboard', icon: LayoutDashboard },
+    { label: 'Courses', to: '/student/courses', icon: GraduationCap },
     { label: 'Assessments', to: '/student/assessments', icon: FileCheck2 },
     { label: 'Coding Practice', to: '/student/coding', icon: Code2 },
     { label: 'AI Resume', to: '/student/resume', icon: FileText },
     { label: 'Skill Intelligence', to: '/student/skills', icon: Sparkles },
-    { label: 'Roadmap', to: '/student/roadmap', icon: Milestone },
+
     { label: 'Interview Prep', to: '/student/interview', icon: MessagesSquare },
     { label: 'Placements', to: '/student/placements', icon: Building2 },
     { label: 'Notifications', to: '/student/notifications', icon: Bell },

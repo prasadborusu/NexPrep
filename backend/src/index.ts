@@ -7,11 +7,12 @@ import codingRoutes from './routes/coding';
 import resumeRoutes from './routes/resume';
 import atsRoutes from './routes/ats';
 import skillGapRoutes from './routes/skillGap';
-import roadmapRoutes from './routes/roadmap';
 import interviewRoutes from './routes/interview';
 import placementRoutes from './routes/placements';
 import bulkEmailRoutes from './routes/bulkEmail';
 import adminRoutes from './routes/admin';
+import companiesRoutes from './routes/companies';
+import coursesRoutes from './routes/courses';
 
 const app = express();
 
@@ -37,11 +38,12 @@ app.use('/api/coding', codingRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/ats', atsRoutes);
 app.use('/api/skill-gap', skillGapRoutes);
-app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/placements', placementRoutes);
 app.use('/api/bulk-email', bulkEmailRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/companies', companiesRoutes);
+app.use('/api/courses', coursesRoutes);
 
 // Global Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

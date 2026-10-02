@@ -1,25 +1,45 @@
 {
   "profiles": [
     {
-      "id": "user-1790935823216-7acon",
-      "email": "rohan.candidate@nexprep.io",
-      "full_name": "Rohan Sharma",
+      "id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "email": "prasadborusu0@gmail.com",
+      "full_name": "prasad",
       "role": "student",
-      "college": "National Institute of Technology",
+      "college": "RCEE",
       "degree": "B.Tech",
-      "branch": "Computer Science & Engineering",
+      "branch": "CSE",
       "graduation_year": 2026,
-      "cgpa": 8.4,
+      "cgpa": 9,
       "phone": "",
-      "skills": [],
+      "skills": [
+        "java"
+      ],
       "target_role": "Full Stack Engineer",
       "bio": "",
-      "created_at": "2026-10-02T10:10:23.216Z",
-      "updated_at": "2026-10-02T10:10:23.216Z"
+      "created_at": "2026-10-02T15:18:48.984+00:00",
+      "updated_at": "2026-10-02T15:28:53.174Z",
+      "github_url": "",
+      "linkedin_url": ""
     },
     {
-      "id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
-      "email": "prasadborusu0@gmail.com",
+      "id": "48bbf5e6-afb3-43b1-a1ed-626cb495c790",
+      "email": "prasadborusu336@gmail.com",
+      "full_name": "Kumar",
+      "role": "admin",
+      "college": "",
+      "degree": "B.Tech",
+      "branch": "Computer Science",
+      "graduation_year": 2026,
+      "phone": "",
+      "skills": [],
+      "target_role": "Full Stack Developer",
+      "bio": "",
+      "created_at": "2026-10-02T15:20:54.37738+00:00",
+      "updated_at": "2026-10-02T15:20:54.37738+00:00"
+    },
+    {
+      "id": "180355ec-3c3c-4476-9143-0e559ddb74ec",
+      "email": "prasadbou0@gmail.com",
       "full_name": "Prasad",
       "role": "student",
       "college": "Mohan Babu University",
@@ -31,57 +51,25 @@
       "skills": [],
       "target_role": "Full Stack Engineer",
       "bio": "",
-      "created_at": "2026-10-02T10:55:27.001342+00:00",
-      "updated_at": "2026-10-02T10:55:27.001342+00:00"
+      "created_at": "2026-10-02T12:32:59.243+00:00",
+      "updated_at": "2026-10-02T12:32:59.243+00:00"
     },
     {
-      "id": "3c2845a8-4b35-4d4f-8e60-4f8bf1dff325",
-      "email": "admin@nexprep.io",
-      "full_name": "NexPrep Administrator",
-      "role": "admin",
-      "college": "",
-      "degree": "B.Tech",
-      "branch": "Computer Science",
-      "graduation_year": 2026,
-      "phone": "",
-      "skills": [],
-      "target_role": "Platform Lead",
-      "bio": "",
-      "created_at": "2026-10-02T10:55:19.326904+00:00",
-      "updated_at": "2026-10-02T10:55:19.326904+00:00"
-    },
-    {
-      "id": "7ab0fb43-8995-415d-95ab-2cf7866bcec8",
-      "email": "student@nexprep.io",
-      "full_name": "NexPrep Candidate",
+      "id": "9455bf6f-4761-41b1-bc03-92c07410087a",
+      "email": "prasadborusu8@gmail.com",
+      "full_name": "Venkata Durga Prasad",
       "role": "student",
-      "college": "Mohan Babu University",
+      "college": "mohan Babu University",
       "degree": "B.Tech",
-      "branch": "Computer Science & Engineering",
+      "branch": "AIML",
       "graduation_year": 2026,
-      "cgpa": 7.9,
+      "cgpa": 9,
       "phone": "",
       "skills": [],
       "target_role": "Full Stack Engineer",
       "bio": "",
-      "created_at": "2026-10-02T10:55:27.420961+00:00",
-      "updated_at": "2026-10-02T10:55:27.420961+00:00"
-    },
-    {
-      "id": "ea4318ad-2557-4b1b-beca-c6809624c8c2",
-      "email": "candidate.1790938697268@example.com",
-      "full_name": "Test Candidate",
-      "role": "student",
-      "college": "",
-      "degree": "B.Tech",
-      "branch": "Computer Science",
-      "graduation_year": 2026,
-      "phone": "",
-      "skills": [],
-      "target_role": "Full Stack Developer",
-      "bio": "",
-      "created_at": "2026-10-02T10:58:17.733759+00:00",
-      "updated_at": "2026-10-02T10:58:17.733759+00:00"
+      "created_at": "2026-10-02T15:07:16.213Z",
+      "updated_at": "2026-10-02T15:07:16.213Z"
     }
   ],
   "assessments": [
@@ -94,11 +82,11 @@
       "total_marks": 40,
       "pass_percentage": 60,
       "is_active": true,
-      "scheduled_at": "2026-10-02T10:03:53.017Z",
-      "expires_at": "2026-12-01T10:03:53.018Z",
+      "scheduled_at": "2026-10-02T13:30:21.967Z",
+      "expires_at": "2026-12-01T13:30:21.967Z",
+      "passkey": "8492",
       "created_by": "system",
-      "created_at": "2026-10-02T10:03:53.018Z",
-      "passkey": "NEX-CS-8492"
+      "created_at": "2026-10-02T13:30:21.967Z"
     },
     {
       "id": "assessment-java-oop",
@@ -109,10 +97,10 @@
       "total_marks": 30,
       "pass_percentage": 70,
       "is_active": true,
-      "scheduled_at": "2026-10-02T10:03:53.018Z",
+      "scheduled_at": "2026-10-02T13:30:21.967Z",
+      "passkey": "5130",
       "created_by": "system",
-      "created_at": "2026-10-02T10:03:53.018Z",
-      "passkey": "NEX-JAVA-5130"
+      "created_at": "2026-10-02T13:30:21.967Z"
     }
   ],
   "questions": [
@@ -143,7 +131,7 @@
       ],
       "correct_option_id": "opt1",
       "explanation": "Under uniform hashing, bucket collisions are minimal, yielding an expected O(1) average lookup time.",
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "created_at": "2026-10-02T13:30:21.967Z"
     },
     {
       "id": "q2",
@@ -172,7 +160,7 @@
       ],
       "correct_option_id": "opt4",
       "explanation": "Durability guarantees that once a transaction has been committed, it will remain committed even in the case of a power outage or crash via write-ahead logging.",
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "created_at": "2026-10-02T13:30:21.967Z"
     },
     {
       "id": "q3",
@@ -201,7 +189,7 @@
       ],
       "correct_option_id": "opt3",
       "explanation": "POST requests generally produce side effects on each invocation (e.g. creating multiple resources) and are thus non-idempotent.",
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "created_at": "2026-10-02T13:30:21.967Z"
     },
     {
       "id": "q4",
@@ -243,57 +231,154 @@
       "constraints": "2 <= nums.length <= 10^4, exactly one solution",
       "difficulty": "easy",
       "category": "Algorithms",
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "created_at": "2026-10-02T13:30:21.967Z"
     }
   ],
   "assessment_submissions": [
     {
-      "id": "sub-1790939717369",
-      "assessment_id": "assessment-1790939717352",
-      "student_id": "test-student-id",
-      "student_name": "Candidate",
-      "student_email": "",
-      "assessment_title": "Cloud & DevOps Screening",
+      "id": "sub-1790948812858",
+      "assessment_id": "assessment-core-cs",
+      "student_id": "180355ec-3c3c-4476-9143-0e559ddb74ec",
+      "student_name": "Prasad",
+      "student_email": "prasadbou0@gmail.com",
+      "assessment_title": "Core Computer Science & Technical Screening",
+      "status": "evaluated",
+      "score": 35,
+      "total_marks": 40,
+      "percentage": 88,
+      "passed": true,
+      "answers": {
+        "q1": {
+          "question_id": "q1",
+          "selected_option_id": "opt1",
+          "language": "python",
+          "is_marked_for_review": false,
+          "saved_at": "2026-10-02T13:46:31.093Z"
+        },
+        "q2": {
+          "question_id": "q2",
+          "selected_option_id": "opt1",
+          "language": "python",
+          "is_marked_for_review": false,
+          "saved_at": "2026-10-02T13:46:33.538Z"
+        },
+        "q3": {
+          "question_id": "q3",
+          "selected_option_id": "opt3",
+          "language": "python",
+          "is_marked_for_review": false,
+          "saved_at": "2026-10-02T13:46:36.421Z"
+        },
+        "q4": {
+          "question_id": "q4",
+          "code_content": "def twoSum(nums, target):\n    # Return [index1, index2]\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n\nimport sys, json\ninput_data = sys.stdin.read().strip()\nif input_data:\n    d = json.loads(input_data)\n    print(json.dumps(twoSum(d[\"nums\"], d[\"target\"])))\n",
+          "language": "python",
+          "is_marked_for_review": false
+        }
+      },
+      "question_results": {
+        "q1": {
+          "correct": true,
+          "marks_obtained": 5,
+          "correct_option_id": "opt1",
+          "explanation": "Under uniform hashing, bucket collisions are minimal, yielding an expected O(1) average lookup time."
+        },
+        "q2": {
+          "correct": false,
+          "marks_obtained": 0,
+          "correct_option_id": "opt4",
+          "explanation": "Durability guarantees that once a transaction has been committed, it will remain committed even in the case of a power outage or crash via write-ahead logging."
+        },
+        "q3": {
+          "correct": true,
+          "marks_obtained": 5,
+          "correct_option_id": "opt3",
+          "explanation": "POST requests generally produce side effects on each invocation (e.g. creating multiple resources) and are thus non-idempotent."
+        },
+        "q4": {
+          "correct": true,
+          "marks_obtained": 25,
+          "passed_cases": 3,
+          "total_cases": 3,
+          "status": "Accepted"
+        }
+      },
+      "started_at": "2026-10-02T13:46:52.858Z",
+      "submitted_at": "2026-10-02T13:46:52.858Z",
+      "proctor_violations": 1
+    },
+    {
+      "id": "sub-1790954547282",
+      "assessment_id": "assessment-core-cs",
+      "student_id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "student_name": "prasad",
+      "student_email": "prasadborusu0@gmail.com",
+      "assessment_title": "Core Computer Science & Technical Screening",
       "status": "evaluated",
       "score": 0,
-      "total_marks": 5,
+      "total_marks": 40,
       "percentage": 0,
       "passed": false,
       "answers": {},
       "question_results": {
-        "q-1790939717360": {
+        "q1": {
           "correct": false,
           "marks_obtained": 0,
           "correct_option_id": "opt1",
-          "explanation": "A pod is the smallest execution unit in Kubernetes."
+          "explanation": "Under uniform hashing, bucket collisions are minimal, yielding an expected O(1) average lookup time."
+        },
+        "q2": {
+          "correct": false,
+          "marks_obtained": 0,
+          "correct_option_id": "opt4",
+          "explanation": "Durability guarantees that once a transaction has been committed, it will remain committed even in the case of a power outage or crash via write-ahead logging."
+        },
+        "q3": {
+          "correct": false,
+          "marks_obtained": 0,
+          "correct_option_id": "opt3",
+          "explanation": "POST requests generally produce side effects on each invocation (e.g. creating multiple resources) and are thus non-idempotent."
+        },
+        "q4": {
+          "correct": false,
+          "marks_obtained": 0,
+          "status": "Not Attempted"
         }
       },
-      "started_at": "2026-10-02T11:15:17.369Z",
-      "submitted_at": "2026-10-02T11:15:17.369Z",
-      "proctor_violations": 2
+      "started_at": "2026-10-02T15:22:27.282Z",
+      "submitted_at": "2026-10-02T15:22:27.282Z",
+      "proctor_violations": 3
     }
   ],
   "coding_problems": [
     {
       "id": "prob-two-sum",
+      "problem_number": 1,
       "title": "Two Sum",
       "slug": "two-sum",
       "difficulty": "easy",
+      "topic_id": "arrays",
+      "topic": "Arrays",
       "category": "Arrays & Hashing",
       "tags": [
         "Array",
         "Hash Table"
       ],
-      "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.",
+      "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
       "examples": [
         {
-          "input": "nums = [2, 7, 11, 15], target = 9",
-          "output": "[0, 1]",
+          "input": "nums = [2,7,11,15], target = 9",
+          "output": "[0,1]",
           "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
         },
         {
-          "input": "nums = [3, 2, 4], target = 6",
-          "output": "[1, 2]"
+          "input": "nums = [3,2,4], target = 6",
+          "output": "[1,2]",
+          "explanation": "nums[1] + nums[2] == 6, we return [1, 2]."
+        },
+        {
+          "input": "nums = [3,3], target = 6",
+          "output": "[0,1]"
         }
       ],
       "constraints": [
@@ -302,48 +387,461 @@
         "-10^9 <= target <= 10^9",
         "Only one valid answer exists."
       ],
+      "hints": [
+        "A really brute force way would be to search for all possible pairs of numbers but that would be slow. Again, it is best to try out brute force solutions for just for completeness.",
+        "So, if we check sub-arrays of size 2, how can we quickly verify if a complementary value exists? Can a hash table help?"
+      ],
+      "leetcode_url": "https://leetcode.com/problems/two-sum/",
       "starter_code": {
-        "python": "def twoSum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in seen:\n            return [seen[diff], i]\n        seen[num] = i\n    return []\n\nimport sys, json\ninput_data = sys.stdin.read().strip()\nif input_data:\n    d = json.loads(input_data)\n    print(json.dumps(twoSum(d[\"nums\"], d[\"target\"])))\n",
-        "javascript": "function twoSum(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp), i];\n        map.set(nums[i], i);\n    }\n    return [];\n}\n\nconst fs = require(\"fs\");\nconst input = fs.readFileSync(0, \"utf-8\").trim();\nif (input) {\n    const d = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(d.nums, d.target)));\n}\n",
-        "java": "import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"[0, 1]\");\n    }\n}\n",
-        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"[0, 1]\" << endl;\n    return 0;\n}\n"
+        "python": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        seen = {}\n        for i, n in enumerate(nums):\n            diff = target - n\n            if diff in seen:\n                return [seen[diff], i]\n            seen[n] = i\n        return []\n\n# Driver\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    sol = Solution()\n    print(json.dumps(sol.twoSum(data[\"nums\"], data[\"target\"])))\n",
+        "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp), i];\n        map.set(nums[i], i);\n    }\n    return [];\n};\n\n// Driver\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(data.nums, data.target)));\n}\n",
+        "typescript": "function twoSum(nums: number[], target: number): number[] {\n    const map = new Map<number, number>();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp)!, i];\n        map.set(nums[i], i);\n    }\n    return [];\n}\n\n// Driver\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(data.nums, data.target)));\n}\n",
+        "java": "import java.util.*;\n\nclass Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int comp = target - nums[i];\n            if (map.containsKey(comp)) {\n                return new int[] { map.get(comp), i };\n            }\n            map.put(nums[i], i);\n        }\n        return new int[0];\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"[0, 1]\");\n    }\n}\n",
+        "cpp": "#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        unordered_map<int, int> seen;\n        for (int i = 0; i < nums.size(); i++) {\n            int diff = target - nums[i];\n            if (seen.count(diff)) return {seen[diff], i};\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n\nint main() {\n    cout << \"[0, 1]\" << endl;\n    return 0;\n}\n"
       },
       "test_cases": [
         {
-          "id": "tc1",
+          "id": "tc-1",
           "input": "{\"nums\": [2, 7, 11, 15], \"target\": 9}",
           "expected_output": "[0, 1]",
           "is_hidden": false
         },
         {
-          "id": "tc2",
+          "id": "tc-2",
           "input": "{\"nums\": [3, 2, 4], \"target\": 6}",
           "expected_output": "[1, 2]",
           "is_hidden": false
         },
         {
-          "id": "tc3",
+          "id": "tc-3",
           "input": "{\"nums\": [3, 3], \"target\": 6}",
           "expected_output": "[0, 1]",
           "is_hidden": true
         }
       ],
-      "acceptance_rate": 0,
-      "total_submissions": 0,
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "acceptance_rate": 67,
+      "total_submissions": 123,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-contains-duplicate",
+      "problem_number": 217,
+      "title": "Contains Duplicate",
+      "slug": "contains-duplicate",
+      "difficulty": "easy",
+      "topic_id": "arrays",
+      "topic": "Arrays",
+      "category": "Arrays & Hashing",
+      "tags": [
+        "Array",
+        "Hash Table",
+        "Sorting"
+      ],
+      "description": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+      "examples": [
+        {
+          "input": "nums = [1,2,3,1]",
+          "output": "true"
+        },
+        {
+          "input": "nums = [1,2,3,4]",
+          "output": "false"
+        },
+        {
+          "input": "nums = [1,1,1,3,3,4,3,2,4,2]",
+          "output": "true"
+        }
+      ],
+      "constraints": [
+        "1 <= nums.length <= 10^5",
+        "-10^9 <= nums[i] <= 10^9"
+      ],
+      "hints": [
+        "Can you use a Hash Set to track seen numbers in O(N) time?"
+      ],
+      "leetcode_url": "https://leetcode.com/problems/contains-duplicate/",
+      "starter_code": {
+        "python": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        return len(nums) != len(set(nums))\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    sol = Solution()\n    print(\"true\" if sol.containsDuplicate(data[\"nums\"]) else \"false\")\n",
+        "javascript": "var containsDuplicate = function(nums) {\n    const s = new Set(nums);\n    return s.size !== nums.length;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(containsDuplicate(data.nums) ? 'true' : 'false');\n}\n",
+        "typescript": "function containsDuplicate(nums: number[]): boolean {\n    return new Set(nums).size !== nums.length;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(containsDuplicate(data.nums) ? 'true' : 'false');\n}\n",
+        "java": "import java.util.*;\nclass Solution {\n    public boolean containsDuplicate(int[] nums) {\n        Set<Integer> set = new HashSet<>();\n        for (int n : nums) {\n            if (!set.add(n)) return true;\n        }\n        return false;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"true\");\n    }\n}\n",
+        "cpp": "#include <iostream>\n#include <vector>\n#include <unordered_set>\nusing namespace std;\nclass Solution {\npublic:\n    bool containsDuplicate(vector<int>& nums) {\n        unordered_set<int> s(nums.begin(), nums.end());\n        return s.size() != nums.size();\n    }\n};\nint main() {\n    cout << \"true\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-cd-1",
+          "input": "{\"nums\": [1, 2, 3, 1]}",
+          "expected_output": "true",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-cd-2",
+          "input": "{\"nums\": [1, 2, 3, 4]}",
+          "expected_output": "false",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-cd-3",
+          "input": "{\"nums\": [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]}",
+          "expected_output": "true",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 94,
+      "total_submissions": 84,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-best-time-to-buy-and-sell-stock",
+      "problem_number": 121,
+      "title": "Best Time to Buy and Sell Stock",
+      "slug": "best-time-to-buy-and-sell-stock",
+      "difficulty": "easy",
+      "topic_id": "arrays",
+      "topic": "Arrays",
+      "category": "Arrays & Dynamic Programming",
+      "tags": [
+        "Array",
+        "Dynamic Programming"
+      ],
+      "description": "You are given an array prices where prices[i] is the price of a given stock on the ith day.\n\nYou want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.\n\nReturn the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.",
+      "examples": [
+        {
+          "input": "prices = [7,1,5,3,6,4]",
+          "output": "5",
+          "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5."
+        },
+        {
+          "input": "prices = [7,6,4,3,1]",
+          "output": "0",
+          "explanation": "In this case, no transactions are done and the max profit = 0."
+        }
+      ],
+      "constraints": [
+        "1 <= prices.length <= 10^5",
+        "0 <= prices[i] <= 10^4"
+      ],
+      "hints": [
+        "Track the minimum price seen so far as you iterate through the list."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "starter_code": {
+        "python": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        min_p = float('inf')\n        max_p = 0\n        for p in prices:\n            if p < min_p:\n                min_p = p\n            elif p - min_p > max_p:\n                max_p = p - min_p\n        return max_p\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(Solution().maxProfit(data[\"prices\"]))\n",
+        "javascript": "var maxProfit = function(prices) {\n    let minPrice = Infinity;\n    let maxProfit = 0;\n    for (let p of prices) {\n        if (p < minPrice) minPrice = p;\n        else if (p - minPrice > maxProfit) maxProfit = p - minPrice;\n    }\n    return maxProfit;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(maxProfit(data.prices));\n}\n",
+        "typescript": "function maxProfit(prices: number[]): number {\n    let minPrice = Infinity;\n    let maxP = 0;\n    for (let p of prices) {\n        if (p < minPrice) minPrice = p;\n        else if (p - minPrice > maxP) maxP = p - minPrice;\n    }\n    return maxP;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(maxProfit(data.prices));\n}\n",
+        "java": "class Solution {\n    public int maxProfit(int[] prices) {\n        int minPrice = Integer.MAX_VALUE;\n        int maxProfit = 0;\n        for (int p : prices) {\n            if (p < minPrice) minPrice = p;\n            else if (p - minPrice > maxProfit) maxProfit = p - minPrice;\n        }\n        return maxProfit;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"5\");\n    }\n}\n",
+        "cpp": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nclass Solution {\npublic:\n    int maxProfit(vector<int>& prices) {\n        int minP = 1e9, maxP = 0;\n        for (int p : prices) {\n            minP = min(minP, p);\n            maxP = max(maxP, p - minP);\n        }\n        return maxP;\n    }\n};\nint main() {\n    cout << \"5\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-stock-1",
+          "input": "{\"prices\": [7, 1, 5, 3, 6, 4]}",
+          "expected_output": "5",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-stock-2",
+          "input": "{\"prices\": [7, 6, 4, 3, 1]}",
+          "expected_output": "0",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-stock-3",
+          "input": "{\"prices\": [2, 4, 1]}",
+          "expected_output": "2",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 92,
+      "total_submissions": 95,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-product-of-array-except-self",
+      "problem_number": 238,
+      "title": "Product of Array Except Self",
+      "slug": "product-of-array-except-self",
+      "difficulty": "medium",
+      "topic_id": "arrays",
+      "topic": "Arrays",
+      "category": "Arrays & Prefix Sum",
+      "tags": [
+        "Array",
+        "Prefix Sum"
+      ],
+      "description": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].\n\nThe product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.\n\nYou must write an algorithm that runs in O(n) time and without using the division operation.",
+      "examples": [
+        {
+          "input": "nums = [1,2,3,4]",
+          "output": "[24,12,8,6]"
+        },
+        {
+          "input": "nums = [-1,1,0,-3,3]",
+          "output": "[0,0,9,0,0]"
+        }
+      ],
+      "constraints": [
+        "2 <= nums.length <= 10^5",
+        "-30 <= nums[i] <= 30",
+        "Product fits in 32-bit integer"
+      ],
+      "hints": [
+        "Compute prefix products from left to right, then suffix products from right to left."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/product-of-array-except-self/",
+      "starter_code": {
+        "python": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        n = len(nums)\n        res = [1] * n\n        prefix = 1\n        for i in range(n):\n            res[i] = prefix\n            prefix *= nums[i]\n        postfix = 1\n        for i in range(n - 1, -1, -1):\n            res[i] *= postfix\n            postfix *= nums[i]\n        return res\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(json.dumps(Solution().productExceptSelf(data[\"nums\"])))\n",
+        "javascript": "var productExceptSelf = function(nums) {\n    const n = nums.length;\n    const res = new Array(n).fill(1);\n    let pre = 1;\n    for (let i = 0; i < n; i++) {\n        res[i] = pre;\n        pre *= nums[i];\n    }\n    let post = 1;\n    for (let i = n - 1; i >= 0; i--) {\n        res[i] *= post;\n        post *= nums[i];\n    }\n    return res;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(productExceptSelf(data.nums)));\n}\n",
+        "typescript": "function productExceptSelf(nums: number[]): number[] {\n    const n = nums.length;\n    const res = new Array(n).fill(1);\n    let pre = 1;\n    for (let i = 0; i < n; i++) {\n        res[i] = pre;\n        pre *= nums[i];\n    }\n    let post = 1;\n    for (let i = n - 1; i >= 0; i--) {\n        res[i] *= post;\n        post *= nums[i];\n    }\n    return res;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(productExceptSelf(data.nums)));\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"[24, 12, 8, 6]\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"[24, 12, 8, 6]\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-prod-1",
+          "input": "{\"nums\": [1, 2, 3, 4]}",
+          "expected_output": "[24, 12, 8, 6]",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-prod-2",
+          "input": "{\"nums\": [-1, 1, 0, -3, 3]}",
+          "expected_output": "[0, 0, 9, 0, 0]",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-prod-3",
+          "input": "{\"nums\": [2, 3, 4]}",
+          "expected_output": "[12, 8, 6]",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 88,
+      "total_submissions": 60,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-maximum-subarray",
+      "problem_number": 53,
+      "title": "Maximum Subarray",
+      "slug": "maximum-subarray",
+      "difficulty": "medium",
+      "topic_id": "arrays",
+      "topic": "Arrays",
+      "category": "Arrays & Dynamic Programming",
+      "tags": [
+        "Array",
+        "Divide and Conquer",
+        "Dynamic Programming"
+      ],
+      "description": "Given an integer array nums, find the subarray with the largest sum, and return its sum.",
+      "examples": [
+        {
+          "input": "nums = [-2,1,-3,4,-1,2,1,-5,4]",
+          "output": "6",
+          "explanation": "The subarray [4,-1,2,1] has the largest sum 6."
+        },
+        {
+          "input": "nums = [1]",
+          "output": "1"
+        },
+        {
+          "input": "nums = [5,4,-1,7,8]",
+          "output": "23"
+        }
+      ],
+      "constraints": [
+        "1 <= nums.length <= 10^5",
+        "-10^4 <= nums[i] <= 10^4"
+      ],
+      "hints": [
+        "Kadane's Algorithm: keep track of current sum and reset to 0 if it becomes negative."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/maximum-subarray/",
+      "starter_code": {
+        "python": "class Solution:\n    def maxSubArray(self, nums: list[int]) -> int:\n        cur_sum = 0\n        max_sub = nums[0]\n        for n in nums:\n            if cur_sum < 0:\n                cur_sum = 0\n            cur_sum += n\n            max_sub = max(max_sub, cur_sum)\n        return max_sub\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(Solution().maxSubArray(data[\"nums\"]))\n",
+        "javascript": "var maxSubArray = function(nums) {\n    let cur = 0;\n    let max = nums[0];\n    for (let n of nums) {\n        if (cur < 0) cur = 0;\n        cur += n;\n        max = Math.max(max, cur);\n    }\n    return max;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(maxSubArray(data.nums));\n}\n",
+        "typescript": "function maxSubArray(nums: number[]): number {\n    let cur = 0;\n    let max = nums[0];\n    for (let n of nums) {\n        if (cur < 0) cur = 0;\n        cur += n;\n        max = Math.max(max, cur);\n    }\n    return max;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(maxSubArray(data.nums));\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"6\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"6\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-max-1",
+          "input": "{\"nums\": [-2, 1, -3, 4, -1, 2, 1, -5, 4]}",
+          "expected_output": "6",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-max-2",
+          "input": "{\"nums\": [1]}",
+          "expected_output": "1",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-max-3",
+          "input": "{\"nums\": [5, 4, -1, 7, 8]}",
+          "expected_output": "23",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 89,
+      "total_submissions": 75,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-valid-anagram",
+      "problem_number": 242,
+      "title": "Valid Anagram",
+      "slug": "valid-anagram",
+      "difficulty": "easy",
+      "topic_id": "strings",
+      "topic": "Strings",
+      "category": "Strings & Hashing",
+      "tags": [
+        "Hash Table",
+        "String",
+        "Sorting"
+      ],
+      "description": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.\n\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+      "examples": [
+        {
+          "input": "s = \"anagram\", t = \"nagaram\"",
+          "output": "true"
+        },
+        {
+          "input": "s = \"rat\", t = \"car\"",
+          "output": "false"
+        }
+      ],
+      "constraints": [
+        "1 <= s.length, t.length <= 5 * 10^4",
+        "s and t consist of lowercase English letters."
+      ],
+      "hints": [
+        "Count the frequency of each character in both strings and compare counts."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/valid-anagram/",
+      "starter_code": {
+        "python": "class Solution:\n    def isAnagram(self, s: str, t: str) -> bool:\n        if len(s) != len(t): return False\n        count = {}\n        for c in s: count[c] = count.get(c, 0) + 1\n        for c in t:\n            if c not in count or count[c] == 0: return False\n            count[c] -= 1\n        return True\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(\"true\" if Solution().isAnagram(data[\"s\"], data[\"t\"]) else \"false\")\n",
+        "javascript": "var isAnagram = function(s, t) {\n    if (s.length !== t.length) return false;\n    const count = {};\n    for (let c of s) count[c] = (count[c] || 0) + 1;\n    for (let c of t) {\n        if (!count[c]) return false;\n        count[c]--;\n    }\n    return true;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isAnagram(data.s, data.t) ? 'true' : 'false');\n}\n",
+        "typescript": "function isAnagram(s: string, t: string): boolean {\n    if (s.length !== t.length) return false;\n    const count: Record<string, number> = {};\n    for (let c of s) count[c] = (count[c] || 0) + 1;\n    for (let c of t) {\n        if (!count[c]) return false;\n        count[c]--;\n    }\n    return true;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isAnagram(data.s, data.t) ? 'true' : 'false');\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"true\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"true\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-an-1",
+          "input": "{\"s\": \"anagram\", \"t\": \"nagaram\"}",
+          "expected_output": "true",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-an-2",
+          "input": "{\"s\": \"rat\", \"t\": \"car\"}",
+          "expected_output": "false",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-an-3",
+          "input": "{\"s\": \"a\", \"t\": \"ab\"}",
+          "expected_output": "false",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 96,
+      "total_submissions": 110,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-valid-palindrome",
+      "problem_number": 125,
+      "title": "Valid Palindrome",
+      "slug": "valid-palindrome",
+      "difficulty": "easy",
+      "topic_id": "strings",
+      "topic": "Strings",
+      "category": "Two Pointers & Strings",
+      "tags": [
+        "Two Pointers",
+        "String"
+      ],
+      "description": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.\n\nGiven a string s, return true if it is a palindrome, or false otherwise.",
+      "examples": [
+        {
+          "input": "s = \"A man, a plan, a canal: Panama\"",
+          "output": "true",
+          "explanation": "\"amanaplanacanalpanama\" is a palindrome."
+        },
+        {
+          "input": "s = \"race a car\"",
+          "output": "false",
+          "explanation": "\"raceacar\" is not a palindrome."
+        },
+        {
+          "input": "s = \" \"",
+          "output": "true",
+          "explanation": "s is an empty string \"\" after removing non-alphanumerics, which is trivially a palindrome."
+        }
+      ],
+      "constraints": [
+        "1 <= s.length <= 2 * 10^5",
+        "s consists only of printable ASCII characters."
+      ],
+      "hints": [
+        "Filter the string to alphanumeric characters in lowercase and use two pointers from the ends."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/valid-palindrome/",
+      "starter_code": {
+        "python": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        filtered = [c.lower() for c in s if c.isalnum()]\n        return filtered == filtered[::-1]\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(\"true\" if Solution().isPalindrome(data[\"s\"]) else \"false\")\n",
+        "javascript": "var isPalindrome = function(s) {\n    const clean = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n    return clean === clean.split('').reverse().join('');\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isPalindrome(data.s) ? 'true' : 'false');\n}\n",
+        "typescript": "function isPalindrome(s: string): boolean {\n    const clean = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n    return clean === clean.split('').reverse().join('');\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isPalindrome(data.s) ? 'true' : 'false');\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"true\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"true\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-pal-1",
+          "input": "{\"s\": \"A man, a plan, a canal: Panama\"}",
+          "expected_output": "true",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-pal-2",
+          "input": "{\"s\": \"race a car\"}",
+          "expected_output": "false",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-pal-3",
+          "input": "{\"s\": \"0P\"}",
+          "expected_output": "false",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 93,
+      "total_submissions": 88,
+      "created_at": "2026-10-02T15:14:31.034Z"
     },
     {
       "id": "prob-valid-parentheses",
+      "problem_number": 20,
       "title": "Valid Parentheses",
       "slug": "valid-parentheses",
       "difficulty": "easy",
+      "topic_id": "stack",
+      "topic": "Stack",
       "category": "Stack",
       "tags": [
         "Stack",
         "String"
       ],
-      "description": "Given a string s containing just the characters \"(\", \")\", \"{\", \"}\", \"[\" and \"]\", determine if the input string is valid.",
+      "description": "Given a string s containing just the characters \"(\", \")\", \"{\", \"}\", \"[\" and \"]\", determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
       "examples": [
+        {
+          "input": "s = \"()\"",
+          "output": "true"
+        },
         {
           "input": "s = \"()[]{}\"",
           "output": "true"
@@ -357,94 +855,330 @@
         "1 <= s.length <= 10^4",
         "s consists of parentheses only \"()[]{}\""
       ],
+      "hints": [
+        "Push opening brackets onto a stack. When an opening bracket is matched by a closing bracket, pop it."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/valid-parentheses/",
       "starter_code": {
-        "python": "def isValid(s: str) -> bool:\n    stack = []\n    mapping = {\")\": \"(\", \"}\": \"{\", \"]\": \"[\"}\n    for char in s:\n        if char in mapping:\n            top = stack.pop() if stack else \"#\"\n            if mapping[char] != top: return False\n        else:\n            stack.append(char)\n    return not stack\n\nimport sys\ns = sys.stdin.read().strip().replace('\"', \"\")\nprint(\"true\" if isValid(s) else \"false\")\n",
-        "javascript": "function isValid(s) {\n    const stack = [];\n    const map = { \")\": \"(\", \"}\": \"{\", \"]\": \"[\" };\n    for (let c of s) {\n        if (map[c]) {\n            if (stack.pop() !== map[c]) return false;\n        } else {\n            stack.push(c);\n        }\n    }\n    return stack.length === 0;\n}\nconst fs = require(\"fs\");\nconst s = fs.readFileSync(0, \"utf-8\").trim().replace(/\"/g, \"\");\nconsole.log(isValid(s) ? \"true\" : \"false\");\n"
+        "python": "class Solution:\n    def isValid(self, s: str) -> bool:\n        stack = []\n        mapping = {\")\": \"(\", \"}\": \"{\", \"]\": \"[\"}\n        for char in s:\n            if char in mapping:\n                top = stack.pop() if stack else \"#\"\n                if mapping[char] != top:\n                    return False\n            else:\n                stack.append(char)\n        return not stack\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(\"true\" if Solution().isValid(data[\"s\"]) else \"false\")\n",
+        "javascript": "var isValid = function(s) {\n    const stack = [];\n    const map = { ')': '(', '}': '{', ']': '[' };\n    for (let c of s) {\n        if (map[c]) {\n            if (stack.pop() !== map[c]) return false;\n        } else {\n            stack.push(c);\n        }\n    }\n    return stack.length === 0;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isValid(data.s) ? 'true' : 'false');\n}\n",
+        "typescript": "function isValid(s: string): boolean {\n    const stack: string[] = [];\n    const map: Record<string, string> = { ')': '(', '}': '{', ']': '[' };\n    for (let c of s) {\n        if (map[c]) {\n            if (stack.pop() !== map[c]) return false;\n        } else {\n            stack.push(c);\n        }\n    }\n    return stack.length === 0;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(isValid(data.s) ? 'true' : 'false');\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"true\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"true\" << endl;\n    return 0;\n}\n"
       },
       "test_cases": [
         {
-          "id": "tc1",
-          "input": "\"()[]{}\"",
+          "id": "tc-vp-1",
+          "input": "{\"s\": \"()\"}",
           "expected_output": "true",
           "is_hidden": false
         },
         {
-          "id": "tc2",
-          "input": "\"(]\"",
+          "id": "tc-vp-2",
+          "input": "{\"s\": \"()[]{}\"}",
+          "expected_output": "true",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-vp-3",
+          "input": "{\"s\": \"(]\"}",
           "expected_output": "false",
-          "is_hidden": false
-        },
-        {
-          "id": "tc3",
-          "input": "\"([{}])\"",
-          "expected_output": "true",
           "is_hidden": true
         }
       ],
-      "acceptance_rate": 0,
-      "total_submissions": 0,
-      "created_at": "2026-10-02T10:03:53.018Z"
+      "acceptance_rate": 97,
+      "total_submissions": 130,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-binary-search",
+      "problem_number": 704,
+      "title": "Binary Search",
+      "slug": "binary-search",
+      "difficulty": "easy",
+      "topic_id": "binary-search",
+      "topic": "Binary Search",
+      "category": "Binary Search",
+      "tags": [
+        "Array",
+        "Binary Search"
+      ],
+      "description": "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.\n\nYou must write an algorithm with O(log n) runtime complexity.",
+      "examples": [
+        {
+          "input": "nums = [-1,0,3,5,9,12], target = 9",
+          "output": "4",
+          "explanation": "9 exists in nums and its index is 4"
+        },
+        {
+          "input": "nums = [-1,0,3,5,9,12], target = 2",
+          "output": "-1",
+          "explanation": "2 does not exist in nums so return -1"
+        }
+      ],
+      "constraints": [
+        "1 <= nums.length <= 10^4",
+        "-10^4 < nums[i], target < 10^4",
+        "All integers in nums are unique and sorted in ascending order."
+      ],
+      "hints": [
+        "Set left = 0, right = len - 1, and repeatedly check the midpoint."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/binary-search/",
+      "starter_code": {
+        "python": "class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        l, r = 0, len(nums) - 1\n        while l <= r:\n            m = (l + r) // 2\n            if nums[m] == target:\n                return m\n            elif nums[m] < target:\n                l = m + 1\n            else:\n                r = m - 1\n        return -1\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(Solution().search(data[\"nums\"], data[\"target\"]))\n",
+        "javascript": "var search = function(nums, target) {\n    let l = 0, r = nums.length - 1;\n    while (l <= r) {\n        let m = Math.floor((l + r) / 2);\n        if (nums[m] === target) return m;\n        if (nums[m] < target) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(search(data.nums, data.target));\n}\n",
+        "typescript": "function search(nums: number[], target: number): number {\n    let l = 0, r = nums.length - 1;\n    while (l <= r) {\n        let m = Math.floor((l + r) / 2);\n        if (nums[m] === target) return m;\n        if (nums[m] < target) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(search(data.nums, data.target));\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"4\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"4\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-bs-1",
+          "input": "{\"nums\": [-1, 0, 3, 5, 9, 12], \"target\": 9}",
+          "expected_output": "4",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-bs-2",
+          "input": "{\"nums\": [-1, 0, 3, 5, 9, 12], \"target\": 2}",
+          "expected_output": "-1",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-bs-3",
+          "input": "{\"nums\": [5], \"target\": 5}",
+          "expected_output": "0",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 95,
+      "total_submissions": 92,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-longest-substring-without-repeating-characters",
+      "problem_number": 3,
+      "title": "Longest Substring Without Repeating Characters",
+      "slug": "longest-substring-without-repeating-characters",
+      "difficulty": "medium",
+      "topic_id": "sliding-window",
+      "topic": "Sliding Window",
+      "category": "Sliding Window & Hash Table",
+      "tags": [
+        "Hash Table",
+        "String",
+        "Sliding Window"
+      ],
+      "description": "Given a string s, find the length of the longest substring without repeating characters.",
+      "examples": [
+        {
+          "input": "s = \"abcabcbb\"",
+          "output": "3",
+          "explanation": "The answer is \"abc\", with length of 3."
+        },
+        {
+          "input": "s = \"bbbbb\"",
+          "output": "1",
+          "explanation": "The answer is \"b\", with length of 1."
+        },
+        {
+          "input": "s = \"pwwkew\"",
+          "output": "3",
+          "explanation": "The answer is \"wke\", with length of 3."
+        }
+      ],
+      "constraints": [
+        "0 <= s.length <= 5 * 10^4",
+        "s consists of English letters, digits, symbols and spaces."
+      ],
+      "hints": [
+        "Maintain a sliding window [l, r] and a set of characters currently in the window."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+      "starter_code": {
+        "python": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        char_set = set()\n        l = 0\n        res = 0\n        for r in range(len(s)):\n            while s[r] in char_set:\n                char_set.remove(s[l])\n                l += 1\n            char_set.add(s[r])\n            res = max(res, r - l + 1)\n        return res\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(Solution().lengthOfLongestSubstring(data[\"s\"]))\n",
+        "javascript": "var lengthOfLongestSubstring = function(s) {\n    const set = new Set();\n    let l = 0, res = 0;\n    for (let r = 0; r < s.length; r++) {\n        while (set.has(s[r])) {\n            set.delete(s[l]);\n            l++;\n        }\n        set.add(s[r]);\n        res = Math.max(res, r - l + 1);\n    }\n    return res;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(lengthOfLongestSubstring(data.s));\n}\n",
+        "typescript": "function lengthOfLongestSubstring(s: string): number {\n    const set = new Set<string>();\n    let l = 0, res = 0;\n    for (let r = 0; r < s.length; r++) {\n        while (set.has(s[r])) {\n            set.delete(s[l]);\n            l++;\n        }\n        set.add(s[r]);\n        res = Math.max(res, r - l + 1);\n    }\n    return res;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(lengthOfLongestSubstring(data.s));\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"3\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"3\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-lsw-1",
+          "input": "{\"s\": \"abcabcbb\"}",
+          "expected_output": "3",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-lsw-2",
+          "input": "{\"s\": \"bbbbb\"}",
+          "expected_output": "1",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-lsw-3",
+          "input": "{\"s\": \"pwwkew\"}",
+          "expected_output": "3",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 85,
+      "total_submissions": 78,
+      "created_at": "2026-10-02T15:14:31.034Z"
+    },
+    {
+      "id": "prob-climbing-stairs",
+      "problem_number": 70,
+      "title": "Climbing Stairs",
+      "slug": "climbing-stairs",
+      "difficulty": "easy",
+      "topic_id": "dynamic-programming",
+      "topic": "Dynamic Programming",
+      "category": "Dynamic Programming",
+      "tags": [
+        "Math",
+        "Dynamic Programming",
+        "Memoization"
+      ],
+      "description": "You are climbing a staircase. It takes n steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+      "examples": [
+        {
+          "input": "n = 2",
+          "output": "2",
+          "explanation": "1. 1 step + 1 step\n2. 2 steps"
+        },
+        {
+          "input": "n = 3",
+          "output": "3",
+          "explanation": "1. 1 step + 1 step + 1 step\n2. 1 step + 2 steps\n3. 2 steps + 1 step"
+        }
+      ],
+      "constraints": [
+        "1 <= n <= 45"
+      ],
+      "hints": [
+        "To reach step n, you either come from step n-1 or n-2. Notice the Fibonacci pattern."
+      ],
+      "leetcode_url": "https://leetcode.com/problems/climbing-stairs/",
+      "starter_code": {
+        "python": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        one, two = 1, 1\n        for _ in range(n - 1):\n            temp = one\n            one = one + two\n            two = temp\n        return one\n\nif __name__ == \"__main__\":\n    import sys, json\n    data = json.loads(sys.stdin.read().strip())\n    print(Solution().climbStairs(data[\"n\"]))\n",
+        "javascript": "var climbStairs = function(n) {\n    let one = 1, two = 1;\n    for (let i = 0; i < n - 1; i++) {\n        let temp = one;\n        one = one + two;\n        two = temp;\n    }\n    return one;\n};\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(climbStairs(data.n));\n}\n",
+        "typescript": "function climbStairs(n: number): number {\n    let one = 1, two = 1;\n    for (let i = 0; i < n - 1; i++) {\n        let temp = one;\n        one = one + two;\n        two = temp;\n    }\n    return one;\n}\n\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(climbStairs(data.n));\n}\n",
+        "java": "class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"3\");\n    }\n}\n",
+        "cpp": "#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"3\" << endl;\n    return 0;\n}\n"
+      },
+      "test_cases": [
+        {
+          "id": "tc-cs-1",
+          "input": "{\"n\": 2}",
+          "expected_output": "2",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-cs-2",
+          "input": "{\"n\": 3}",
+          "expected_output": "3",
+          "is_hidden": false
+        },
+        {
+          "id": "tc-cs-3",
+          "input": "{\"n\": 5}",
+          "expected_output": "8",
+          "is_hidden": true
+        }
+      ],
+      "acceptance_rate": 96,
+      "total_submissions": 90,
+      "created_at": "2026-10-02T15:14:31.034Z"
     }
   ],
-  "code_submissions": [],
+  "code_submissions": [
+    {
+      "id": "csub-1790954583327",
+      "student_id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "problem_id": "prob-two-sum",
+      "problem_title": "Two Sum",
+      "language": "javascript",
+      "code": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp), i];\n        map.set(nums[i], i);\n    }\n    return [];\n};\n\n// Driver\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(data.nums, data.target)));\n}\n",
+      "status": "Accepted",
+      "passed_test_cases": 3,
+      "total_test_cases": 3,
+      "execution_time_ms": 277,
+      "created_at": "2026-10-02T15:23:03.327Z"
+    },
+    {
+      "id": "csub-1790948354461",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "problem_id": "prob-two-sum",
+      "problem_title": "Two Sum",
+      "language": "python",
+      "code": "print(\"[1,2]\")",
+      "status": "Wrong Answer",
+      "passed_test_cases": 1,
+      "total_test_cases": 3,
+      "execution_time_ms": 257,
+      "created_at": "2026-10-02T13:39:14.461Z"
+    },
+    {
+      "id": "csub-1790948319693",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "problem_id": "prob-two-sum",
+      "problem_title": "Two Sum",
+      "language": "javascript",
+      "code": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const comp = target - nums[i];\n        if (map.has(comp)) return [map.get(comp), i];\n        map.set(nums[i], i);\n    }\n    return [];\n};\n\n// Driver\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\nif (input) {\n    const data = JSON.parse(input);\n    console.log(JSON.stringify(twoSum(data.nums, data.target)));\n}\n",
+      "status": "Accepted",
+      "passed_test_cases": 3,
+      "total_test_cases": 3,
+      "execution_time_ms": 273,
+      "created_at": "2026-10-02T13:38:39.693Z"
+    }
+  ],
   "resumes": [
     {
-      "id": "resume-user-1790937177748-sytkp",
-      "student_id": "user-1790937177748-sytkp",
-      "title": "Full Stack Engineer Resume",
+      "id": "resume-mur0j8en-sm2u",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "title": "Full Stack Engineer Resume (MINIMAL)",
+      "template": "executive",
+      "template_id": "executive",
+      "section_order": [
+        "personal_info",
+        "summary",
+        "skills",
+        "projects",
+        "experience",
+        "education",
+        "certifications",
+        "achievements",
+        "responsibilities",
+        "links",
+        "languages"
+      ],
       "personal_info": {
         "full_name": "Prasad",
         "email": "prasadborusu0@gmail.com",
-        "phone": "",
-        "location": "",
-        "linkedin_url": "",
-        "github_url": ""
-      },
-      "target_role": "Full Stack Engineer",
-      "summary": "",
-      "education": [
-        {
-          "id": "edu-1",
-          "institution": "Mohan Babu University",
-          "degree": "B.Tech",
-          "field": "Computer Science & Engineering",
-          "start_date": "",
-          "end_date": "2026",
-          "score": "7.9 CGPA",
-          "highlights": []
-        }
-      ],
-      "experience": [],
-      "projects": [],
-      "skills": {
-        "languages": [],
-        "frameworks": [],
-        "tools_databases": [],
-        "core_concepts": []
-      },
-      "certifications": [],
-      "created_at": "2026-10-02T10:33:18.613Z",
-      "updated_at": "2026-10-02T10:33:18.613Z"
-    },
-    {
-      "id": "resume-default-student",
-      "student_id": "default-student",
-      "title": "Software Engineering Resume",
-      "template": "minimal",
-      "personal_info": {
-        "full_name": "",
-        "email": "",
-        "phone": "",
+        "phone": "9390782956",
         "location": "",
         "linkedin_url": "",
         "github_url": "",
         "portfolio_url": ""
       },
-      "target_role": "Software Engineer",
+      "target_role": "Full Stack Engineer",
       "target_industry": "Technology",
       "job_description": "",
       "summary": "",
-      "education": [],
+      "education": [
+        {
+          "id": "edu-1790948564303",
+          "institution": "Mohan Babu University",
+          "degree": "B.Tech",
+          "field": "Computer Science & Engineering",
+          "start_year": "",
+          "end_year": "2026",
+          "score": "7.9 CGPA",
+          "location": ""
+        }
+      ],
       "experience": [],
       "projects": [],
       "skills": {
@@ -458,177 +1192,248 @@
       },
       "certifications": [],
       "achievements": [],
+      "responsibilities": [],
+      "languages": [],
       "links": [],
       "versions": [],
-      "created_at": "2026-10-02T10:43:56.648Z",
-      "updated_at": "2026-10-02T10:43:56.648Z"
+      "created_at": "2026-10-02T13:42:44.303Z",
+      "updated_at": "2026-10-02T13:43:05.491Z"
     },
     {
-      "id": "resume-stu-1",
-      "student_id": "stu-1",
-      "title": "Full Stack Resume",
-      "template": "minimal",
+      "id": "resume-mur44r3x-herb",
+      "student_id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "title": "Full Stack Engineer Resume (MINIMAL)",
+      "template": "technical",
+      "template_id": "technical",
+      "section_order": [
+        "personal_info",
+        "summary",
+        "skills",
+        "projects",
+        "experience",
+        "education",
+        "certifications",
+        "achievements",
+        "responsibilities",
+        "links",
+        "languages"
+      ],
       "personal_info": {
-        "full_name": "Devon Vance",
-        "email": "devon@example.com",
-        "phone": "+91 9876543210",
-        "location": "Bengaluru, India",
-        "linkedin_url": "https://linkedin.com/in/devon",
-        "github_url": "https://github.com/devon",
-        "portfolio_url": "https://devon.dev"
+        "full_name": "prasad",
+        "email": "prasadborusu0@gmail.com",
+        "phone": "8390782956",
+        "location": "ELURU",
+        "linkedin_url": "HTTS...",
+        "github_url": "Gi",
+        "portfolio_url": ""
       },
       "target_role": "Full Stack Engineer",
-      "target_industry": "FinTech",
-      "job_description": "Looking for a full stack engineer proficient in React and Node.js with strong database skills.",
-      "summary": "Proactive full-stack engineer with hands-on project experience in web architectures.",
+      "target_industry": "Technology",
+      "job_description": "",
+      "summary": "",
       "education": [
         {
-          "id": "edu-1",
-          "institution": "National Institute of Technology",
+          "id": "edu-1790954607165",
+          "institution": "RCEE",
           "degree": "B.Tech",
-          "field": "Computer Science",
-          "start_year": "2021",
-          "end_year": "2025",
-          "score": "8.5 CGPA",
-          "location": "Bengaluru"
-        }
-      ],
-      "skills": {
-        "languages": [
-          "TypeScript",
-          "Python"
-        ],
-        "frameworks": [
-          "React",
-          "Node.js"
-        ],
-        "libraries": [],
-        "databases": [
-          "PostgreSQL"
-        ],
-        "tools": [
-          "Git"
-        ],
-        "cloud": [
-          "Docker"
-        ],
-        "other": []
-      },
-      "projects": [
-        {
-          "id": "proj-1",
-          "name": "Placement Portal",
-          "description": "Built an automated placement dashboard with student profiles.",
-          "technologies": [
-            "React",
-            "Node.js"
-          ],
-          "github_url": "",
-          "live_url": "",
-          "duration": "3 months",
-          "key_contributions": [
-            "Designed REST endpoints."
-          ]
+          "field": "CSE",
+          "start_year": "",
+          "end_year": "2026",
+          "score": "9 CGPA",
+          "location": ""
         }
       ],
       "experience": [],
+      "projects": [],
+      "skills": {
+        "languages": [],
+        "frameworks": [],
+        "libraries": [],
+        "databases": [],
+        "tools": [],
+        "cloud": [],
+        "other": []
+      },
       "certifications": [],
       "achievements": [],
+      "responsibilities": [],
+      "languages": [],
       "links": [],
-      "versions": [
-        {
-          "id": "ver-1790937860289-rd0l",
-          "name": "v1.0-Release",
-          "created_at": "2026-10-02T10:44:20.289Z",
-          "target_role": "Full Stack Engineer",
-          "template": "minimal",
-          "data": {
-            "id": "resume-stu-1",
-            "student_id": "stu-1",
-            "title": "Full Stack Resume",
-            "template": "minimal",
-            "personal_info": {
-              "full_name": "Devon Vance",
-              "email": "devon@example.com",
-              "phone": "+91 9876543210",
-              "location": "Bengaluru, India",
-              "linkedin_url": "https://linkedin.com/in/devon",
-              "github_url": "https://github.com/devon",
-              "portfolio_url": "https://devon.dev"
-            },
-            "target_role": "Full Stack Engineer",
-            "target_industry": "FinTech",
-            "job_description": "Looking for a full stack engineer proficient in React and Node.js with strong database skills.",
-            "summary": "Proactive full-stack engineer with hands-on project experience in web architectures.",
-            "education": [
-              {
-                "id": "edu-1",
-                "institution": "National Institute of Technology",
-                "degree": "B.Tech",
-                "field": "Computer Science",
-                "start_year": "2021",
-                "end_year": "2025",
-                "score": "8.5 CGPA",
-                "location": "Bengaluru"
-              }
-            ],
-            "skills": {
-              "languages": [
-                "TypeScript",
-                "Python"
-              ],
-              "frameworks": [
-                "React",
-                "Node.js"
-              ],
-              "libraries": [],
-              "databases": [
-                "PostgreSQL"
-              ],
-              "tools": [
-                "Git"
-              ],
-              "cloud": [
-                "Docker"
-              ],
-              "other": []
-            },
-            "projects": [
-              {
-                "id": "proj-1",
-                "name": "Placement Portal",
-                "description": "Built an automated placement dashboard with student profiles.",
-                "technologies": [
-                  "React",
-                  "Node.js"
-                ],
-                "github_url": "",
-                "live_url": "",
-                "duration": "3 months",
-                "key_contributions": [
-                  "Designed REST endpoints."
-                ]
-              }
-            ],
-            "experience": [],
-            "certifications": [],
-            "achievements": [],
-            "links": [],
-            "versions": [],
-            "created_at": "2026-10-02T10:44:20.275Z",
-            "updated_at": "2026-10-02T10:44:20.276Z"
-          }
-        }
-      ],
-      "created_at": "2026-10-02T10:44:20.275Z",
-      "updated_at": "2026-10-02T10:44:20.278Z"
+      "versions": [],
+      "created_at": "2026-10-02T15:23:27.165Z",
+      "updated_at": "2026-10-02T15:24:29.752Z"
     }
   ],
-  "ats_analyses": [],
+  "ats_analyses": [
+    {
+      "student_id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "target_role": "Python Developer",
+      "job_description": "python developer",
+      "overall_score": 62,
+      "breakdown": {
+        "keyword_match_score": 50,
+        "formatting_score": 92,
+        "structure_score": 90,
+        "impact_metrics_score": 20
+      },
+      "matched_keywords": [
+        "python",
+        "sql",
+        "git",
+        "rest",
+        "postgresql"
+      ],
+      "missing_skills": [
+        "django",
+        "fastapi",
+        "flask",
+        "docker",
+        "unit testing"
+      ],
+      "formatting_feedback": [
+        {
+          "type": "pass",
+          "message": "Clean bullet points detected. ATS scanners parse bulleted achievements reliably."
+        },
+        {
+          "type": "pass",
+          "message": "Optimal resume length (493 words). Well balanced for 1-page ATS screening."
+        },
+        {
+          "type": "pass",
+          "message": "Moderate action verbs detected (developed, built, designed, automated, integrated). Strengthen bullet starts with high-impact engineering verbs."
+        },
+        {
+          "type": "pass",
+          "message": "Direct contact coordinates (email & telephone) clearly identifiable."
+        },
+        {
+          "type": "pass",
+          "message": "Professional developer profiles (GitHub / LinkedIn) present."
+        }
+      ],
+      "structure_feedback": [
+        {
+          "section": "Summary / Objective",
+          "status": "present",
+          "tip": "Standard Summary / Objective header detected."
+        },
+        {
+          "section": "Work Experience / Internships",
+          "status": "present",
+          "tip": "Standard Work Experience / Internships header detected."
+        },
+        {
+          "section": "Projects",
+          "status": "present",
+          "tip": "Standard Projects header detected."
+        },
+        {
+          "section": "Education",
+          "status": "present",
+          "tip": "Standard Education header detected."
+        },
+        {
+          "section": "Technical Skills",
+          "status": "present",
+          "tip": "Standard Technical Skills header detected."
+        }
+      ],
+      "actionable_recommendations": [
+        "Incorporate missing target competencies for Python Developer: django, fastapi, flask, docker, unit testing.",
+        "Quantify your accomplishments using metrics (e.g., \"Increased query performance by 40%\", \"Built for 1,000+ active users\", \"Reduced API latency to 120ms\")."
+      ],
+      "analyzed_at": "2026-10-02T15:24:54.758Z",
+      "id": "ats-1790954694758"
+    },
+    {
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "target_role": "Full Stack Engineer",
+      "job_description": "sowftware developer",
+      "overall_score": 57,
+      "breakdown": {
+        "keyword_match_score": 40,
+        "formatting_score": 92,
+        "structure_score": 90,
+        "impact_metrics_score": 20
+      },
+      "matched_keywords": [
+        "javascript",
+        "sql",
+        "html",
+        "css"
+      ],
+      "missing_skills": [
+        "typescript",
+        "react",
+        "node.js",
+        "git",
+        "rest",
+        "docker"
+      ],
+      "formatting_feedback": [
+        {
+          "type": "pass",
+          "message": "Clean bullet points detected. ATS scanners parse bulleted achievements reliably."
+        },
+        {
+          "type": "pass",
+          "message": "Acceptable resume length (315 words). Fits standard 1-2 page requirements."
+        },
+        {
+          "type": "pass",
+          "message": "Moderate action verbs detected (developed, implemented, created). Strengthen bullet starts with high-impact engineering verbs."
+        },
+        {
+          "type": "pass",
+          "message": "Direct contact coordinates (email & telephone) clearly identifiable."
+        },
+        {
+          "type": "pass",
+          "message": "Professional developer profiles (GitHub / LinkedIn) present."
+        }
+      ],
+      "structure_feedback": [
+        {
+          "section": "Summary / Objective",
+          "status": "present",
+          "tip": "Standard Summary / Objective header detected."
+        },
+        {
+          "section": "Work Experience / Internships",
+          "status": "present",
+          "tip": "Standard Work Experience / Internships header detected."
+        },
+        {
+          "section": "Projects",
+          "status": "present",
+          "tip": "Standard Projects header detected."
+        },
+        {
+          "section": "Education",
+          "status": "present",
+          "tip": "Standard Education header detected."
+        },
+        {
+          "section": "Technical Skills",
+          "status": "present",
+          "tip": "Standard Technical Skills header detected."
+        }
+      ],
+      "actionable_recommendations": [
+        "Incorporate missing target competencies for Full Stack Engineer: typescript, react, node.js, git, rest.",
+        "Quantify your accomplishments using metrics (e.g., \"Increased query performance by 40%\", \"Built for 1,000+ active users\", \"Reduced API latency to 120ms\").",
+        "Enhance project descriptions with authoritative action verbs (e.g., \"Architected\", \"Engineered\", \"Optimized\", \"Refactored\").",
+        "Align your skills section directly with the target job profile by explicitly showcasing hands-on experience in javascript, typescript, react."
+      ],
+      "analyzed_at": "2026-10-02T13:32:37.377Z",
+      "id": "ats-1790947957377"
+    }
+  ],
   "roadmaps": [
     {
-      "id": "rm-user-1790937177748-sytkp",
-      "student_id": "user-1790937177748-sytkp",
+      "id": "rm-69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
       "target_role": "Full Stack Engineer",
       "duration_weeks": 6,
       "weeks": [
@@ -802,11 +1607,306 @@
         }
       ],
       "progress_percentage": 0,
-      "updated_at": "2026-10-02T10:32:57.830Z"
+      "updated_at": "2026-10-02T13:32:59.945Z"
     }
   ],
-  "interview_sessions": [],
-  "placement_drives": [],
+  "interview_sessions": [
+    {
+      "id": "theory-practice-69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "target_role": "General",
+      "domain": "theory",
+      "difficulty": "fresher",
+      "questions": [],
+      "status": "ongoing",
+      "created_at": "2026-10-02T13:43:52.842Z"
+    }
+  ],
+  "placement_drives": [
+    {
+      "id": "drive-1790954888782",
+      "company_name": "microsoft",
+      "company_logo": "",
+      "role_title": "sd1",
+      "location": "Hybrid",
+      "ctc_range": "1l -2l",
+      "eligibility": {
+        "min_cgpa": 7,
+        "allowed_branches": [
+          "CSE",
+          "IT",
+          "ECE"
+        ],
+        "allowed_batches": [
+          2025,
+          2026
+        ],
+        "backlogs_allowed": false
+      },
+      "job_description": "python developer",
+      "rounds": [
+        "Online Assessment",
+        "Technical Interview",
+        "HR Interview"
+      ],
+      "deadline": "2026-10-16T15:28:08.782Z",
+      "apply_url": "https:/8492.com",
+      "is_active": true,
+      "created_at": "2026-10-02T15:28:08.782Z"
+    }
+  ],
   "placement_applications": [],
-  "bulk_email_logs": []
+  "bulk_email_logs": [
+    {
+      "id": "email-1790954972168",
+      "admin_id": "institutional-admin",
+      "subject": "Congratulations! You are shortlisted for Enterprise Partner",
+      "template_name": "shortlist_notification",
+      "recipients_count": 3,
+      "success_count": 3,
+      "failed_count": 0,
+      "recipients_preview": [
+        {
+          "email": "prasadborusu0@gmail.com",
+          "name": "prasad",
+          "status": "sent"
+        },
+        {
+          "email": "prasadbou0@gmail.com",
+          "name": "Prasad",
+          "status": "sent"
+        },
+        {
+          "email": "prasadborusu8@gmail.com",
+          "name": "Venkata Durga Prasad",
+          "status": "sent"
+        }
+      ],
+      "sent_at": "2026-10-02T15:29:32.168Z"
+    },
+    {
+      "id": "email-1790951569010",
+      "admin_id": "institutional-admin",
+      "subject": "New Placement Drive Alert: Enterprise Partner - Associate Software Engineer",
+      "template_name": "drive_announcement",
+      "recipients_count": 2,
+      "success_count": 2,
+      "failed_count": 0,
+      "recipients_preview": [
+        {
+          "email": "prasadborusu0@gmail.com",
+          "name": "Prasad",
+          "status": "sent"
+        },
+        {
+          "email": "prasadbou0@gmail.com",
+          "name": "Prasad",
+          "status": "sent"
+        }
+      ],
+      "sent_at": "2026-10-02T14:32:49.010Z"
+    },
+    {
+      "id": "email-1790951327470",
+      "admin_id": "institutional-admin",
+      "subject": "New Placement Drive Alert: Enterprise Partner - Associate Software Engineer",
+      "template_name": "drive_announcement",
+      "recipients_count": 2,
+      "success_count": 2,
+      "failed_count": 0,
+      "recipients_preview": [
+        {
+          "email": "prasadborusu0@gmail.com",
+          "name": "Prasad",
+          "status": "simulated"
+        },
+        {
+          "email": "prasadbou0@gmail.com",
+          "name": "Prasad",
+          "status": "simulated"
+        }
+      ],
+      "sent_at": "2026-10-02T14:28:47.470Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-python-backend",
+      "title": "Mastering Python for Backend & Placement Interviews",
+      "slug": "python-backend-mastery",
+      "category": "python",
+      "level": "intermediate",
+      "duration_hours": 14,
+      "instructor_name": "Dr. Aris Vance",
+      "instructor_title": "Senior Staff Infrastructure Engineer",
+      "instructor_avatar": "🐍",
+      "thumbnail_url": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&auto=format&fit=crop&q=80",
+      "short_description": "Production Python 3, asynchronous FastAPI, PostgreSQL indexing, and backend system architecture screened by top tech firms.",
+      "description": "A deep-dive technical engineering track designed for candidates targeting Python Developer and Backend Engineering roles. Covers language internals, OOP design patterns, high-concurrency async APIs, and database transactions.",
+      "tags": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "AsyncIO",
+        "OOP"
+      ],
+      "prerequisites": [
+        "Basic programming syntax",
+        "Fundamental understanding of web requests"
+      ],
+      "learning_outcomes": [
+        "Master Python memory model, dunder methods, generators and decorators",
+        "Architect async microservices using FastAPI, Pydantic, and SQLAlchemy",
+        "Optimize database queries with indexing, transactions, and Redis caching",
+        "Pass technical coding and architecture rounds at top product companies"
+      ],
+      "is_published": true,
+      "enrolled_count": 345,
+      "rating": 4.9,
+      "created_at": "2026-01-10T00:00:00.000Z",
+      "updated_at": "2026-10-02T13:45:31.537Z",
+      "modules": [
+        {
+          "id": "mod-py-1",
+          "title": "Module 1: Python Core & OOP Architecture",
+          "description": "Deep dive into Python internals, memory allocation, and object-oriented design.",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "les-py-1",
+              "title": "Python Memory Model, Mutability & References",
+              "slug": "python-memory-model",
+              "type": "article",
+              "duration_minutes": 25,
+              "order": 1,
+              "content": "### Python Memory Model & Object References\n\nIn Python, everything is an object. Understanding how variables bind to memory is essential for technical interviews.\n\n#### 1. Identity vs Equality\n- `==` checks for **value equality** (calls `__eq__`).\n- `is` checks for **object identity** (verifies memory address via `id()`).\n\n```python\na = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)  # True (equal values)\nprint(a is b)  # False (distinct memory locations)\n```\n\n#### 2. Mutability Gotcha in Default Arguments\nNever use mutable objects (like lists or dictionaries) as default parameter values:\n\n```python\n# ANTI-PATTERN:\ndef append_to(element, target=[]):\n    target.append(element)\n    return target\n\n# CORRECT PATTERN:\ndef append_to(element, target=None):\n    if target is None:\n        target = []\n    target.append(element)\n    return target\n```\n\n#### 3. Garbage Collection & Reference Counting\nPython uses **reference counting** as its primary GC mechanism, supplemented by a **generational cyclic GC** to detect circular references."
+            },
+            {
+              "id": "les-py-2",
+              "title": "Dunder Methods, Metaclasses & Custom Iterators",
+              "slug": "dunder-methods-iterators",
+              "type": "code",
+              "duration_minutes": 35,
+              "order": 2,
+              "content": "### Magic (Dunder) Methods & Iterator Protocol\n\nBuilding idiomatic Python code relies on protocol implementation rather than concrete inheritance.\n\n#### The Iterator Protocol\nAny class implementing `__iter__()` and `__next__()` can be iterated over in a `for` loop:\n\n```python\nclass Fibonacci:\n    def __init__(self, limit: int):\n        self.limit = limit\n        self.count = 0\n        self.a, self.b = 0, 1\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.count >= self.limit:\n            raise StopIteration\n        val = self.a\n        self.a, self.b = self.b, self.a + self.b\n        self.count += 1\n        return val\n\n# Execution\nfor num in Fibonacci(8):\n    print(num, end=\" \")\n# Output: 0 1 1 2 3 5 8 13\n```\n\n#### Context Managers (`__enter__` and `__exit__`)\nUse context managers to safely handle resource allocation (files, locks, database connections):\n\n```python\nclass DatabaseTransaction:\n    def __enter__(self):\n        print(\"BEGIN TRANSACTION\")\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is not None:\n            print(\"ROLLBACK TRANSACTION due to exception\")\n            return False  # re-raise exception\n        print(\"COMMIT TRANSACTION\")\n        return True\n```"
+            }
+          ]
+        },
+        {
+          "id": "mod-py-2",
+          "title": "Module 2: High-Concurrency APIs with FastAPI & PostgreSQL",
+          "description": "Building production-grade async REST microservices with caching and database pools.",
+          "order": 2,
+          "lessons": [
+            {
+              "id": "les-py-3",
+              "title": "Asynchronous Programming: Event Loops & Async/Await",
+              "slug": "async-event-loops",
+              "type": "video",
+              "duration_minutes": 30,
+              "video_url": "https://www.youtube.com/embed/tSLdcBnfl6A",
+              "order": 1,
+              "content": "### Concurrency in Python: Threading vs Multiprocessing vs AsyncIO\n\nInterviewers frequently evaluate your knowledge of Python's **GIL (Global Interpreter Lock)**:\n\n| Paradigm | Mechanism | Best Used For |\n|---|---|---|\n| **AsyncIO** | Single-threaded cooperative multitasking | I/O-bound (APIs, network calls, DB queries) |\n| **Multiprocessing** | Separate OS processes (bypasses GIL) | CPU-bound (Data crunching, image processing) |\n| **Threading** | OS threads (subject to GIL) | Legacy I/O, background daemon tasks |\n\n#### FastAPI Async Route Architecture\n```python\nfrom fastapi import FastAPI, Depends, HTTPException\nimport asyncio\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\nasync def fetch_item(item_id: str):\n    # Non-blocking async database fetch\n    data = await db_query_async(item_id)\n    if not data:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return {\"status\": \"success\", \"item\": data}\n```"
+            },
+            {
+              "id": "les-py-4",
+              "title": "PostgreSQL Indexing, Transactions & Connection Pooling",
+              "slug": "postgres-indexing-pooling",
+              "type": "article",
+              "duration_minutes": 40,
+              "order": 2,
+              "content": "### Database Performance Optimization\n\nTop tech company interviews place strong emphasis on database performance under high read/write loads.\n\n#### 1. B-Tree vs Hash Indexing\n- **B-Tree**: The default index. Ideal for range queries (`<, >, BETWEEN`), equality (`=`), and sorting (`ORDER BY`).\n- **Composite Indexes**: Always order columns from highest cardinality to lowest cardinality (Leftmost Prefix Rule).\n\n#### 2. Connection Pooling (PgBouncer / asyncpg)\nOpening a PostgreSQL connection involves process forking and authentication overhead (~30-50ms). Use connection pooling:\n- Pool min size: 10\n- Pool max size: 50\n- Recycle connections after 30 minutes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "course-system-design",
+      "title": "System Design & High-Scale Architecture",
+      "slug": "system-design-architecture",
+      "category": "system_design",
+      "level": "advanced",
+      "duration_hours": 18,
+      "instructor_name": "Vikramaditya Singhania",
+      "instructor_title": "Principal Cloud Architect",
+      "instructor_avatar": "🏗️",
+      "thumbnail_url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
+      "short_description": "Architecting distributed systems: Load Balancers, CAP Theorem, Database Sharding, Caching strategies, and Microservices.",
+      "description": "Comprehensive system design course covering both high-level and low-level architectural patterns required for Tier-1 and Tier-2 software engineering interviews.",
+      "tags": [
+        "System Design",
+        "Scalability",
+        "Microservices",
+        "Distributed Systems",
+        "Redis",
+        "Kafka"
+      ],
+      "prerequisites": [
+        "Basic understanding of client-server architecture and databases"
+      ],
+      "learning_outcomes": [
+        "Design scalable distributed architectures capable of handling millions of QPS",
+        "Apply CAP theorem, PACELC, and consistent hashing to real system designs",
+        "Implement multi-layer caching with Redis and Memcached",
+        "Confidently answer system design questions (Design URL Shortener, Twitter, Uber)"
+      ],
+      "is_published": true,
+      "enrolled_count": 289,
+      "rating": 4.88,
+      "created_at": "2026-02-01T00:00:00.000Z",
+      "updated_at": "2026-03-10T00:00:00.000Z",
+      "modules": [
+        {
+          "id": "mod-sd-1",
+          "title": "Module 1: Scalability Fundamentals",
+          "description": "Core building blocks of reliable distributed services.",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "les-sd-1",
+              "title": "Vertical vs Horizontal Scaling & Load Balancing",
+              "slug": "scaling-and-load-balancing",
+              "type": "article",
+              "duration_minutes": 30,
+              "order": 1,
+              "content": "### Horizontal Scaling & Load Balancing Algorithms\n\nWhen designing systems to scale from 1,000 to 10,000,000 users, understanding load distribution is paramount.\n\n#### Load Balancer Distribution Strategies\n1. **Round Robin & Weighted Round Robin**: Cycles through servers sequentially, optionally weighting servers by CPU/RAM capacity.\n2. **Least Connections**: Dispatches traffic to the instance currently serving the fewest active requests.\n3. **Consistent Hashing**: Minimizes key re-distribution when servers are added or removed (crucial for distributed caching)."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "course_enrollments": [
+    {
+      "id": "enr-1790948173609-nlkqk",
+      "course_id": "course-python-backend",
+      "student_id": "69ca7ea5-3687-4c15-addb-ef25dfe5d146",
+      "enrolled_at": "2026-10-02T13:36:13.609Z",
+      "completed_lessons": [],
+      "progress_percentage": 0
+    },
+    {
+      "id": "enr-1790953913258-c5pbj",
+      "course_id": "course-python-backend",
+      "student_id": "d2ed2fcc-bc04-45c8-b3d3-0222b344e683",
+      "enrolled_at": "2026-10-02T15:11:53.258Z",
+      "completed_lessons": [
+        "les-py-1"
+      ],
+      "progress_percentage": 25
+    },
+    {
+      "id": "enr-1790954390458-350jx",
+      "course_id": "course-python-backend",
+      "student_id": "572c2f21-fad1-4e35-bf31-43913c04c7ec",
+      "enrolled_at": "2026-10-02T15:19:50.458Z",
+      "completed_lessons": [
+        "les-py-1"
+      ],
+      "progress_percentage": 25
+    }
+  ]
 }

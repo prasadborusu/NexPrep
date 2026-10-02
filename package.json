@@ -4,6 +4,7 @@
   "private": true,
   "description": "NEXPREP - AI-Powered Career Preparation Platform",
   "scripts": {
+    "dev": "cd backend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",

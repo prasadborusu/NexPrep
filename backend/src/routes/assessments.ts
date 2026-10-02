@@ -5,8 +5,8 @@ import { Assessment, AssessmentSubmission } from '../types';
 
 const router = Router();
 
-// List active assessments
-router.get('/', (req: Request, res: Response) => {
+// Admin: List all assessments with passkeys
+router.get('/admin/all', (req: Request, res: Response) => {
   const list = memoryStore.assessments.map(a => {
     const qCount = memoryStore.questions.filter(q => q.assessment_id === a.id).length;
     return { ...a, questions_count: qCount };
@@ -14,7 +14,21 @@ router.get('/', (req: Request, res: Response) => {
   return res.json(list);
 });
 
-// Get assessment details by id with questions (strip correct options for students)
+// Student: List active assessments (PASSKEY STRIPPED - NEVER EXPOSED TO STUDENT)
+router.get('/', (req: Request, res: Response) => {
+  const list = memoryStore.assessments.map(a => {
+    const qCount = memoryStore.questions.filter(q => q.assessment_id === a.id).length;
+    const { passkey, ...safeAssessment } = a;
+    return {
+      ...safeAssessment,
+      questions_count: qCount,
+      requires_passkey: Boolean(passkey)
+    };
+  });
+  return res.json(list);
+});
+
+// Student: Get assessment details by id (PASSKEY STRIPPED - NEVER EXPOSED TO STUDENT)
 router.get('/:id', (req: Request, res: Response) => {
   const assessment = memoryStore.assessments.find(a => a.id === req.params.id);
   if (!assessment) {
@@ -38,8 +52,13 @@ router.get('/:id', (req: Request, res: Response) => {
       };
     });
 
+  const { passkey, ...safeAssessment } = assessment;
+
   return res.json({
-    assessment,
+    assessment: {
+      ...safeAssessment,
+      requires_passkey: Boolean(passkey)
+    },
     questions
   });
 });
@@ -211,7 +230,7 @@ router.post('/:id/passkey', (req: Request, res: Response) => {
   }
 
   const customKey = req.body.passkey ? String(req.body.passkey).trim().toUpperCase() : null;
-  const newPasskey = customKey || `NEX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  const newPasskey = customKey || String(Math.floor(1000 + Math.random() * 9000));
 
   assessment.passkey = newPasskey;
   persistStore();
@@ -227,7 +246,7 @@ router.post('/', (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Title is required' });
   }
 
-  const generatedPasskey = passkey ? String(passkey).trim().toUpperCase() : `NEX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  const generatedPasskey = passkey ? String(passkey).trim().toUpperCase() : String(Math.floor(1000 + Math.random() * 9000));
 
   const newAssessment: Assessment = {
     id: `assessment-${Date.now()}`,

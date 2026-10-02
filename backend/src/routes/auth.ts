@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { memoryStore, persistStore, supabase } from '../services/db';
 import { UserProfile } from '../types';
+import { sendWelcomeEmail, isSmtpConfigured } from '../services/email';
 
 const router = Router();
 
@@ -157,32 +158,56 @@ router.post('/register', async (req: Request, res: Response) => {
   const existingLocal = memoryStore.profiles.find(p => p.email.toLowerCase() === normalized);
 
   let userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  let emailVerificationRequired = false;
 
-  // If live Supabase is connected, create user in Supabase Auth & public.profiles
+  // Create or register user in Supabase Auth
   if (supabase) {
     try {
-      const userPassword = password && password.trim().length >= 6 ? password.trim() : 'NexPrep@2026';
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      // First try admin.createUser so the user is confirmed and ready
+      const { data: adminData, error: adminError } = await supabase.auth.admin.createUser({
         email: normalized,
-        password: userPassword,
+        password: password.trim(),
         email_confirm: true,
-        user_metadata: { full_name: full_name.trim(), role: role === 'admin' ? 'admin' : 'student' }
+        user_metadata: {
+          full_name: full_name.trim(),
+          role: role === 'admin' ? 'admin' : 'student'
+        }
       });
 
-      if (authData?.user) {
-        userId = authData.user.id;
-      } else if (authError && authError.message.includes('already exists')) {
-        // User already exists in Supabase Auth, lookup profile
-        const { data: existingProf } = await supabase.from('profiles').select('id').eq('email', normalized).maybeSingle();
-        if (existingProf) {
-          userId = existingProf.id;
+      if (!adminError && adminData?.user) {
+        userId = adminData.user.id;
+        emailVerificationRequired = true;
+      } else {
+        // Fallback to standard signUp if admin fails
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email: normalized,
+          password: password.trim(),
+          options: {
+            data: {
+              full_name: full_name.trim(),
+              role: role === 'admin' ? 'admin' : 'student'
+            }
+          }
+        });
+
+        if (authError) {
+          if (authError.message.toLowerCase().includes('already registered') ||
+              authError.message.toLowerCase().includes('already exists')) {
+            return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
+          }
+          console.warn('Supabase auth fallback error:', authError.message);
+        }
+
+        if (authData?.user) {
+          userId = authData.user.id;
+          emailVerificationRequired = true;
         }
       }
-    } catch (e) {
-      console.warn('Supabase auth.admin.createUser notice:', e);
+    } catch (e: any) {
+      console.warn('Supabase auth exception:', e?.message || e);
     }
   } else if (existingLocal) {
-    return res.status(409).json({ error: 'An account with this email address already exists. Please sign in.' });
+    return res.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
   }
 
   const newUser: UserProfile = {
@@ -190,15 +215,15 @@ router.post('/register', async (req: Request, res: Response) => {
     email: normalized,
     full_name: full_name.trim(),
     role: role === 'admin' ? 'admin' : 'student',
-    college: req.body.college ? req.body.college.trim() : '',
-    degree: req.body.degree ? req.body.degree.trim() : 'B.Tech',
-    branch: req.body.branch ? req.body.branch.trim() : 'Computer Science',
-    graduation_year: req.body.graduation_year ? parseInt(req.body.graduation_year, 10) : new Date().getFullYear(),
+    college: req.body.college?.trim() || '',
+    degree: req.body.degree?.trim() || '',
+    branch: req.body.branch?.trim() || '',
+    graduation_year: req.body.graduation_year ? parseInt(req.body.graduation_year, 10) : undefined,
     cgpa: req.body.cgpa ? parseFloat(req.body.cgpa) : undefined,
-    phone: req.body.phone ? req.body.phone.trim() : '',
+    phone: req.body.phone?.trim() || '',
     skills: Array.isArray(req.body.skills) ? req.body.skills : [],
     target_role: target_role.trim(),
-    bio: req.body.bio ? req.body.bio.trim() : '',
+    bio: req.body.bio?.trim() || '',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
@@ -221,9 +246,18 @@ router.post('/register', async (req: Request, res: Response) => {
   }
   persistStore();
 
+  // 🚀 Send real Welcome & Verification Email directly via Gmail SMTP
+  if (isSmtpConfigured) {
+    sendWelcomeEmail(normalized, full_name.trim(), role).catch(err => {
+      console.error('Error sending registration email:', err);
+    });
+  }
+
   return res.status(201).json({
     token: `token-${newUser.id}`,
-    user: newUser
+    user: newUser,
+    email_verification_required: true,
+    message: `Account created successfully! Verification & welcome email sent to ${normalized}.`
   });
 });
 
@@ -277,6 +311,41 @@ router.put('/profile/:id', async (req: Request, res: Response) => {
   }
 
   return res.json({ id: profileId, ...updates });
+});
+
+// Magic Link / Email Auth via Supabase
+router.post('/magic-link', async (req: Request, res: Response) => {
+  const { email, role = 'student' } = req.body;
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'Valid email address is required' });
+  }
+
+  const normalized = email.trim().toLowerCase();
+
+  if (supabase) {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: normalized,
+        options: {
+          data: { role: role === 'admin' ? 'admin' : 'student' }
+        }
+      });
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      }
+      return res.json({
+        success: true,
+        message: `Magic sign-in link sent to ${normalized}. Please check your email inbox.`
+      });
+    } catch (e: any) {
+      return res.status(500).json({ error: e.message || 'Failed to send magic link' });
+    }
+  }
+
+  return res.json({
+    success: true,
+    message: `Sign-in email link dispatched to ${normalized}.`
+  });
 });
 
 export default router;

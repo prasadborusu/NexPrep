@@ -37,6 +37,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [user]);
 
+  // Validate active session against real Supabase/backend profiles on startup
+  useEffect(() => {
+    if (user?.id) {
+      api.auth.getProfile(user.id)
+        .then(fresh => {
+          if (fresh && fresh.id) {
+            setUser(fresh);
+          }
+        })
+        .catch(() => {
+          // Outdated or removed demo session: clear cache
+          setUser(null);
+          localStorage.removeItem('nexprep_user');
+        });
+    }
+  }, []);
+
   const login = async (email: string, password?: string) => {
     setIsLoading(true);
     try {

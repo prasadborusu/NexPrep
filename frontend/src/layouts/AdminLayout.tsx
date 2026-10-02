@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   Shield,
-  ShieldCheck
+  ShieldCheck,
+  GraduationCap
 } from 'lucide-react';
 
 export const AdminLayout: React.FC = () => {
@@ -36,6 +37,7 @@ export const AdminLayout: React.FC = () => {
   const adminNavItems = [
     { label: 'Admin Dashboard', to: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Students Roster', to: '/admin/students', icon: Users },
+    { label: 'Courses', to: '/admin/courses', icon: GraduationCap },
     { label: 'Assessments', to: '/admin/assessments', icon: FileCheck2 },
     { label: 'Question Bank', to: '/admin/questions', icon: Database },
     { label: 'Coding Problems', to: '/admin/coding', icon: Code2 },
