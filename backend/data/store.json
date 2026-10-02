@@ -349,7 +349,7 @@
       ],
       "acceptance_rate": 67,
       "total_submissions": 123,
-      "created_at": "2026-10-02T16:41:38.848Z"
+      "created_at": "2026-10-02T16:58:44.893Z"
     },
     {
       "id": "prob-contains-duplicate",
@@ -417,7 +417,7 @@
       ],
       "acceptance_rate": 94,
       "total_submissions": 84,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-best-time-to-buy-and-sell-stock",
@@ -482,7 +482,7 @@
       ],
       "acceptance_rate": 92,
       "total_submissions": 95,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-product-of-array-except-self",
@@ -546,7 +546,7 @@
       ],
       "acceptance_rate": 88,
       "total_submissions": 60,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-maximum-subarray",
@@ -615,7 +615,7 @@
       ],
       "acceptance_rate": 89,
       "total_submissions": 75,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-valid-anagram",
@@ -679,7 +679,7 @@
       ],
       "acceptance_rate": 96,
       "total_submissions": 110,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-valid-palindrome",
@@ -749,7 +749,7 @@
       ],
       "acceptance_rate": 93,
       "total_submissions": 88,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-valid-parentheses",
@@ -816,7 +816,7 @@
       ],
       "acceptance_rate": 97,
       "total_submissions": 130,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-binary-search",
@@ -882,7 +882,7 @@
       ],
       "acceptance_rate": 95,
       "total_submissions": 92,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-longest-substring-without-repeating-characters",
@@ -953,7 +953,7 @@
       ],
       "acceptance_rate": 85,
       "total_submissions": 78,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     },
     {
       "id": "prob-climbing-stairs",
@@ -1018,7 +1018,7 @@
       ],
       "acceptance_rate": 96,
       "total_submissions": 90,
-      "created_at": "2026-10-02T16:41:38.849Z"
+      "created_at": "2026-10-02T16:58:44.894Z"
     }
   ],
   "code_submissions": [

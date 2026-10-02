@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
+import { sendOtpViaEmailJS, isEmailJSConfigured } from '../../lib/emailjs';
 import confetti from 'canvas-confetti';
 import {
   ArrowRight,
@@ -108,6 +109,13 @@ export const RegisterPage: React.FC = () => {
       setResendCountdown(30);
       if (res.otp_fallback) {
         setOtpFallback(res.otp_fallback);
+        if (isEmailJSConfigured) {
+          sendOtpViaEmailJS({
+            to_name: fullName.trim(),
+            to_email: email.trim(),
+            otp_code: res.otp_fallback
+          });
+        }
       } else {
         setOtpFallback(null);
       }
@@ -211,6 +219,13 @@ export const RegisterPage: React.FC = () => {
       const res = await api.auth.resendOtp(registeredEmail);
       if (res.otp_fallback) {
         setOtpFallback(res.otp_fallback);
+        if (isEmailJSConfigured) {
+          sendOtpViaEmailJS({
+            to_name: fullName.trim() || 'Candidate',
+            to_email: registeredEmail,
+            otp_code: res.otp_fallback
+          });
+        }
       }
       setResendSuccess(res.message || 'New 4-digit code sent!');
       setResendCountdown(30);

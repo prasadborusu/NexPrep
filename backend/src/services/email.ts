@@ -44,28 +44,37 @@ export function getTransporter() {
 
 export const isSmtpConfigured = Boolean(
   process.env.RESEND_API_KEY ||
+  (process.env.EMAILJS_SERVICE_ID && (process.env.EMAILJS_PUBLIC_KEY || process.env.EMAILJS_USER_ID)) ||
   ((process.env.SMTP_USER || config.smtpUser) &&
    (process.env.SMTP_PASS || config.smtpPass) &&
    !(process.env.SMTP_USER || config.smtpUser).includes('your-gmail'))
 );
 
-// Unified Send Email Helper supporting Resend HTTPS API (never blocked by Render) and SMTP
+// Unified Send Email Helper supporting Resend HTTPS, EmailJS HTTPS, and Nodemailer SMTP
 export async function sendEmailDirect({
   to,
   subject,
   html,
-  text
+  text,
+  toName,
+  otp
 }: {
   to: string;
   subject: string;
   html: string;
   text: string;
+  toName?: string;
+  otp?: string;
 }): Promise<{ success: boolean; error?: string }> {
   const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  const emailjsServiceId = process.env.EMAILJS_SERVICE_ID?.trim();
+  const emailjsTemplateId = process.env.EMAILJS_TEMPLATE_ID?.trim();
+  const emailjsPublicKey = (process.env.EMAILJS_PUBLIC_KEY || process.env.EMAILJS_USER_ID)?.trim();
+  const emailjsPrivateKey = process.env.EMAILJS_PRIVATE_KEY?.trim();
   const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
   const fromName = process.env.SMTP_FROM_NAME || config.smtpFromName || 'NexPrep Placement Cell';
 
-  // 1. If RESEND_API_KEY is available, use HTTPS REST API (guaranteed delivery on Render/Cloud with 0 port blocks)
+  // 1. If RESEND_API_KEY is available, use HTTPS REST API (guaranteed delivery on Render with 0 port blocks)
   if (resendApiKey && resendApiKey.startsWith('re_')) {
     try {
       const response = await fetch('https://api.resend.com/emails', {
@@ -92,11 +101,47 @@ export async function sendEmailDirect({
       return { success: true };
     } catch (err: any) {
       console.error(`❌ Resend API delivery error to ${to}:`, err.message);
-      // Fall through to SMTP transporter if configured
+      // Fall through
     }
   }
 
-  // 2. Otherwise use Nodemailer SMTP
+  // 2. If EMAILJS credentials are set, use EmailJS HTTPS REST API (guaranteed delivery via HTTPS Port 443)
+  if (emailjsServiceId && emailjsTemplateId && emailjsPublicKey) {
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          service_id: emailjsServiceId,
+          template_id: emailjsTemplateId,
+          user_id: emailjsPublicKey,
+          accessToken: emailjsPrivateKey || undefined,
+          template_params: {
+            to_name: toName || 'Candidate',
+            to_email: to,
+            otp_code: otp || '',
+            subject,
+            message: text
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || `EmailJS returned status ${response.status}`);
+      }
+
+      console.log(`✅ Email sent via EmailJS HTTPS API to ${to}`);
+      return { success: true };
+    } catch (err: any) {
+      console.error(`❌ EmailJS API delivery error to ${to}:`, err.message);
+      // Fall through
+    }
+  }
+
+  // 3. Otherwise use Nodemailer SMTP
   const transporter = getTransporter();
   if (!transporter || !user) {
     const msg = 'SMTP is not configured on the server. Add RESEND_API_KEY or SMTP_USER & SMTP_PASS in Render Environment.';
@@ -185,6 +230,8 @@ export async function sendOtpEmail(to: string, fullName: string, otp: string): P
 
   return sendEmailDirect({
     to,
+    toName: fullName,
+    otp,
     subject: `🔐 ${otp} is your NexPrep verification code`,
     text: `Your NexPrep 4-digit verification code is: ${otp}\n\nValid for 10 minutes.\n\nNexPrep Placement Cell`,
     html
