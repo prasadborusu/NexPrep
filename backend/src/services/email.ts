@@ -2,23 +2,35 @@ import nodemailer from 'nodemailer';
 import { config } from '../config';
 
 export function getTransporter() {
-  const user = process.env.SMTP_USER || config.smtpUser;
-  const pass = process.env.SMTP_PASS || config.smtpPass;
-  const host = process.env.SMTP_HOST || config.smtpHost || 'smtp.gmail.com';
-  const port = parseInt(process.env.SMTP_PORT || String(config.smtpPort) || '587', 10);
-  const secure = (process.env.SMTP_SECURE || String(config.smtpSecure)) === 'true';
+  const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
+  const pass = (process.env.SMTP_PASS || config.smtpPass)?.trim().replace(/\s+/g, '');
 
   if (!user || !pass || user.includes('your-gmail') || pass.includes('your-16')) {
     return null;
   }
+
+  // If user is Gmail, use nodemailer's dedicated 'gmail' service which handles Port 465/SSL cleanly across Linux cloud providers
+  if (user.endsWith('@gmail.com') || (process.env.SMTP_HOST || config.smtpHost)?.includes('gmail')) {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user,
+        pass
+      }
+    });
+  }
+
+  const host = process.env.SMTP_HOST || config.smtpHost || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || String(config.smtpPort) || '587', 10);
+  const secure = port === 465 || (process.env.SMTP_SECURE || String(config.smtpSecure)) === 'true';
 
   return nodemailer.createTransport({
     host,
     port,
     secure,
     auth: {
-      user: user.trim(),
-      pass: pass.trim().replace(/\s+/g, '')
+      user,
+      pass
     },
     tls: {
       rejectUnauthorized: false

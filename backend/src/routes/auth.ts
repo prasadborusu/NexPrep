@@ -390,8 +390,8 @@ router.post('/resend-otp', async (req: Request, res: Response) => {
   });
 });
 
-// 4. Check SMTP Status on Render
-router.get('/smtp-check', (req: Request, res: Response) => {
+// 4. Check SMTP Status & Test Email on Render
+router.get('/smtp-check', async (req: Request, res: Response) => {
   const hasUser = Boolean(process.env.SMTP_USER || config.smtpUser);
   const hasPass = Boolean(process.env.SMTP_PASS || config.smtpPass);
   const user = process.env.SMTP_USER || config.smtpUser;
@@ -404,6 +404,30 @@ router.get('/smtp-check', (req: Request, res: Response) => {
       ? '✅ Gmail SMTP is configured in server environment variables.'
       : '⚠️ SMTP_USER and SMTP_PASS are missing in server environment variables.'
   });
+});
+
+// 5. Test Live Email Sending from Render Server
+router.get('/test-email', async (req: Request, res: Response) => {
+  const to = (req.query.to as string) || (process.env.SMTP_USER || config.smtpUser);
+  if (!to) {
+    return res.status(400).json({ error: 'Provide a ?to=email query parameter' });
+  }
+
+  const testOtp = '9999';
+  const result = await sendOtpEmail(to, 'Test Candidate', testOtp);
+  if (result.success) {
+    return res.json({
+      success: true,
+      message: `✅ Test email successfully delivered to ${to} from ${process.env.SMTP_USER || config.smtpUser}!`
+    });
+  } else {
+    return res.status(500).json({
+      success: false,
+      error: result.error,
+      smtp_user: process.env.SMTP_USER || config.smtpUser,
+      hint: 'Verify that the Google App Password has 16 characters and 2-Step Verification is enabled on your Google Account.'
+    });
+  }
 });
 
 // Get Profile
