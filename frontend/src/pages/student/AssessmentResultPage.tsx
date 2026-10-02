@@ -57,7 +57,7 @@ export const AssessmentResultPage: React.FC = () => {
       <div className="p-12 text-center space-y-4">
         <p className="text-sm text-slate-500">No submission found for this assessment.</p>
         <button
-          onClick={() => navigate('/assessments')}
+          onClick={() => navigate('/student/assessments')}
           className="px-4 py-2 bg-purple-700 text-white rounded-xl text-xs font-semibold"
         >
           Back to Assessments
@@ -110,14 +110,14 @@ export const AssessmentResultPage: React.FC = () => {
 
         <div className="pt-2 flex justify-center gap-3">
           <Link
-            to="/skill-gap"
+            to="/student/skills"
             className="px-5 py-2.5 rounded-xl bg-white text-purple-900 text-xs font-bold hover:bg-purple-50 transition-all shadow-sm flex items-center gap-1.5"
           >
             <Sparkles className="w-3.5 h-3.5 text-pink-500" />
             View Updated Skill Gap
           </Link>
           <Link
-            to="/dashboard"
+            to="/student/dashboard"
             className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all border border-white/20"
           >
             Back to Dashboard

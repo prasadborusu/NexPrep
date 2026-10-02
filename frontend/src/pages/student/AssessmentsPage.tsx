@@ -96,7 +96,7 @@ export const AssessmentsPage: React.FC = () => {
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-xs text-slate-400">Questions: {ass.questions_count || 4} Items</span>
                 <button
-                  onClick={() => navigate(`/assessments/${ass.id}`)}
+                  onClick={() => navigate(`/student/assessments/${ass.id}`)}
                   className="px-5 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all shadow-sm flex items-center gap-1.5"
                 >
                   Take Assessment

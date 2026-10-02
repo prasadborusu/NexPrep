@@ -89,7 +89,7 @@ export const SkillGapPage: React.FC = () => {
             </div>
 
             <Link
-              to="/roadmap"
+              to="/student/roadmap"
               className="px-6 py-3 rounded-2xl bg-white text-purple-950 text-xs font-bold hover:bg-purple-50 transition-all shadow-sm shrink-0 flex items-center gap-1.5"
             >
               Follow Dynamic Roadmap

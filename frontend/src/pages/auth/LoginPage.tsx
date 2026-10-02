@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ArrowRight, Lock, Mail, Sparkles, User, ShieldCheck } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
   const { login, switchRole } = useAuth();
   const [email, setEmail] = useState('student@nexprep.io');
   const [password, setPassword] = useState('••••••••••••');
@@ -21,7 +23,11 @@ export const LoginPage: React.FC = () => {
     setError(null);
     try {
       const user = await login(email);
-      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+      if (redirectUrl) {
+        navigate(redirectUrl);
+      } else {
+        navigate(user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -31,7 +37,11 @@ export const LoginPage: React.FC = () => {
 
   const handleQuickDemo = (type: 'student' | 'admin') => {
     switchRole(type);
-    navigate(type === 'admin' ? '/admin' : '/dashboard');
+    if (redirectUrl && type === 'student') {
+      navigate(redirectUrl);
+    } else {
+      navigate(type === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+    }
   };
 
   return (
@@ -100,13 +110,12 @@ export const LoginPage: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-semibold text-slate-700">Password</label>
-              <button
-                type="button"
-                onClick={() => alert('For this demo, simply submit or click the demo pills above.')}
-                className="text-[11px] font-semibold text-purple-700 hover:underline"
+              <Link
+                to="/forgot-password"
+                className="text-[11px] font-semibold text-[#6D28D9] hover:underline"
               >
                 Forgot?
-              </button>
+              </Link>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
@@ -123,7 +132,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-bold transition-all shadow-sm hover:shadow-soft flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white text-sm font-bold transition-all shadow-sm hover:shadow-soft flex items-center justify-center gap-2"
           >
             {isLoading ? 'Signing In...' : 'Sign In'}
             <ArrowRight className="w-4 h-4" />
@@ -133,8 +142,8 @@ export const LoginPage: React.FC = () => {
         {/* Footer */}
         <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
           Don't have an account?{' '}
-          <Link to="/auth/register" className="font-semibold text-purple-700 hover:underline">
-            Register as Student
+          <Link to="/register" className="font-semibold text-[#6D28D9] hover:underline">
+            Register as Candidate
           </Link>
         </div>
       </div>

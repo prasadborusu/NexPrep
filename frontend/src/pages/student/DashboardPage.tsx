@@ -115,7 +115,7 @@ export const DashboardPage: React.FC = () => {
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-purple-200">Readiness Score</p>
               <p className="text-sm font-bold text-white">Competitive Track</p>
-              <Link to="/skill-gap" className="text-[11px] text-pink-300 hover:text-white flex items-center gap-1 mt-0.5">
+              <Link to="/student/skills" className="text-[11px] text-pink-300 hover:text-white flex items-center gap-1 mt-0.5">
                 View skill gaps <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -173,7 +173,7 @@ export const DashboardPage: React.FC = () => {
                 <h3 className="text-lg font-bold text-slate-900">Upcoming Assessments</h3>
                 <p className="text-xs text-slate-500">Proctored technical and coding evaluations</p>
               </div>
-              <Link to="/assessments" className="text-xs font-bold text-purple-700 hover:text-purple-800 flex items-center gap-1">
+              <Link to="/student/assessments" className="text-xs font-bold text-purple-700 hover:text-purple-800 flex items-center gap-1">
                 View all <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -208,7 +208,7 @@ export const DashboardPage: React.FC = () => {
                     </div>
 
                     <button
-                      onClick={() => navigate(`/assessments/${ass.id}`)}
+                      onClick={() => navigate(`/student/assessments/${ass.id}`)}
                       className="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all shrink-0 flex items-center justify-center gap-1.5"
                     >
                       Start Exam
@@ -227,7 +227,7 @@ export const DashboardPage: React.FC = () => {
                 <h3 className="text-lg font-bold text-slate-900">Skill Intelligence Matrix</h3>
                 <p className="text-xs text-slate-500">Benchmark comparison for {user?.target_role}</p>
               </div>
-              <Link to="/skill-gap" className="text-xs font-bold text-purple-700 hover:text-purple-800 flex items-center gap-1">
+              <Link to="/student/skills" className="text-xs font-bold text-purple-700 hover:text-purple-800 flex items-center gap-1">
                 Deep Dive <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -286,7 +286,7 @@ export const DashboardPage: React.FC = () => {
           <div className="bg-white rounded-2xl p-6 border border-purple-100/80 shadow-soft space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-slate-900">Weekly Roadmap</h3>
-              <Link to="/roadmap" className="text-xs font-bold text-purple-700 hover:text-purple-800">
+              <Link to="/student/roadmap" className="text-xs font-bold text-purple-700 hover:text-purple-800">
                 View All
               </Link>
             </div>
@@ -316,7 +316,7 @@ export const DashboardPage: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-800">Career Tool Shortcuts</h3>
             <div className="space-y-2">
               <button
-                onClick={() => navigate('/resume-builder')}
+                onClick={() => navigate('/student/resume/builder')}
                 className="w-full p-2.5 rounded-xl bg-white hover:bg-purple-100/50 border border-purple-100 text-left text-xs font-semibold text-slate-700 flex items-center justify-between transition-colors shadow-xs"
               >
                 <span className="flex items-center gap-2">
@@ -327,7 +327,7 @@ export const DashboardPage: React.FC = () => {
               </button>
 
               <button
-                onClick={() => navigate('/ats-analyzer')}
+                onClick={() => navigate('/student/resume/analyzer')}
                 className="w-full p-2.5 rounded-xl bg-white hover:bg-pink-100/50 border border-purple-100 text-left text-xs font-semibold text-slate-700 flex items-center justify-between transition-colors shadow-xs"
               >
                 <span className="flex items-center gap-2">
@@ -338,7 +338,7 @@ export const DashboardPage: React.FC = () => {
               </button>
 
               <button
-                onClick={() => navigate('/coding')}
+                onClick={() => navigate('/student/coding')}
                 className="w-full p-2.5 rounded-xl bg-white hover:bg-blue-100/50 border border-purple-100 text-left text-xs font-semibold text-slate-700 flex items-center justify-between transition-colors shadow-xs"
               >
                 <span className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export const DashboardPage: React.FC = () => {
               </button>
 
               <button
-                onClick={() => navigate('/interview-prep')}
+                onClick={() => navigate('/student/interview')}
                 className="w-full p-2.5 rounded-xl bg-white hover:bg-emerald-100/50 border border-purple-100 text-left text-xs font-semibold text-slate-700 flex items-center justify-between transition-colors shadow-xs"
               >
                 <span className="flex items-center gap-2">

@@ -33,7 +33,7 @@ export const RegisterPage: React.FC = () => {
         role,
         skills: ['Python', 'Problem Solving']
       });
-      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+      navigate(user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
     } catch (err: any) {
       setError(err.message || 'Registration failed');
     } finally {
@@ -175,7 +175,7 @@ export const RegisterPage: React.FC = () => {
 
         <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
           Already have an account?{' '}
-          <Link to="/auth/login" className="font-semibold text-purple-700 hover:underline">
+          <Link to="/login" className="font-semibold text-purple-700 hover:underline">
             Sign In here
           </Link>
         </div>

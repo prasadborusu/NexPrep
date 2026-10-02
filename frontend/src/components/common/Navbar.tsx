@@ -1,17 +1,23 @@
-import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { ArrowRight, LogOut, ChevronRight } from 'lucide-react';
+import { ChevronRight, Menu, X, LogIn, UserPlus, Sparkles } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { user, role, logout } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isLanding = location.pathname === '/';
+  const navLinks = [
+    { label: 'Features', to: '/features' },
+    { label: 'How It Works', to: '/how-it-works' },
+    { label: 'AI Resume', to: '/ai-resume' },
+    { label: 'Assessments', to: '/assessments' },
+    { label: 'About', to: '/about' },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FBFAFF]/90 backdrop-blur-md border-b border-[#EAE6F5]">
+    <header className="sticky top-0 z-50 bg-[#FBFAFF]/95 backdrop-blur-md border-b border-[#EAE6F5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* LEFT: NexPrep Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
@@ -25,63 +31,122 @@ export const Navbar: React.FC = () => {
           </span>
         </Link>
 
-        {/* CENTER: Clean minimal links */}
-        {isLanding ? (
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#77718A]">
-            <a href="#features" className="hover:text-[#6D28D9] transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-[#6D28D9] transition-colors">How It Works</a>
-            <a href="#ai-resume" className="hover:text-[#6D28D9] transition-colors">AI Resume</a>
-            <a href="#assessments" className="hover:text-[#6D28D9] transition-colors">Assessments</a>
-            <a href="#about" className="hover:text-[#6D28D9] transition-colors">About</a>
-          </nav>
-        ) : (
-          <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-[#77718A]">
-            <span className="px-2.5 py-1 rounded-full bg-purple-50 text-[#6D28D9] border border-purple-100">
-              {role === 'admin' ? 'Institutional Administration' : 'Career Preparation Workspace'}
-            </span>
-          </div>
-        )}
+        {/* CENTER: React Router Navigation Links (No anchor # hashes) */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                `transition-colors duration-150 py-1 ${
+                  isActive
+                    ? 'text-[#6D28D9] font-bold border-b-2 border-[#6D28D9]'
+                    : 'text-[#77718A] hover:text-[#181525]'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
 
-        {/* RIGHT: Login & Get Started */}
-        <div className="flex items-center gap-3">
-          {isLanding ? (
+        {/* RIGHT: Login & Get Started or Active Session Dashboard */}
+        <div className="hidden md:flex items-center gap-3">
+          {user ? (
+            <button
+              onClick={() => navigate(role === 'admin' ? '/admin/dashboard' : '/student/dashboard')}
+              className="px-4 py-2 text-xs font-semibold text-white bg-[#6D28D9] hover:bg-[#5B21B6] rounded-xl transition-all shadow-sm flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Go to {role === 'admin' ? 'Admin Portal' : 'Student Dashboard'}</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          ) : (
             <>
               <Link
-                to="/auth/login"
+                to="/login"
                 className="px-4 py-2 text-sm font-medium text-[#181525] hover:text-[#6D28D9] transition-colors"
               >
                 Login
               </Link>
               <Link
-                to="/auth/register"
+                to="/register"
                 className="px-4 py-2 text-sm font-semibold text-white bg-[#6D28D9] hover:bg-[#5B21B6] rounded-xl transition-all shadow-sm hover:shadow-soft flex items-center gap-1.5"
               >
                 Get Started
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </>
-          ) : (
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-medium text-[#77718A] hidden sm:inline">
-                {user?.full_name || 'User'}
-              </span>
-              <button
-                onClick={() => navigate(role === 'admin' ? '/admin' : '/dashboard')}
-                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#6D28D9] hover:bg-[#5B21B6] rounded-xl transition-all shadow-sm"
-              >
-                Dashboard
-              </button>
-              <button
-                onClick={logout}
-                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
-                title="Sign out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
           )}
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-xl text-[#77718A] hover:text-[#181525] hover:bg-purple-50 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-[#EAE6F5] bg-white px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
+          <nav className="space-y-1">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-xl text-sm font-medium ${
+                    isActive
+                      ? 'bg-purple-50 text-[#6D28D9] font-bold'
+                      : 'text-[#77718A] hover:bg-slate-50 hover:text-[#181525]'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="pt-3 border-t border-[#EAE6F5] flex flex-col gap-2">
+            {user ? (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate(role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-[#6D28D9] text-white text-xs font-semibold text-center"
+              >
+                Go to {role === 'admin' ? 'Admin Portal' : 'Student Dashboard'}
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-2 px-4 rounded-xl border border-[#EAE6F5] text-sm font-semibold text-[#181525] text-center flex items-center justify-center gap-1.5"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-2 px-4 rounded-xl bg-[#6D28D9] text-white text-sm font-semibold text-center flex items-center justify-center gap-1.5"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

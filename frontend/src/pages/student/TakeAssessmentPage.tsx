@@ -182,7 +182,7 @@ export const TakeAssessmentPage: React.FC = () => {
         answers,
         is_final_submit: true
       });
-      navigate(`/assessments/${id}/result`);
+      navigate(`/student/assessments/${id}/result`);
     } catch (err) {
       console.error('Submission error:', err);
     } finally {

@@ -25,26 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return null;
       }
     }
-    // Default logged in demo student for frictionless instant experience
-    return {
-      id: 'demo-student-id',
-      email: 'student@nexprep.io',
-      full_name: 'Alex Johnson',
-      role: 'student',
-      college: 'National Institute of Technology',
-      degree: 'B.Tech',
-      branch: 'Computer Science & Engineering',
-      graduation_year: 2026,
-      cgpa: 8.75,
-      phone: '+91 98765 43210',
-      github_url: 'https://github.com/alexjohnson',
-      linkedin_url: 'https://linkedin.com/in/alexjohnson',
-      skills: ['Java', 'Python', 'React', 'Node.js', 'PostgreSQL', 'Data Structures', 'REST APIs'],
-      target_role: 'Full Stack Engineer',
-      bio: 'Enthusiastic CS undergraduate passionate about scalable systems, distributed cloud computing, and AI-assisted workflows.',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    return null;
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const updated = {
         ...user,
         role: newRole,
-        full_name: newRole === 'admin' ? 'Dr. Sarah Mitchell' : 'Alex Johnson',
+        full_name: newRole === 'admin' ? 'Administrator' : 'Student Candidate',
         email: newRole === 'admin' ? 'admin@nexprep.io' : 'student@nexprep.io'
       };
       setUser(updated);
@@ -97,10 +78,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser({
         id: newRole === 'admin' ? 'demo-admin-id' : 'demo-student-id',
         email: newRole === 'admin' ? 'admin@nexprep.io' : 'student@nexprep.io',
-        full_name: newRole === 'admin' ? 'Dr. Sarah Mitchell' : 'Alex Johnson',
+        full_name: newRole === 'admin' ? 'Administrator' : 'Student Candidate',
         role: newRole,
         skills: ['Software Engineering', 'Evaluation'],
-        target_role: newRole === 'admin' ? 'Placement Director' : 'Full Stack Engineer',
+        target_role: newRole === 'admin' ? 'Placement Director' : 'Software Engineer',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });
