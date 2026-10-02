@@ -9,14 +9,16 @@ export function getTransporter() {
     return null;
   }
 
-  // If user is Gmail, use nodemailer's dedicated 'gmail' service which handles Port 465/SSL cleanly across Linux cloud providers
+  // If user is Gmail, use nodemailer's dedicated 'gmail' service with fast connection timeouts
   if (user.endsWith('@gmail.com') || (process.env.SMTP_HOST || config.smtpHost)?.includes('gmail')) {
     return nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user,
         pass
-      }
+      },
+      connectionTimeout: 8000,
+      socketTimeout: 8000
     });
   }
 
@@ -32,6 +34,8 @@ export function getTransporter() {
       user,
       pass
     },
+    connectionTimeout: 8000,
+    socketTimeout: 8000,
     tls: {
       rejectUnauthorized: false
     }
@@ -39,22 +43,87 @@ export function getTransporter() {
 }
 
 export const isSmtpConfigured = Boolean(
-  (process.env.SMTP_USER || config.smtpUser) &&
-  (process.env.SMTP_PASS || config.smtpPass) &&
-  !(process.env.SMTP_USER || config.smtpUser).includes('your-gmail')
+  process.env.RESEND_API_KEY ||
+  ((process.env.SMTP_USER || config.smtpUser) &&
+   (process.env.SMTP_PASS || config.smtpPass) &&
+   !(process.env.SMTP_USER || config.smtpUser).includes('your-gmail'))
 );
 
-export async function sendOtpEmail(to: string, fullName: string, otp: string): Promise<{ success: boolean; error?: string }> {
-  const transporter = getTransporter();
+// Unified Send Email Helper supporting Resend HTTPS API (never blocked by Render) and SMTP
+export async function sendEmailDirect({
+  to,
+  subject,
+  html,
+  text
+}: {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
   const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
   const fromName = process.env.SMTP_FROM_NAME || config.smtpFromName || 'NexPrep Placement Cell';
 
+  // 1. If RESEND_API_KEY is available, use HTTPS REST API (guaranteed delivery on Render/Cloud with 0 port blocks)
+  if (resendApiKey && resendApiKey.startsWith('re_')) {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: `${fromName} <onboarding@resend.dev>`,
+          to: [to],
+          subject,
+          html,
+          text
+        })
+      });
+
+      const resData: any = await response.json();
+      if (!response.ok) {
+        throw new Error(resData.message || `Resend API returned ${response.status}`);
+      }
+
+      console.log(`✅ Email sent via Resend HTTPS API to ${to} (ID: ${resData.id})`);
+      return { success: true };
+    } catch (err: any) {
+      console.error(`❌ Resend API delivery error to ${to}:`, err.message);
+      // Fall through to SMTP transporter if configured
+    }
+  }
+
+  // 2. Otherwise use Nodemailer SMTP
+  const transporter = getTransporter();
   if (!transporter || !user) {
-    const msg = 'SMTP is not configured on the server. Please add SMTP_USER and SMTP_PASS to Render Environment Variables.';
-    console.warn(`⚠️ Cannot send OTP email to ${to}: ${msg}`);
+    const msg = 'SMTP is not configured on the server. Add RESEND_API_KEY or SMTP_USER & SMTP_PASS in Render Environment.';
+    console.warn(`⚠️ Cannot send email to ${to}: ${msg}`);
     return { success: false, error: msg };
   }
 
+  try {
+    const info = await transporter.sendMail({
+      from: `"${fromName}" <${user}>`,
+      to,
+      subject,
+      text,
+      html
+    });
+    console.log(`✅ Email sent via SMTP to ${to} (MessageId: ${info.messageId})`);
+    return { success: true };
+  } catch (err: any) {
+    console.error(`❌ SMTP delivery error to ${to}:`, err.message);
+    return {
+      success: false,
+      error: `Render blocked outbound SMTP port: ${err.message}. Add RESEND_API_KEY (Free from resend.com) to Render Environment to deliver via HTTPS.`
+    };
+  }
+}
+
+export async function sendOtpEmail(to: string, fullName: string, otp: string): Promise<{ success: boolean; error?: string }> {
   const digits = otp.split('');
 
   const html = `
@@ -114,32 +183,15 @@ export async function sendOtpEmail(to: string, fullName: string, otp: string): P
     </html>
   `;
 
-  try {
-    const info = await transporter.sendMail({
-      from: `"${fromName}" <${user}>`,
-      to,
-      subject: `🔐 ${otp} is your NexPrep verification code`,
-      text: `Your NexPrep 4-digit verification code is: ${otp}\n\nValid for 10 minutes.\n\nNexPrep Placement Cell`,
-      html
-    });
-    console.log(`✅ 4-Digit OTP (${otp}) sent to ${to} (MessageId: ${info.messageId})`);
-    return { success: true };
-  } catch (err: any) {
-    console.error(`❌ Failed to send OTP email to ${to}:`, err.message);
-    return { success: false, error: err.message };
-  }
+  return sendEmailDirect({
+    to,
+    subject: `🔐 ${otp} is your NexPrep verification code`,
+    text: `Your NexPrep 4-digit verification code is: ${otp}\n\nValid for 10 minutes.\n\nNexPrep Placement Cell`,
+    html
+  });
 }
 
 export async function sendWelcomeEmail(to: string, fullName: string, role: string) {
-  const transporter = getTransporter();
-  const user = (process.env.SMTP_USER || config.smtpUser)?.trim();
-  const fromName = process.env.SMTP_FROM_NAME || config.smtpFromName || 'NexPrep Placement Cell';
-
-  if (!transporter || !user) {
-    console.warn('⚠️ Cannot send welcome email: SMTP not configured');
-    return false;
-  }
-
   const roleDisplay = role === 'admin' ? 'Placement Officer / Administrator' : 'Student Candidate';
 
   const html = `
@@ -183,18 +235,10 @@ export async function sendWelcomeEmail(to: string, fullName: string, role: strin
     </html>
   `;
 
-  try {
-    const info = await transporter.sendMail({
-      from: `"${fromName}" <${user}>`,
-      to,
-      subject: '🎉 Welcome to NexPrep — Your Account is Ready!',
-      text: `Welcome to NexPrep, ${fullName}!\n\nYour account has been registered and verified.\n\nSign in to your dashboard: https://nex-prep1.netlify.app/login\n\nNexPrep Placement Cell`,
-      html
-    });
-    console.log(`✅ Welcome email sent to ${to} (MessageId: ${info.messageId})`);
-    return true;
-  } catch (err: any) {
-    console.error(`❌ Failed to send welcome email to ${to}:`, err.message);
-    return false;
-  }
+  return sendEmailDirect({
+    to,
+    subject: '🎉 Welcome to NexPrep — Your Account is Ready!',
+    text: `Welcome to NexPrep, ${fullName}!\n\nYour account has been registered and verified.\n\nSign in to your dashboard: https://nex-prep1.netlify.app/login\n\nNexPrep Placement Cell`,
+    html
+  });
 }
